@@ -1,0 +1,37 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# "." am Anfang bezeichnet den Top-Level Namensraum bei Helm
+
+apiVersion: v1
+# https://kubernetes.io/docs/concepts/configuration/configmap
+kind: ConfigMap
+metadata:
+  name: {{ include "computer.fullname" . }}
+data:
+  TZ: Europe/Berlin
+  NODE_ENV: {{ .Values.nodeConfig }}
+  LOG_DIR: /var/log/node
+  LOG_LEVEL: {{ .Values.loglevel }}
+  # String "true" statt Boolean true durch die Funktion quote
+  LOG_PRETTY: {{ quote .Values.logPretty }}
+  #APOLLO_DEBUG: "false"
+  HEALTH_PRETTY_PRINT: {{ quote .Values.logHealthyPretty }}
+  DB_HOST: postgres
+  DB_USER: {{ .Values.dbUser }}
+  DB_PASS: {{ .Values.dbPassword }}
+  DB_POPULATE: {{ quote .Values.dbPopulate }}
+  K8S_TLS: 'false'
+  USER_PASSWORD_ENCODED: {{ .Values.userPasswordEncoded }}

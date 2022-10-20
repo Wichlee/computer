@@ -16,8 +16,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:   Get-Content jenkins.dockerfile | docker run --rm --interactive hadolint/hadolint:2.10.0-beta-debian
-#           docker buildx build --tag juergenzimmermann/jenkins:1.0.0 . --file jenkins.dockerfile
-#           docker sbom juergenzimmermann/jenkins:1.0.0
+#           docker buildx build --tag gruppe2/jenkins:1.0.0 . --file jenkins.dockerfile
+#           docker sbom gruppe2/jenkins:1.0.0
 
 # https://www.jenkins.io/doc/book/installing/docker
 # https://manpages.debian.org/bullseye/apt/apt-get.8.en.html

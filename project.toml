@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Aufruf:
-# pack build juergenzimmermann/buch:1.0.0-buildpacks --builder paketobuildpacks/builder:base
+# pack build gruppe2/computer:1.0.0-buildpacks --builder paketobuildpacks/builder:base
 
 # ------------------------------------------------------------------------------
 # P r o j e c t   D e s c r i p t o r   f u e r   p a c k
@@ -29,8 +29,8 @@
 
 # table = Key/Value-Paare
 [project]
-id = "com.acme.buch"
-name = "Microservice buch"
+id = "com.acme.computer"
+name = "Microservice computer"
 version = "1.0.0"
 authors = ["Juergen.Zimmermann@h-ka.de"]
 

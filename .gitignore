@@ -40,7 +40,7 @@ Thumbs.db
 coverage
 /.nyc_output
 /.clinic
-/__tests__/buch/__snapshots__
+/__tests__/computer/__snapshots__
 
 # Snyk
 .snyk

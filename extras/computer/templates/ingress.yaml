@@ -1,0 +1,49 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+# https://github.com/kubernetes/ingress-nginx
+# https://kubernetes.io/docs/concepts/services-networking/ingress-controllers
+# https://github.com/kubernetes/ingress-nginx/blob/main/README.md#changelog Versionen von nginx
+# https://kubernetes.github.io/ingress-nginx/examples/rewrite
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.namespace }}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  namespace: {{ .Values.namespace }}
+spec:
+  ingressClassName: nginx
+  rules:
+    # kubernetes.docker.internal entspricht localhost. Siehe C:\Windows\System32\drivers\etc\hosts
+    - host: kubernetes.docker.internal
+      http:
+        paths:
+          # (.*) wird abgebildet auf $2 (d.h. 2. Pfad-Segment), z.B.
+          #   kubernetes.docker.internal/buecher wird zu kubernetes.docker.internal:3000/
+          #   kubernetes.docker.internal/buecher/123 wird zu kubernetes.docker.internal:3000/123
+          - path: /buecher(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "computer.fullname" . }}
+                port:
+                  name: http-svc
+                  #number: 3000
+  tls:
+    - hosts: [kubernetes.docker.internal]
+      secretName: {{ .Values.namespace }}-tls

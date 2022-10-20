@@ -47,7 +47,7 @@ services:
           cpus: '2'
           memory: 512M
   jenkins:
-    image: juergenzimmermann/jenkins:1.0.0
+    image: gruppe2/jenkins:1.0.0
     ports:
       - published: 7070
         target: 8080

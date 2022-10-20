@@ -197,14 +197,14 @@ pipeline {
 
                 success {
                     script {
-                        if (fileExists("${env.WORKSPACE}/buch.zip")) {
-                            sh 'rm buch.zip'
+                        if (fileExists("${env.WORKSPACE}/computer.zip")) {
+                            sh 'rm computer.zip'
                         }
                     }
                     // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
-                    zip zipFile: 'buch.zip', archive: false, dir: 'dist'
-                    // jobs/buch/builds/.../archive/buch.zip
-                    archiveArtifacts 'buch.zip'
+                    zip zipFile: 'computer.zip', archive: false, dir: 'dist'
+                    // jobs/computer/builds/.../archive/computer.zip
+                    archiveArtifacts 'computer.zip'
                 }
             }
         }
@@ -213,7 +213,7 @@ pipeline {
             steps {
               echo 'TODO: Docker-Image bauen: dockerd starten, pack installieren'
               // Docker-Installation und laufender Docker-Daemon erforderlich
-              // sh 'docker build --tag juergenzimmermann/buch:1.0.0 .'
+              // sh 'docker build --tag gruppe2/computer:1.0.0 .'
             }
         }
 
