@@ -1,0 +1,23 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "rest-client.environmentVariables": {
+    "localHTTPS": {
+      "restUrl": "https://localhost:3000",
+      "authUrl": "https://localhost:3000/auth",
+      "graphQlUrl": "https://localhost:3000/graphql",
+      "dbPopulateUrl": "https://localhost:3000/dbPopulate"
+    },
+    "kubernetesHTTP": {
+      "restUrl": "http://localhost:3000",
+      "authUrl": "http://localhost:3000/auth",
+      "graphQlUrl": "http://localhost:3000/graphql",
+      "dbPopulateUrl": "http://localhost:3000/dbPopulate"
+    },
+    "ingress": {
+      "restUrl": "https://kubernetes.docker.internal",
+      "authUrl": "https://kubernetes.docker.internal/auth",
+      "graphQlUrl": "https://kubernetes.docker.internal/graphql",
+      "dbPopulateUrl": "https://kubernetes.docker.internal/dbPopulate"
+    }
+  }
+}

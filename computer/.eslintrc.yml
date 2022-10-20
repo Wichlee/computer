@@ -1,0 +1,610 @@
+# Copyright (C) 2018 - present Juergen Zimmermann, Florian Rusch
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# https://eslint.org/docs/user-guide/configuring
+
+---
+parser: '@typescript-eslint/parser'
+
+parserOptions:
+  project: tsconfig.json
+  ecmaVersion: 2022
+  sourceType: module
+  ecmaFeatures:
+    impliedStrict: true
+
+plugins:
+  - '@typescript-eslint'
+  - unicorn
+  - prettier
+  - promise
+  - import
+  - security
+  - security-node
+  - prefer-arrow
+  - regexp
+  - jest
+  - jest-formatting
+
+extends:
+  # https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin
+  - plugin:@typescript-eslint/recommended
+  # https://github.com/eslint/eslint/blob/main/conf/eslint-recommended.js
+  - eslint:recommended
+  # https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
+  - plugin:unicorn/recommended
+  # prettier ueberschreibt vorherige Konfigurationseinstellungen
+  - plugin:prettier/recommended
+  - prettier
+  - plugin:n/recommended
+  - plugin:promise/recommended
+  - plugin:security/recommended
+  - plugin:security-node/recommended
+  # https://github.com/import-js/eslint-plugin-import/tree/main/config
+  - plugin:import/errors
+  - plugin:import/warnings
+  - plugin:import/typescript
+  # https://github.com/jest-community/eslint-plugin-jest#rules
+  - plugin:eslint-comments/recommended
+  # https://github.com/ota-meshi/eslint-plugin-regexp/blob/master/lib/configs/recommended.ts
+  - plugin:regexp/recommended
+  # https://github.com/jest-community/eslint-plugin-jest/blob/main/README.md#rules
+  - plugin:jest/recommended
+  - plugin:jest/style
+  - plugin:jest-formatting/strict
+
+root: true
+
+env:
+  node: true
+  es2021: true
+  jest: true
+
+rules:
+  # https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#supported-rules
+  # https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin/docs/rules
+  # https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended.ts
+  '@typescript-eslint/array-type':
+    - error
+    - default: array
+  '@typescript-eslint/await-thenable': error
+  '@typescript-eslint/ban-ts-comment': error
+  '@typescript-eslint/ban-tslint-comment': error
+  '@typescript-eslint/brace-style': error
+  '@typescript-eslint/class-literal-property-style': error
+  '@typescript-eslint/comma-dangle':
+    - error
+    - always-multiline
+  '@typescript-eslint/comma-spacing': error
+  '@typescript-eslint/consistent-generic-constructors': error
+  '@typescript-eslint/consistent-indexed-object-style': error
+  '@typescript-eslint/consistent-type-definitions':
+    - error
+    - interface
+  '@typescript-eslint/consistent-type-exports': error
+  # TODO Bug in @typescript-eslint ?
+  # '@typescript-eslint/consistent-type-imports': error
+  '@typescript-eslint/default-param-last': error
+  '@typescript-eslint/dot-notation': error
+  '@typescript-eslint/explicit-function-return-type': off
+  '@typescript-eslint/explicit-member-accessibility': off
+  '@typescript-eslint/explicit-module-boundary-types': off
+  '@typescript-eslint/func-call-spacing': error
+  '@typescript-eslint/interface-name-prefix': off
+  '@typescript-eslint/keyword-spacing': error
+  '@typescript-eslint/lines-between-class-members': error
+  '@typescript-eslint/member-ordering': error
+  '@typescript-eslint/method-signature-style': error
+  '@typescript-eslint/naming-convention':
+    - error
+    - selector: default
+      format:
+        - camelCase
+    - selector: variable
+      format:
+        - camelCase
+        - UPPER_CASE
+    - selector: parameter
+      format:
+        - camelCase
+      #filter:
+      #  regex: ^_$
+      #  match: true
+      leadingUnderscore: allow
+    - selector: classProperty
+      modifiers:
+        - private
+        - static
+        - readonly
+      format:
+        - UPPER_CASE
+      leadingUnderscore: allowDouble
+    - selector: objectLiteralProperty
+      format:
+        - camelCase
+      leadingUnderscore: allow
+    - selector: enumMember
+      format:
+        - UPPER_CASE
+    - selector: typeLike
+      format:
+        - PascalCase
+  '@typescript-eslint/no-base-to-string':
+    - error
+    - ignoredTypeNames: ["RegExp", "boolean", "ObjectID"]
+  '@typescript-eslint/no-confusing-non-null-assertion': error
+  '@typescript-eslint/no-confusing-void-expression':
+    - error
+    - ignoreArrowShorthand: true
+  '@typescript-eslint/no-dupe-class-members': error
+  '@typescript-eslint/no-duplicate-enum-values': error
+  '@typescript-eslint/no-dynamic-delete': error
+  '@typescript-eslint/no-empty-function':
+    - error
+    - allow:
+        - arrowFunctions
+  '@typescript-eslint/no-empty-interface': error
+  '@typescript-eslint/no-explicit-any': off
+  '@typescript-eslint/no-extra-non-null-assertion': error
+  '@typescript-eslint/no-extra-parens': error
+  '@typescript-eslint/no-extra-semi': error
+  '@typescript-eslint/no-floating-promises':
+    - error
+    - ignoreIIFE: true
+  '@typescript-eslint/no-for-in-array': error
+  '@typescript-eslint/no-implied-eval': error
+  '@typescript-eslint/no-invalid-this': error
+  '@typescript-eslint/no-invalid-void-type': error
+  '@typescript-eslint/no-loop-func': error
+  '@typescript-eslint/no-magic-numbers':
+    - error
+    - ignoreReadonlyClassProperties: true
+      ignoreArrayIndexes: true
+      enforceConst: true
+      ignore: [0, 1, -1]
+  '@typescript-eslint/no-meaningless-void-operator': error
+  '@typescript-eslint/no-misused-promises':
+    - error
+    - checksVoidReturn: false
+  '@typescript-eslint/no-non-null-asserted-nullish-coalescing': error
+  '@typescript-eslint/no-non-null-asserted-optional-chain': error
+  '@typescript-eslint/no-redundant-type-constituents': error
+  '@typescript-eslint/no-require-imports': error
+  '@typescript-eslint/no-restricted-imports':
+    - error
+    - allowTypeImports: true
+  '@typescript-eslint/no-shadow': error
+  '@typescript-eslint/no-this-alias': error
+  '@typescript-eslint/no-throw-literal': error
+  '@typescript-eslint/no-unnecessary-boolean-literal-compare': error
+  '@typescript-eslint/no-unnecessary-condition':
+    - error
+    - allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing: true
+  '@typescript-eslint/no-unnecessary-qualifier': error
+  '@typescript-eslint/no-unnecessary-type-arguments': error
+  '@typescript-eslint/no-unnecessary-type-assertion': error
+  '@typescript-eslint/no-unnecessary-type-constraint': error
+  '@typescript-eslint/no-unsafe-argument': error
+  '@typescript-eslint/no-unsafe-assignment': error
+  #"@typescript-eslint/no-unsafe-call": error
+  #"@typescript-eslint/no-unsafe-member-access": error
+  '@typescript-eslint/no-unsafe-return': error
+  #'@typescript-eslint/no-untyped-public-signature': error
+  # TODO Bug in @typescript-eslint ?
+  '@typescript-eslint/no-unused-vars':
+    - off
+    - ignoreRestSiblings: true
+  '@typescript-eslint/no-useless-constructor': error
+  '@typescript-eslint/no-useless-empty-export': error
+  '@typescript-eslint/non-nullable-type-assertion-style': error
+  '@typescript-eslint/object-curly-spacing':
+    - error
+    - always
+  '@typescript-eslint/padding-line-between-statements': error
+  '@typescript-eslint/prefer-as-const': error
+  '@typescript-eslint/prefer-enum-initializers': error
+  '@typescript-eslint/prefer-for-of': error
+  '@typescript-eslint/prefer-includes': error
+  '@typescript-eslint/prefer-literal-enum-member': error
+  '@typescript-eslint/prefer-optional-chain': error
+  '@typescript-eslint/prefer-readonly': error
+  #"@typescript-eslint/prefer-readonly-parameter-types":
+  #  - error
+  #  - checkParameterProperties: true
+  '@typescript-eslint/prefer-reduce-type-parameter': error
+  '@typescript-eslint/prefer-regexp-exec': error
+  '@typescript-eslint/prefer-return-this-type': error
+  '@typescript-eslint/prefer-string-starts-ends-with': error
+  '@typescript-eslint/prefer-ts-expect-error': error
+  '@typescript-eslint/require-array-sort-compare': error
+  '@typescript-eslint/require-await': error
+  '@typescript-eslint/restrict-plus-operands':
+    - error
+    - checkCompoundAssignments: true
+  '@typescript-eslint/restrict-template-expressions':
+    - error
+    - allowNumber: true
+      allowBoolean: true
+      allowNullish: true
+  '@typescript-eslint/return-await': error
+  '@typescript-eslint/semi': error
+  '@typescript-eslint/sort-type-union-intersection-members': error
+  '@typescript-eslint/space-before-blocks': error
+  '@typescript-eslint/space-before-function-paren':
+    - error
+    - anonymous: always
+      asyncArrow: always
+      named: never
+  '@typescript-eslint/space-infix-ops': error
+  '@typescript-eslint/strict-boolean-expressions': error
+  '@typescript-eslint/triple-slash-reference': error
+  '@typescript-eslint/type-annotation-spacing': error
+  '@typescript-eslint/unbound-method':
+    - error
+    - ignoreStatic: true
+  '@typescript-eslint/unified-signatures': error
+
+  eslint-comments/no-unused-disable: error
+
+  # https://github.com/benmosher/eslint-plugin-import/issues/1667
+  import/no-cycle:
+    - error
+    - maxDepth: 4
+      ignoreExternal: true
+  import/no-extraneous-dependencies: error
+  import/no-unresolved: off
+  #import/no-unused-modules:
+  #  - error
+  #  - unusedExports: true
+
+  # https://github.com/jest-community/eslint-plugin-jest/blob/main/src/index.ts
+  jest/no-conditional-in-test: error
+  jest/consistent-test-it:
+    - error
+    - fn: test
+      withinDescribe: test
+  #jest/max-expects: error
+  jest/no-conditional-expect: off
+  jest/no-duplicate-hooks: error
+  jest/no-restricted-matchers: error
+  jest/no-standalone-expect: off
+  jest/no-test-return-statement: error
+  jest/prefer-comparison-matcher: error
+  jest/prefer-equality-matcher: error
+  jest/prefer-expect-resolves: error
+  jest/prefer-hooks-in-order: error
+  jest/prefer-hooks-on-top: error
+  jest/prefer-mock-promise-shorthand: error
+  jest/prefer-snapshot-hint: error
+  jest/prefer-to-be: error
+  jest/prefer-todo: error
+  jest/require-top-level-describe: error
+  jest/valid-expect: off
+
+  # https://github.com/weiran-zsd/eslint-plugin-node/blob/master/lib/configs/_commons.js
+  n/callback-return: error
+  n/exports-style: error
+  n/file-extension-in-import: off
+  n/global-require: error
+  n/handle-callback-err: error
+  n/no-callback-literal: error
+  n/no-missing-import: off
+  n/no-mixed-requires: error
+  n/no-new-require: error
+  n/no-path-concat: error
+  n/no-process-env: error
+  n/no-process-exit: error
+  n/no-sync: error
+  n/no-unpublished-import: off
+  n/prefer-global/buffer: error
+  n/prefer-global/console: error
+  n/prefer-global/process: error
+  n/prefer-global/text-decoder: error
+  n/prefer-global/text-encoder: error
+  n/prefer-global/url: error
+  n/prefer-global/url-search-params: error
+  n/prefer-promises/dns: error
+  n/prefer-promises/fs: error
+
+  prefer-arrow/prefer-arrow-functions:
+    - error
+    - classPropertiesAllowed: false
+
+  regexp/prefer-regexp-exec: error
+
+  # https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/configs/recommended.js
+  unicorn/catch-error-name:
+    - error
+    - name: err
+  unicorn/filename-case: off
+  unicorn/import-style:
+    - error
+    - styles:
+        path:
+          named: true
+  # nicht notwendig wegen TypeScript
+  unicorn/no-array-callback-reference: off
+  unicorn/no-fn-reference-in-iterator: off
+  unicorn/no-array-for-each: off
+  unicorn/no-keyword-prefix: error
+  unicorn/no-nested-ternary: error
+  unicorn/no-object-as-default-parameter: error
+  unicorn/no-process-exit: off
+  unicorn/no-static-only-class: error
+  unicorn/no-unsafe-regex: error
+  unicorn/no-unused-properties: error
+  unicorn/numeric-separators-style: error
+  unicorn/prefer-array-find: error
+  unicorn/prefer-array-flat: error
+  unicorn/prefer-flat-map: error
+  # "CommonJS" als Modulsystem
+  unicorn/prefer-module: off
+  # z.B. "node:os" funktioniert nicht mit dem Node-Image (in Kubernetes)
+  unicorn/prefer-node-protocol: off
+  unicorn/prefer-replace-all: error
+  unicorn/prefer-switch: error
+  unicorn/prevent-abbreviations: off
+  # prevent-abbreviations markiert auch Suffixe und Praefixe
+  #unicorn/prevent-abbreviations:
+  #  - error
+  #  - whitelist:
+  #      req: true
+  #      res: true
+  #      err: true
+  #      db: true
+  #      msg: true
+  #      dev: true
+  #    checkFilenames: false
+  unicorn/string-content: error
+
+  # https://eslint.org/docs/rules
+  array-bracket-newline:
+    - error
+    - multiline: true
+  array-bracket-spacing: error
+  # https://github.com/prettier/eslint-config-prettier#arrow-body-style-and-prefer-arrow-callback
+  # https://eslint.org/docs/rules/arrow-body-style
+  arrow-body-style:
+    - error
+    - as-needed
+  arrow-parens: error
+  arrow-spacing: error
+  block-scoped-var: error
+  block-spacing: error
+  # siehe @typescript-eslint/brace-style
+  brace-style: 0
+  camelcase: error
+  comma-dangle: 0
+  # siehe @typescript-eslint/comma-spacing
+  comma-spacing: 0
+  comma-style: error
+  computed-property-spacing: error
+  consistent-this: error
+  # https://github.com/prettier/eslint-config-prettier#curly
+  # https://eslint.org/docs/rules/curly
+  curly:
+    - error
+    - all
+  default-case: error
+  default-case-last: error
+  default-param-last: error
+  # siehe @typescript-eslint/dot-notation
+  dot-notation: 0
+  eqeqeq: error
+  eol-last: error
+  for-direction: error
+  # siehe @typescript-eslint/func-call-spacing
+  func-call-spacing: 0
+  func-name-matching: error
+  func-names:
+    - error
+    - never
+  func-style: error
+  getter-return: error
+  grouped-accessor-pairs: error
+  key-spacing: error
+  keyword-spacing: error
+  # wegen //NOSONAR
+  #line-comment-position: error
+  linebreak-style: error
+  logical-assignment-operators: error
+  max-classes-per-file: error
+  max-depth: error
+  # https://github.com/prettier/eslint-config-prettier#max-len
+  # https://eslint.org/docs/rules/max-len
+  max-len:
+    - error
+    - ignoreComments: true
+      ignoreTrailingComments: true
+      ignoreStrings: true
+      ignoreTemplateLiterals: true
+      ignoreUrls: true
+  max-lines: error
+  max-lines-per-function:
+    - error
+    - max: 60
+  max-nested-callbacks:
+    - error
+    - max: 4
+  max-params: error
+  max-statements:
+    - error
+    - max: 25
+  max-statements-per-line: error
+  new-parens: error
+  no-alert: error
+  no-array-constructor: error
+  no-bitwise: error
+  no-caller: error
+  # https://github.com/prettier/eslint-config-prettier#no-confusing-arrow
+  # https://eslint.org/docs/rules/no-confusing-arrow
+  no-confusing-arrow:
+    - error
+    - allowParens: false
+  no-console: 0
+  no-constant-binary-expression: error
+  no-constructor-return: error
+  no-continue: error
+  no-dupe-class-members: 0
+  # siehe import/no-duplicates
+  #no-duplicate-imports: error
+  no-else-return: error
+  no-eq-null: error
+  no-eval: error
+  no-extend-native: error
+  no-extra-bind: error
+  no-extra-label: error
+  # siehe @typescript-eslint/no-extra-parens
+  no-extra-parens: 0
+  # siehe @typescript-eslint/no-extra-semi
+  no-extra-semi: 0
+  no-implicit-coercion: error
+  no-implicit-globals: error
+  no-implied-eval: error
+  # siehe @typescript-eslint/no-invalid-this
+  no-invalid-this: 0
+  no-iterator: error
+  no-label-var: error
+  no-labels: error
+  no-lone-blocks: error
+  no-lonely-if: error
+  no-loop-func: error
+  # siehe @typescript-eslint/no-loss-of-precision
+  no-loss-of-precision: off
+  # siehe @typescript-eslint/no-magic-numbers
+  no-magic-numbers: 0
+  no-multi-assign: error
+  no-multi-spaces: error
+  no-multiple-empty-lines: error
+  no-negated-condition: error
+  no-nested-ternary: error
+  no-new: error
+  no-new-func: error
+  no-new-object: error
+  no-new-wrappers: error
+  no-param-reassign: error
+  no-promise-executor-return: error
+  no-proto: error
+  no-redeclare: 0
+  # siehe @typescript-eslint/no-restricted-imports
+  no-restricted-imports: 0
+  no-restricted-properties: error
+  # https://github.com/prettier/eslint-config-prettier#no-sequences
+  no-restricted-syntax:
+    - error
+    - SequenceExpression
+  no-return-assign: error
+  # siehe @typescript-eslint/return-await
+  no-return-await: 0
+  no-script-url: error
+  no-self-compare: error
+  no-sequences: error
+  # siehe @typescript-eslint/no-shadow
+  no-shadow: 0
+  no-shadow-restricted-names: error
+  no-tabs: error
+  no-template-curly-in-string: error
+  no-throw-literal: error
+  no-trailing-spaces: error
+  no-undef-init: error
+  no-underscore-dangle:
+    - error
+    - allow: ["_id", "__v"]
+  no-unmodified-loop-condition: error
+  no-unneeded-ternary: error
+  no-unreachable-loop: error
+  no-unused-expressions: error
+  no-unused-private-class-members: error
+  # siehe @typescript-eslint/no-unused-vars
+  no-unused-vars: 0
+  no-use-before-define:
+    - error
+    - functions: false
+      classes: false
+  no-useless-call: error
+  no-useless-catch: error
+  no-useless-computed-key: error
+  no-useless-concat: error
+  no-useless-rename: error
+  no-useless-return: error
+  no-void: error
+  no-whitespace-before-property: error
+  no-with: error
+  nonblock-statement-body-position: error
+  object-curly-newline: error
+  # siehe @typescript-eslint/object-curly-spacing
+  object-curly-spacing: 0
+  object-property-newline:
+    - error
+    - allowAllPropertiesOnSameLine: true
+  object-shorthand: error
+  one-var:
+    - error
+    - never
+  one-var-declaration-per-line: error
+  operator-assignment: error
+  operator-linebreak: error
+  padded-blocks:
+    - error
+    - never
+  # siehe @typescript-eslint/padding-line-between-statements
+  padding-line-between-statements: 0
+  prefer-destructuring: error
+  prefer-exponentiation-operator: error
+  prefer-numeric-literals: error
+  #prefer-object-has-own: error
+  prefer-object-spread: error
+  prefer-promise-reject-errors: error
+  prefer-regex-literals:
+    - error
+    - disallowRedundantWrapping: true
+  prefer-rest-params: error
+  prefer-template: error
+  quote-props:
+    - error
+    - as-needed
+  # https://github.com/prettier/eslint-config-prettier#quotes
+  # https://eslint.org/docs/rules/quotes
+  quotes:
+    - error
+    - single
+    - avoidEscape: true
+      allowTemplateLiterals: false
+  radix: error
+  require-atomic-updates: error
+  # siehe @typescript-eslint/require-await
+  require-await: 0
+  require-unicode-regexp: error
+  rest-spread-spacing: error
+  semi-spacing: error
+  sort-imports: error
+  space-before-blocks: error
+  # siehe @typescript-eslint/space-before-function-paren
+  space-before-function-paren: 0
+  space-in-parens: error
+  # siehe @typescript-eslint/space-infix-ops
+  space-infix-ops: 0
+  space-unary-ops: error
+  # wegen //NOSONAR
+  #spaced-comment: error
+  strict: error
+  switch-colon-spacing: error
+  symbol-description: error
+  template-curly-spacing: error
+  wrap-iife: error
+  yield-star-spacing: error
+  yoda:
+    - error
+    - never

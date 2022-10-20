@@ -1,0 +1,51 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf:   docker compose up
+#           docker compose down
+#
+# evtl.:    docker compose exec mailserver bash
+
+---
+# https://docs.docker.com/compose/compose-file
+# https://docs.docker.com/compose/compose-file/compose-file-v3
+services:
+  mailserver:
+    image: gessnerfl/fake-smtp-server:1.10.1
+    ports:
+      - published: 5025
+        target: 5025
+      - published: 5080
+        target: 5080
+      - published: 5081
+        target: 5081
+    volumes:
+      - type: bind
+        source: C:/Zimmermann/volumes/fakesmtp
+        target: /tmp
+    environment:
+      TZ: Europe/Berlin
+      SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
+      # wegen "-" nicht auslagern in .env-Datei
+      SPRING_MAIN_BANNER-MODE: LOG
+      SPRING_LAZY-INITIALIZATION: "true"
+      SPRING_JPA_OPEN-IN-VIEW: "true"
+    container_name: mailserver
+    hostname: mailserver
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M

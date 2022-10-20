@@ -1,0 +1,24 @@
+{
+    "out": "extras/doc/api",
+    "entryPoints": ["src"],
+    "entryPointStrategy": "expand",
+    "excludePrivate": true,
+    "intentionallyNotExported": [
+      "Env",
+      "GraphQlConfig",
+      "HealthConfig",
+      "JwtConfig",
+      "K8sConfig",
+      "NodeConfig",
+      "Links",
+      "CustomErrorMessages",
+      "BuchCreateDTO",
+      "BuchUpdateDTO",
+      "Login",
+      "LoginInput",
+      "Payload"
+    ],
+    "validation": {
+      "invalidLink": true
+    }
+}

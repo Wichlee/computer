@@ -1,0 +1,127 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "@Controller" as Controller
+  hide Controller circle
+
+  class "@UseGuards" as UseGuards
+  hide UseGuards circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "@Post" as Post
+  hide Post circle
+
+  class "@Put" as Put
+  hide Put circle
+
+  class "@Delete" as Delete
+  hide Delete circle
+
+  class "@Req" as Req
+  hide Req circle
+
+  class "@Res" as Res
+  hide Res circle
+
+  class "@Param" as Param
+  hide Param circle
+
+  class "@Body" as Body
+  hide Body circle
+
+  class "@Headers" as Headers
+  hide Headers circle
+
+  UseInterceptors .[hidden].> Post
+  UseInterceptors .[hidden].> Put
+  UseInterceptors .[hidden].> Delete
+
+  Post .[hidden].> Req
+  Post .[hidden].> Res
+  Post .[hidden].> Param
+  Post .[hidden].> Body
+  Post .[hidden].> Headers
+}
+
+package express {
+  class Request
+  class Response
+
+  Response .right[hidden].> Controller
+}
+
+package security.auth {
+  class "type Role = 'ADMIN' | 'MITARBEITER' | 'KUNDE'" as Role
+  hide Role circle
+
+  class "@Roles" as Roles
+  hide Roles circle
+
+  Roles .right.> Role
+}
+
+package buch {
+  package entity #FFFFFF {
+    class Buch <<entity>>
+
+    Buch .[hidden].> Promise
+    Buch .[hidden].> Request
+  }
+
+  package service {
+    class BuchWriteService << control >>
+    class BuchReadService << control >>
+  }
+
+  package rest #DDDDDD {
+    class BuchWriteController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
+      + @Post() @Roles() async create(@Body() buch: Buch, @Req() req: Request,  @Res() res: Response): Promise<Response>
+      + @Put() @Roles() async update(@Body() buch: Buch, @Param() id: string, @Headers() version: string, @Res() res: Response): Promise<Response>
+      + @Delete() @Roles() async delete(@Param() id: string, @Res() res: Response): Promise<Response>
+    }
+
+    BuchWriteController o--> "1" BuchWriteService : service
+    BuchWriteController o--> "1" BuchReadService : readService
+    BuchWriteController ..up> Buch
+
+    BuchWriteController ..> Controller
+
+    BuchWriteController .up.> Roles
+    BuchWriteController .up.> Role
+
+    BuchWriteController ..> Request
+    BuchWriteController ..> Response
+    BuchWriteController ..> Promise
+
+    Buch .up[hidden].> Roles
+    BuchWriteService .[hidden].> Request
+    BuchWriteService .[hidden].> Promise
+  }
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

@@ -1,0 +1,50 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# https://helm.sh/docs/chart_best_practices/values
+
+nodeConfig: development
+loglevel: debug
+logPretty: "true"
+logHealthyPretty: "true"
+dbPassword: p
+dbPopulate: "true"
+userPasswordEncoded: "$argon2i$v=19$m=4096,t=3,p=1$aaxA2v/9rRSPGkwYN+NQog$27Huii1XtD3iEd62fog+04G26LRPZMHoYCI6AGKTL8M"
+
+replicaCount: 1
+
+resourcesRequests:
+  #cpu: 1000m
+  memory: 768Mi
+  #memory: 1536Mi
+
+resourcesLimits:
+  #cpu: 2000m
+  memory: 768Mi
+  #memory: 1536Mi
+
+livenessProbe:
+  initialDelay: 45
+  timeout: 15
+  period: 120
+  failureThreshold: 1
+readinessProbe:
+  initialDelay: 45
+  timeout: 15
+  period: 120
+  failureThreshold: 1
+
+autoscaling:
+  enabled: false

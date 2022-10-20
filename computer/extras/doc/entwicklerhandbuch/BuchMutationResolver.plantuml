@@ -1,0 +1,86 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/graphql {
+  class "@Resolver" as Resolver
+  hide Resolver circle
+
+  class "@UseGuards" as UseGuards
+  hide UseGuards circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "@Mutation" as Mutation
+  hide Mutation circle
+
+  class "@Args" as Args
+  hide Args circle
+}
+
+package security.auth {
+  class "type Role = 'ADMIN' | 'MITARBEITER' | 'KUNDE'" as Role
+  hide Role circle
+
+  class "@Roles" as Roles
+  hide Roles circle
+
+  Roles .right.> Role
+}
+
+package buch #DDDDDD {
+  package entity #FFFFFF {
+    class Buch <<entity>>
+  }
+
+  package service #FFFFFF {
+    class BuchWriteService << control >>
+  }
+
+  class "type BuchDTO = Omit<Buch, 'aktualisiert' | 'erzeugt' | 'schlagwoerter'> & { schlagwoerter: string[] }" as BuchDTO
+  hide BuchDTO circle
+
+  class BuchMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
+    + @Mutation() @Roles() async create(@Args() buch: Buch): Promise<string>
+    + @Mutation() @Roles() async update(@Args() buch: BuchDTO): Promise<number>
+    + @Mutation() @Roles() async delete(@Args() id: string): Promise<boolean>
+  }
+
+  BuchMutationResolver o-down-> "1" BuchWriteService : service
+
+  BuchMutationResolver ..> Buch
+  BuchMutationResolver ..> BuchDTO
+  BuchDTO .up.> Buch
+  BuchMutationResolver ..> Promise
+  BuchMutationResolver ..> Resolver
+
+  BuchMutationResolver .up.> Roles
+  BuchMutationResolver .up.> Role
+
+  BuchDTO .[hidden].> Promise
+  BuchDTO .[hidden].> Resolver
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

@@ -1,0 +1,44 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+apiVersion: v1
+# https://kubernetes.io/docs/concepts/services-networking/connect-applications-service
+# https://kubernetes.io/docs/concepts/services-networking/service
+kind: Service
+metadata:
+  # 60+ Template Functions: Go Templates, Sprig Template Library, include, required
+  # https://helm.sh/docs/chart_template_guide/functions_and_pipelines
+  # https://godoc.org/text/template
+  # https://masterminds.github.io/sprig
+  name: {{ include "mailserver.fullname" . }}
+  labels:
+    # https://helm.sh/docs/chart_template_guide/function_list
+    # nindent rueckt um eine bestimmte Anzahl ("n") Zeichen ein
+    {{- include "mailserver.labels" . | nindent 4 }}
+spec:
+  # Selektion der Pods fuer eingehende Requests
+  selector:
+    {{- include "mailserver.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: 5025
+      name: smtp
+    - port: 5080
+      name: {{ include "mailserver.name" . }}-http
+    - port: 5081
+      name: actuator
+      # https://kubernetes.io/docs/concepts/services-networking/service/#protocol-support
+      #protocol: TCP
+  # https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  #type: ClusterIP

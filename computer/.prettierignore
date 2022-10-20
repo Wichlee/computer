@@ -1,0 +1,10 @@
+# https://git-scm.com/docs/gitignore#_pattern_format
+
+package.json
+ReadMe.md
+extras/kubernetes/*.yaml
+extras/kubernetes/templates/*.yaml
+extras/postgres/kubernetes/*.yaml
+extras/postgres/kubernetes/templates/*.yaml
+extras/mysql/kubernetes/*.yaml
+extras/mysql/kubernetes/templates/*.yaml

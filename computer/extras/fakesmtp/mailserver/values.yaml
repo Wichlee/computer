@@ -1,0 +1,96 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Default values for mailserver.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# https://helm.sh/docs/chart_best_practices/values
+
+# -- Namespace in NOTES.txt
+namespace: acme
+
+# -- Defaultwert ist im Chart bei `name` und kann überschrieben werden.
+nameOverride: ""
+
+# -- _Fully Qualified Name (FQN)_ ist defaultmäßig im Chart bei `name` und kann überschrieben werden.
+fullnameOverride: ""
+
+# -- Anzahl Replica im Pod von Kubernetes
+replicaCount: 2
+
+image:
+  # -- Repository als Präfix beim Image-Namen
+  repository: gessnerfl
+  # -- Name des Image
+  name: fake-smtp-server
+  # -- Pull-Policy für das Image
+  pullPolicy: IfNotPresent
+  # -- Defaultwert ist im Chart bei `appVersion` und kann überschrieben werden.
+  tag: ""
+
+# -- ANSI Escape-Sequencen für die Ausgabe in der Konsole erkennen
+outputAnsiEnabled: DETECT
+
+# -- Anzeige des Banners
+bannerMode: CONSOLE
+
+resourcesRequests:
+  # -- (Mindest-) Anforderung an CPU-Ressourcen in _millicores_, z.B. `500m` oder `1`
+  cpu: 500m
+  # -- (Mindest-) Anforderung an Memory-Resourcen als _mebibyte_ Wert
+  memory: 512Mi
+  # -- (Mindest-) Anforderung an flüchtigen Speicher für z.B. Caching und Logs
+  ephemeral: 64Mi
+
+resourcesLimits:
+  # -- Maximalanforderung an CPU-Ressourcen in _millicores_, z.B. `500m` oder `1`
+  cpu: 600m
+  # -- Maximalanforderung an Memory-Resourcen als _mebibyte_ Wert
+  memory: 512Mi
+  # -- Maximalanforderung an flüchtigen Speicher für z.B. Caching und Logs
+  ephemeral: 64Mi
+
+livenessProbe:
+  # -- Anzahl Sekunden, bis die Probe für Liveness abgesetzt wird
+  initialDelay: 60
+  # -- Timeout für Liveness-Probe in Sekunden
+  timeout: 60
+  # -- periodischer Abstand zwischen den Liveness-Proben in Sekunden
+  period: 10
+  # -- Max. Anzahl an Fehlversuchen bei den Liveness-Proben
+  failureThreshold: 1
+
+readinessProbe:
+  # -- Anzahl Sekunden, bis die Probe für Readiness abgesetzt wird
+  initialDelay: 60
+  # -- Timeout für Readiness-Probe in Sekunden
+  timeout: 60
+  # -- periodischer Abstand zwischen den Readiness-Proben in Sekunden
+  period: 10
+  # -- Max. Anzahl an Fehlversuchen bei den Readiness-Proben
+  failureThreshold: 1
+
+autoscaling:
+  # -- Ist Autoscaling aktiviert?
+  enabled: true
+  # -- Mininmale Anzahl an Replicas
+  minReplicas: 1
+  # -- Maximale Anzahl an Replicas
+  maxReplicas: 100
+  # -- Maximale CPU-Auslastung
+  targetCPUUtilizationPercentage: 80
+  # -- Maximale RAM-Auslastung
+  targetMemoryUtilizationPercentage: 80

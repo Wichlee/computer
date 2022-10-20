@@ -1,0 +1,53 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf:   docker compose up
+#           docker compose down
+#
+# evtl.:    docker compose exec sonar bash
+
+# https://docs.docker.com/compose/compose-file
+# https://docs.docker.com/compose/compose-file/compose-file-v3
+
+services:
+  sonar:
+    image: sonarqube:9.6.1-community
+    ports:
+      # Port fuer HTTP
+      - published: 9000
+        target: 9000
+      # Port fuer H2
+      - published: 9092
+        target: 9092
+    volumes:
+      - type: bind
+        source: C:/Zimmermann/volumes/sonarqube/data
+        target: /opt/sonarqube/data
+      - type: bind
+        source: C:/Zimmermann/volumes/sonarqube/logs
+        target: /opt/sonarqube/logs
+      - type: bind
+        source: C:/Zimmermann/volumes/sonarqube/language-plugins
+        target: /opt/sonarqube/lib/extensions
+        read_only: true
+    environment:
+      TZ: Europe/Berlin
+    container_name: sonar
+    hostname: sonar
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M

@@ -1,0 +1,9 @@
+# Default, so dass in C:\Users\<MeineKennung>\.gitignore core.autocrlf nicht notwendig ist
+#* text=auto
+
+# (Binaer-) Dateien, die nicht modifiziert werden sollen
+*.png binary
+*.jpg binary
+*.cer binary
+*.pem binary
+package-lock.json binary

@@ -1,0 +1,78 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf:   docker compose up
+#           docker compose down
+
+# docker compose exec mysql bash
+# mysql --user=root --password=p
+
+---
+# https://docs.docker.com/compose/compose-file
+# https://docs.docker.com/compose/compose-file/compose-file-v3
+services:
+  mysql:
+    image: mysql:8.0.30
+    ports:
+      - published: 3306
+        target: 3306
+    volumes:
+      - type: bind
+        source: C:/Zimmermann/volumes/mysql/db
+        # /etc/mysql/my.cnf
+        # SELECT @@datadir;
+        target: /var/lib/mysql
+      - type: bind
+        source: C:/Zimmermann/volumes/mysql/sql
+        target: /sql
+        read_only: true
+      - type: bind
+        source: C:/Zimmermann/volumes/mysql/tmp
+        target: /tmp
+    env_file: [mysql.env]
+#    user: "mysql:mysql"
+    # docker inspect mysql --format '{{ .Id }}: SecurityOpt={{ .HostConfig.SecurityOpt }}'
+    security_opt:
+      - label:user:mysql
+      - no-new-privileges:true
+    container_name: mysql
+    # gleicher Name wie der Kubernetes-Service
+    hostname: mysql
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+    healthcheck:
+      test: ["CMD", "mysqladmin", "--user=root", "--password=p", "--host=mysql", "ping"]
+      interval: 5s
+      timeout: 2s
+      start_period: 5s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.0
+    links: [mysql]
+    ports:
+      - published: 8889
+        target: 80
+    env_file: [phpMyAdmin.env]
+    # kein dedizierter User im Image vorhanden
+    container_name: phpmyadmin
+    hostname: phpmyadmin
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 768M

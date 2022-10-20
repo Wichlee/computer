@@ -1,0 +1,13 @@
+{
+  "titel": "Testisbn",
+  "rating": 1,
+  "art": "KINDLE",
+  "verlag": "FOO_VERLAG",
+  "preis": 99.9,
+  "rabatt": 0.1,
+  "lieferbar": true,
+  "datum": "2022-01-31",
+  "isbn": "9783897225831",
+  "homepage": "https://test.de/",
+  "schlagwoerter": ["JAVASCRIPT", "TYPESCRIPT"]
+}

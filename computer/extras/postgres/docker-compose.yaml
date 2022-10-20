@@ -1,0 +1,95 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf:   docker compose up
+#           docker compose down
+
+# BEACHTE: Bei "pgadmin" immer Ausloggen.
+# Sonst hat man abgelaufene Sessions und erhaelt die Fehlermeldung "The CSRF session token is missing."
+
+# docker compose exec postgres bash
+#   psql --username=postgres
+#   cat /usr/share/postgresql/postgresql.conf.sample > /var/lib/postgresql/data/my-postgresql.conf
+# docker compose exec pgadmin ash
+
+---
+# https://docs.docker.com/compose/compose-file
+# https://docs.docker.com/compose/compose-file/compose-file-v3
+services:
+  postgres:
+    image: postgres:14.5-bullseye
+    ports:
+      - published: 5432
+        target: 5432
+    volumes:
+      - type: bind
+        source: C:/Zimmermann/volumes/postgres/data
+        target: /var/lib/postgresql/data
+      - type: bind
+        source: C:/Zimmermann/volumes/postgres/postgresql.conf
+        target: /etc/postgresql/postgresql.conf
+        read_only: true
+      - type: bind
+        source: C:/Zimmermann/volumes/postgres/tablespace
+        target: /var/lib/postgresql/tablespace
+      - type: bind
+        source: C:/Zimmermann/volumes/postgres/sql
+        target: /sql
+        read_only: true
+    env_file: [postgres.env]
+    # beim 1. Start *NICHT* den eingeschraenkten Linux-User "postgres" verwenden, d.h. implizit "root"
+    user: "postgres:postgres"
+    # docker inspect postgres --format '{{ .Id }}: SecurityOpt={{ .HostConfig.SecurityOpt }}'
+    security_opt:
+      - label:user:postgres
+      - no-new-privileges:true
+    container_name: postgres
+    # gleicher Name wie der Kubernetes-Service
+    hostname: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+    healthcheck:
+      test: ["CMD", "pg_isready", "--dbname", "postgres", "--username", "postgres"]
+      interval: 5s
+      timeout: 2s
+      start_period: 5s
+
+  # http://localhost:8888 mit Emailadresse "pgadmin@acme.com" und Passwort "p"
+  pgadmin:
+    image: dpage/pgadmin4:6.14
+    ports:
+      # Gunicorn ("Green Unicorn") ist ein Webserver in Python fuer UNIX (hier: BusyBox)
+      - published: 8888
+        target: 80
+    volumes:
+      - type: bind
+        source: C:/Zimmermann/volumes/postgres/pgadmin
+        # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+        target: /var/lib/pgadmin
+      - type: bind
+        source: C:/Zimmermann/volumes/postgres/pgadmin4
+        target: /var/lib/pgadmin4
+    env_file: [pgadmin.env]
+    user: "pgadmin:5050"
+    container_name: pgadmin
+    hostname: pgadmin
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 768M

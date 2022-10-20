@@ -1,0 +1,141 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#  "." am Anfang bezeichnet den Top-Level Namensraum
+# kubectl logs mysql-0 --namespace acme
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "mysql.fullname" . }}
+  labels:
+    {{- include "mysql.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "mysql.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "mysql.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        {{- include "mysql.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          name: {{ .Chart.Name }}
+          imagePullPolicy: Always
+          #imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ include "mysql.fullname" . }}
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mysql.fullname" . }}
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: {{ .Chart.Name }}
+          securityContext:
+            # mysql
+            runAsUser: 999
+            runAsGroup: 999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: {{ .Values.resourcesRequests.cpu }}
+              memory: {{ .Values.resourcesRequests.memory }}
+              ephemeral-storage: {{ .Values.resourcesRequests.ephemeral }}
+            limits:
+              cpu: {{ .Values.resourcesLimits.cpu }}
+              memory: {{ .Values.resourcesLimits.memory }}
+              ephemeral-storage: {{ .Values.resourcesLimits.ephemeral }}
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin --user=root --password=p --host=mysql-0 ping"]
+            initialDelaySeconds: {{ .Values.liveness.initialDelay }}
+            timeoutSeconds: {{ .Values.liveness.timeout }}
+            periodSeconds: {{ .Values.liveness.period }}
+            failureThreshold: {{ .Values.liveness.failureThreshold }}
+            terminationGracePeriodSeconds: 5
+          readinessProbe:
+            exec:
+              command: [ "sh", "-c", "mysqladmin --user=root --password=p --host=mysql-0 ping" ]
+            initialDelaySeconds: {{ .Values.readiness.initialDelay }}
+            timeoutSeconds: {{ .Values.readiness.timeout }}
+            periodSeconds: {{ .Values.readiness.period }}
+            failureThreshold: {{ .Values.readiness.failureThreshold }}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: {{ include "mysql.name" . }}-db-volume
+            - mountPath: /tmp
+              name: {{ include "mysql.name" . }}-tmp-volume
+            - mountPath: /var/run/mysqld
+              name: {{ include "mysql.name" . }}-mysqld-volume
+      volumes:
+        - name: {{ include "mysql.name" . }}-db-volume
+          persistentVolumeClaim:
+            claimName: {{ include "mysql.name" . }}-db-volume-mysql-0
+        - name: {{ include "mysql.name" . }}-tmp-volume
+          persistentVolumeClaim:
+            claimName: {{ include "mysql.name" . }}-tmp-volume-mysql-0
+        - name: {{ include "mysql.name" . }}-mysqld-volume
+          persistentVolumeClaim:
+            claimName: {{ include "mysql.name" . }}-mysqld-volume-mysql-0
+      serviceAccountName: {{ include "mysql.fullname" . }}
+      automountServiceAccountToken: false
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "mysql.name" . }}-db-volume
+        labels:
+          app.kubernetes.io/name: {{ include "mysql.name" . }}-db
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: manual
+    - metadata:
+        name: {{ include "mysql.name" . }}-tmp-volume
+        labels:
+          app.kubernetes.io/name: {{ include "mysql.name" . }}-tmp
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 128Ki
+        storageClassName: manual
+    - metadata:
+        name: {{ include "mysql.name" . }}-mysqld-volume
+        labels:
+          app.kubernetes.io/name: {{ include "mysql.name" . }}-mysqld
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 256Ki
+        storageClassName: manual

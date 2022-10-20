@@ -1,0 +1,65 @@
+// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+//
+// N e t z w e r k   -  V e r b i n d u n g   n o t w e n d i g
+//
+
+### Suche alle Buecher
+GET {{restUrl}}
+
+### Suche mit vorhandener Buch-ID
+GET {{restUrl}}/00000000-0000-0000-0000-000000000001
+
+### Suche mit vorhandener Buch-ID und Versionsnummer
+GET {{restUrl}}/00000000-0000-0000-0000-000000000001
+If-None-Match: "0"
+
+### Suche mit vorhandener Buch-ID und falscher Versionsnummer
+GET {{restUrl}}/00000000-0000-0000-0000-000000000001
+If-None-Match: 0
+
+### Suche mit ungueltiger Buch-ID
+GET {{restUrl}}/YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY
+
+### Suche mit nicht-vorhandener Buch-ID
+GET {{restUrl}}/99999999-9999-9999-9999-999999999999
+
+### Suche mit vorhandenem Titel
+GET {{restUrl}}?titel=a
+
+### Suche mit nicht-vorhandenem Titel
+GET {{restUrl}}?titel=xxx
+
+### Suche mit vorhandener ISBN
+GET {{restUrl}}?isbn=978-3-8972-2583-1
+
+### Suche mit vorhandenen Schlagwoertern
+GET {{restUrl}}?javascript=true&typescript=true
+
+### Suche mit vorhandenem Schlagwort "JAVASCRIPT"
+GET {{restUrl}}?javascript=true
+
+### Suche mit vorhandenem Schlagwort "TYPESCRIPT"
+GET {{restUrl}}?typescript=true
+
+### Suche mit nicht-vorhandener Property
+GET {{restUrl}}?php=true
+
+### Suche mit gueltiger Buchart
+GET {{restUrl}}?art=KINDLE
+
+### Suche mit gueltigem Rating
+GET {{restUrl}}?rating=1

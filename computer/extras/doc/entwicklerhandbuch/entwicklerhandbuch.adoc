@@ -1,0 +1,142 @@
+// Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+// Preview durch <Strg><Shift>v
+
+= Entwickler/innen/handbuch
+Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
+:doctype: book
+:toc: left
+:sectanchors:
+:sectlinks:
+:sectnums:
+:source-highlighter: coderay
+:icons: font
+// :kroki-server-url: https://kroki.io
+
+// https://github.com/asciidoctor/asciidoctorj
+// https://github.com/asciidoctor/asciidoctor-diagram
+// http://de.plantuml.com/classes.html
+// http://de.plantuml.com/component.html
+// https://github.com/odrotbohm/asciidoctor-plantuml
+
+IMPORTANT: Copyright (C) 2020 - present Jürgen Zimmermann, Hochschule Karlsruhe. +
+           Free use of this software is granted under the terms of the
+           GNU General Public License (GPL) v3. +
+           For the full text of the license, see the http://www.gnu.org/licenses/gpl-3.0.html[license] file.
+
+== Der Applikationsserver
+
+=== Der Applikationsserver im Überblick
+
+Sed porttitor lectus nibh. Nulla porttitor accumsan tincidunt.
+
+.Use Cases
+[plantuml,use-cases,svg]
+----
+include::use-cases.plantuml[]
+----
+
+Quisque velit nisi, pretium ut lacinia in, elementum id enim. Nulla porttitor
+accumsan tincidunt.
+
+.Komponentendiagramm
+[plantuml,komponenten,svg]
+----
+include::komponenten.plantuml[]
+----
+
+=== Die REST-Schnittstelle
+
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia
+Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet
+ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
+amet ligula.
+
+."BuchGetController" für Lesezugriffe an der REST-Schnittstelle
+[plantuml,BuchGetController,svg]
+----
+include::BuchGetController.plantuml[]
+----
+
+Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
+sollicitudin molestie malesuada.
+
+."BuchWriteController" für Schreibzugriffe an der REST-Schnittstelle
+[plantuml,BuchGetController,svg]
+----
+include::BuchWriteController.plantuml[]
+----
+
+=== Die GraphQL-Schnittstelle
+
+Donec sollicitudin molestie malesuada. Donec rutrum congue leo eget malesuada.
+
+.BuchQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
+[plantuml,BuchQueryResolver,svg]
+----
+include::BuchQueryResolver.plantuml[]
+----
+
+Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a
+pellentesque nec, egestas non nisi.
+
+.BuchMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
+[plantuml,BuchMutationResolver,svg]
+----
+include::BuchMutationResolver.plantuml[]
+----
+
+=== Der Anwendungskern
+
+Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
+
+."BuchReadService" im Anwendungskern
+[plantuml,BuchReadService,svg]
+----
+include::BuchReadService.plantuml[]
+----
+
+Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget
+malesuada.
+
+."BuchWriteService" im Anwendungskern
+[plantuml,BuchWriteService,svg]
+----
+include::BuchWriteService.plantuml[]
+----
+
+=== Klasse für Entities
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur arcu erat,
+accumsan id imperdiet et, porttitor at sem.
+
+.Entity
+[plantuml,Buch,svg]
+----
+include::Buch.plantuml[]
+----
+
+== Programmierrichtlinien für TypeScript und JavaScript
+
+Für die Programmierung mit *TypeScript* und *JavaScript* wird folgende
+Styleguides empfehlenswert:
+
+[horizontal]
+_Microsoft_:: https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines
+_Angular_:: https://angular.io/docs/ts/latest/guide/style-guide.html
+_Google_:: https://google.github.io/styleguide/tsguide.html
+_React_:: https://github.com/airbnb/javascript/tree/master/react

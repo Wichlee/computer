@@ -1,0 +1,102 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf:
+# pack build juergenzimmermann/buch:1.0.0-buildpacks --builder paketobuildpacks/builder:base
+
+# ------------------------------------------------------------------------------
+# P r o j e c t   D e s c r i p t o r   f u e r   p a c k
+# ------------------------------------------------------------------------------
+
+# https://paketo.io/docs/buildpacks/language-family-buildpacks/nodejs
+# https://buildpacks.io/docs/app-developer-guide/using-project-descriptor
+# https://buildpacks.io/docs/reference/config/project-descriptor
+# https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md
+# https://buildpacks.io/docs/app-developer-guide/environment-variables
+# https://console.cloud.google.com/gcr/images/paketo-buildpacks/GLOBAL/nodejs
+
+# table = Key/Value-Paare
+[project]
+id = "com.acme.buch"
+name = "Microservice buch"
+version = "1.0.0"
+authors = ["Juergen.Zimmermann@h-ka.de"]
+
+# array of tables
+[[project.licenses]]
+type = "GPL-3.0"
+
+[build]
+# fuer Verzeichnis /workspace im Image
+include = [
+  "/dist/src",
+  "!/dist/src/**/*.js.map",
+  "!/dist/src/**/*.d.ts",
+  "!/dist/src/jest.config.*",
+  "!/dist/__tests__",
+  "/.npmrc",
+  "/.slugignore",
+  "/Procfile",
+  "/package*.json",
+  "/project.toml",
+  "/scripts/copy-resources.js",
+  #"/node_modules",
+]
+
+#[[build.buildpacks]]
+# https://registry.buildpacks.io/buildpacks/paketo-buildpacks/procfile
+# https://github.com/paketo-buildpacks/procfile/tags
+# https://console.cloud.google.com/gcr/images/paketo-buildpacks/GLOBAL/procfile
+#uri = "urn:cnb:registry:paketo-buildpacks/procfile@5.2.0"
+
+#[[build.buildpacks]]
+# https://registry.buildpacks.io/buildpacks/paketo-buildpacks/node-engine
+# https://github.com/paketo-buildpacks/node-engine/tags
+# https://console.cloud.google.com/gcr/images/paketo-buildpacks/GLOBAL/node-engine
+uri = "urn:cnb:registry:paketo-buildpacks/node-engine@0.17.0"
+
+[[build.buildpacks]]
+# https://registry.buildpacks.io/buildpacks/paketo-buildpacks/nodejs
+# https://github.com/paketo-buildpacks/nodejs/tags
+# https://console.cloud.google.com/gcr/images/paketo-buildpacks/GLOBAL/nodejs
+uri = "urn:cnb:registry:paketo-buildpacks/nodejs@0.24.0"
+
+[[build.env]]
+name = "BP_NODE_VERSION"
+value = "18.8.0"
+
+[[build.env]]
+name = "BP_LAUNCHPOINT"
+value = "dist/src/main.js"
+
+[[build.env]]
+name = "NODE_VERBOSE"
+value = "true"
+
+[[build.env]]
+name = "NPM_CONFIG_LOGLEVEL"
+value = "verbose"
+
+[[build.env]]
+name = "NODE_ENV"
+value = "production"
+
+[[build.env]]
+name = "NPM_CONFIG_PRODUCTION"
+value = "true"
+
+# [[build.env]]
+# name = "GOOGLE_RUNTIME_VERSION"
+# value = "18.7.0"

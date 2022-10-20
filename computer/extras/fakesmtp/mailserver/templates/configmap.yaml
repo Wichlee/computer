@@ -1,0 +1,29 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# "." am Anfang bezeichnet den Top-Level Namensraum bei Helm
+
+apiVersion: v1
+# https://kubernetes.io/docs/concepts/configuration/configmap
+kind: ConfigMap
+metadata:
+  name: {{ include "mailserver.fullname" . }}
+data:
+  # Key-Value-Paare (hier: fuer die Umgebungsvariable)
+  TZ: Europe/Berlin
+  SPRING_OUTPUT_ANSI_ENABLED: {{ .Values.outputAnsiEnabled }}
+  SPRING_MAIN_BANNER-MODE: {{ .Values.bannerMode }}
+  SPRING_LAZY-INITIALIZATION: "true"
+  SPRING_JPA_OPEN-IN-VIEW: "true"

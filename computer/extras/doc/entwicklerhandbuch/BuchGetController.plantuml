@@ -1,0 +1,91 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "@Controller" as Controller
+  hide Controller circle
+
+  class "@Get" as Get
+  hide Get circle
+
+  class "@Req" as Req
+  hide Req circle
+
+  class "@Res" as Res
+  hide Res circle
+
+  class "@Param" as Param
+  hide Param circle
+
+  class "@Query" as Query
+  hide Query circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+}
+
+package express {
+  class Request
+  class Response
+
+  Response .[hidden].> Controller
+}
+
+package buch {
+  package entity #FFFFFF {
+    class Buch <<entity>>
+
+    Buch .[hidden].> Promise
+    Buch .[hidden].> Request
+  }
+
+  package service {
+    class BuchReadService << control >>
+  }
+
+  package rest #DDDDDD {
+    BuchQuery -up-|> Buch
+
+    class BuchGetController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
+      + @Get() async findById(@Param() id: string, @Req() req: Request, @Headers() version: string, @Res() res: Response): Promise<Response<BuchModel | undefined>>
+      + @Get() async find(@Query() query: BuchQuery, @Req() req: Request,  @Res() res: Response): Promise<Response<BuecherModel | undefined>>
+    }
+
+    BuchGetController o--> "1" BuchReadService : service
+
+    BuchGetController ..> Controller
+    BuchGetController ..> Request
+    BuchGetController ..> Response
+    BuchGetController ..> Promise
+    BuchGetController .up.> BuchModel
+    BuchGetController .up.> BuchQuery
+
+    BuchReadService .[hidden].> Request
+    BuchReadService .[hidden].> Promise
+    Response .right[hidden].> Controller
+  }
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

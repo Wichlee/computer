@@ -1,0 +1,15 @@
+# https://eslint.org/docs/user-guide/configuring#ignoring-files-and-directories
+
+.nyc_output/*
+.vscode/*
+build/*
+coverage/*
+dist/*
+mochaawesome-report/*
+node-ts/*
+scripts/*
+temp/*
+node_modules/*
+
+# default:
+#node_modules/*

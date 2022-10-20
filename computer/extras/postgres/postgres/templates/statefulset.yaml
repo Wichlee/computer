@@ -1,0 +1,156 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#  "." am Anfang bezeichnet den Top-Level Namensraum
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "postgres.fullname" . }}
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "postgres.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "postgres.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        {{- include "postgres.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          name: {{ .Chart.Name }}
+          imagePullPolicy: Always
+          #imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ include "postgres.fullname" . }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgres.fullname" . }}
+                  key: password
+          ports:
+            - containerPort: 5432
+              name: {{ .Chart.Name }}
+          securityContext:
+            # postgres
+            runAsUser: 999
+            runAsGroup: 999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: {{ .Values.resourcesRequests.cpu }}
+              memory: {{ .Values.resourcesRequests.memory }}
+              ephemeral-storage: {{ .Values.resourcesRequests.ephemeral }}
+            limits:
+              cpu: {{ .Values.resourcesLimits.cpu }}
+              memory: {{ .Values.resourcesLimits.memory }}
+              ephemeral-storage: {{ .Values.resourcesLimits.ephemeral }}
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "psql --dbname=postgres --username=postgres --command='SELECT 1'"]
+            initialDelaySeconds: {{ .Values.liveness.initialDelay }}
+            timeoutSeconds: {{ .Values.liveness.timeout }}
+            periodSeconds: {{ .Values.liveness.period }}
+            failureThreshold: {{ .Values.liveness.failureThreshold }}
+            terminationGracePeriodSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "psql --dbname=postgres --username=postgres --command='SELECT 1'"]
+            initialDelaySeconds: {{ .Values.readiness.initialDelay }}
+            timeoutSeconds: {{ .Values.readiness.timeout }}
+            periodSeconds: {{ .Values.readiness.period }}
+            failureThreshold: {{ .Values.readiness.failureThreshold }}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: {{ include "postgres.name" . }}-data-volume
+            - mountPath: /etc/postgresql/postgresql.conf
+              name: {{ include "postgres.name" . }}-conf-volume
+            - mountPath: /var/lib/postgresql/tablespace
+              name: {{ include "postgres.name" . }}-tablespace-volume
+            - mountPath: /var/run/postgresql
+              name: {{ include "postgres.name" . }}-run-volume
+      volumes:
+        - name: {{ include "postgres.name" . }}-data-volume
+          persistentVolumeClaim:
+            claimName: {{ include "postgres.name" . }}-data-volume-postgres-0
+        - name: {{ include "postgres.name" . }}-conf-volume
+          persistentVolumeClaim:
+            claimName: {{ include "postgres.name" . }}-conf-volume-postgres-0
+        - name: {{ include "postgres.name" . }}-tablespace-volume
+          persistentVolumeClaim:
+            claimName: {{ include "postgres.name" . }}-tablespace-volume-postgres-0
+        - name: {{ include "postgres.name" . }}-run-volume
+          persistentVolumeClaim:
+            claimName: {{ include "postgres.name" . }}-run-volume-postgres-0
+      serviceAccountName: {{ include "postgres.fullname" . }}
+      automountServiceAccountToken: false
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ include "postgres.name" . }}-data-volume
+        labels:
+          app.kubernetes.io/name: postgres-data
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: manual
+    - metadata:
+        name: {{ include "postgres.name" . }}-conf-volume
+        labels:
+          app.kubernetes.io/name: postgres-conf
+        finalizers: []
+      spec:
+        accessModes: [ReadOnlyMany]
+        resources:
+          requests:
+            storage: 128Ki
+        storageClassName: manual
+    - metadata:
+        name: {{ include "postgres.name" . }}-tablespace-volume
+        labels:
+          app.kubernetes.io/name: postgres-tablespace
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: manual
+    - metadata:
+        name: {{ include "postgres.name" . }}-run-volume
+        labels:
+          app.kubernetes.io/name: postgres-run
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 128Ki
+        storageClassName: manual

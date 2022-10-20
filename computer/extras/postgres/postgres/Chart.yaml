@@ -1,0 +1,64 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Aufruf: helm install [--debug --dry-run] postgres . -f values.yaml -f dev.yaml
+#         helm uninstall postgres
+
+# Metadaten generiert durch: helm create postgres
+
+apiVersion: v2
+name: postgres
+description: Helm Chart für PostgreSQL und pgAdmin
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 1.0.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+appVersion: "14.5"
+
+kubeVersion: ">=1.24.0"
+
+keywords:
+  - Database
+  - SQL
+  - PostgreSQL
+  - Postgres
+  - pgAdmin
+
+home: https://www.www.h-ka.de
+icon: https://www.www.h-ka.de/typo3conf/ext/in2template/Resources/Public/Images/Favicons/favicon-256x256.png
+
+maintainers:
+  - name: Jürgen Zimmermann
+    email: Juergen.Zimmermann@h-ka.de
+    url: https://www.h-ka.de
+
+sources:
+  - https://www.postgresql.org
+  - https://www.pgadmin.org

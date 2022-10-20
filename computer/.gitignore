@@ -1,0 +1,68 @@
+# https://git-scm.com/docs/gitignore#_pattern_format
+
+# compiled output
+/dist
+
+# Abhaengige Dateien durch npm
+/node_modules
+
+# Generierte Dateien
+build
+extras/doc/entwicklerhandbuch/html/*
+extras/doc/folien/*.html
+extras/doc/api/*
+extras/doc/popeye/*
+extras/helm/README.md
+extras/postgres/helm/README.md
+extras/postgres/.kpt-pipeline
+extras/mysql/helm/README.md
+extras/mysql/.kpt-pipeline
+node-ts
+temp
+tmp
+zz_env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.scannerwork
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+coverage
+/.nyc_output
+/.clinic
+/__tests__/buch/__snapshots__
+
+# Snyk
+.snyk
+snyk_report.*
+snyk-*.json
+snyk-*.log
+
+# IDEs and editors
+/.idea
+*.iml
+.env
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.sonarlint
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

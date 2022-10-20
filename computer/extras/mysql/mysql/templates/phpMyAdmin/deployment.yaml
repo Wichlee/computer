@@ -1,0 +1,117 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.phpMyAdmin.name }}
+  labels:
+    {{- include "phpMyAdmin.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "phpMyAdmin.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        {{- include "phpMyAdmin.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - image: {{ .Values.phpMyAdmin.imageName }}:{{ .Values.phpMyAdmin.version }}
+          name: {{ .Values.phpMyAdmin.name }}
+          imagePullPolicy: Always
+          #imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.phpMyAdmin.name }}
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mysql.fullname" . }}
+                  key: password
+          ports:
+            - containerPort: 80
+              name: {{ .Values.phpMyAdmin.name }}
+          securityContext:
+            # Nur der User "root" kann sich einloggen: siehe /etc/passwd
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+            # Shell-Kommando: capsh --print
+            # default capabilities: cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap
+            # https://snyk.io/blog/kubernetes-securitycontext-linux-capabilities
+            # https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/policy/container-capabilities
+            capabilities:
+              drop: [ALL]
+              # add: [CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, SETGID, SETUID, SETPCAP, NET_BIND_SERVICE, NET_RAW, SYS_CHROOT, MKNOD, AUDIT_WRITE, SETFCAP]
+              add: [SETUID, SETGID]
+          resources:
+            requests:
+              # vor allem fuer den Start des Webservers
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.phpMyAdmin.name }}
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 2
+            terminationGracePeriodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.phpMyAdmin.name }}
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 2
+          volumeMounts:
+            - mountPath: /etc/phpmyadmin
+              name: {{ .Values.phpMyAdmin.name }}-etc-volume
+            - mountPath: /tmp
+              name: {{ .Values.phpMyAdmin.name }}-tmp-volume
+            - mountPath: /var/www/html/tmp
+              name: {{ .Values.phpMyAdmin.name }}-www-tmp-volume
+            - mountPath: /var/run/apache2
+              name: {{ .Values.phpMyAdmin.name }}-apache2-volume
+      volumes:
+        - name: {{ .Values.phpMyAdmin.name }}-etc-volume
+          hostPath:
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/phpmyadmin-etc
+            type: Directory
+        - name: {{ .Values.phpMyAdmin.name }}-tmp-volume
+          hostPath:
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/phpmyadmin-tmp
+            type: Directory
+        - name: {{ .Values.phpMyAdmin.name }}-www-tmp-volume
+          hostPath:
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/phpmyadmin-www-tmp
+            type: Directory
+        - name: {{ .Values.phpMyAdmin.name }}-apache2-volume
+          hostPath:
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/phpmyadmin-apache2
+            type: Directory
+      serviceAccountName: {{ .Values.phpMyAdmin.name }}
+      automountServiceAccountToken: false

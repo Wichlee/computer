@@ -1,0 +1,144 @@
+:revealjsdir: ../../../node_modules/reveal.js
+:revealjs_slideNumber: true
+:sectnums:
+
+// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+// https://asciidoctor.org/docs/asciidoctor-revealjs
+
+= Beispiel mit Nest, REST, GraphQL, TypeORM, JWT und Jest
+
+Jürgen Zimmermann <Juergen.Zimmermann@h-ka.de>
+
+== Gliederung
+
+* Werkzeuge
+* Nest und REST
+* Nest und GraphQL
+* TypeORM
+* Security
+* Jest, Axios und Istanbul
+* OpenAPI durch Swagger
+
+== Werkzeuge
+
+* Infrastruktur
+* Entwicklungsumgebung
+* CI und Deployment
+* Dokumentation
+
+=== Infrastruktur
+
+* npm
+* node_modules
+* ts-node
+
+=== Entwicklungsumgebung
+
+* VS Code
+* TypeScript und ES 2015+
+* ESLint und SonarQube
+* Prettier
+* RESTclient, auch für GraphQL
+
+=== CI und Deployment
+
+* pack für Docker Images
+* Kubernetes
+  - Kustomize
+  - (Skaffold)
+  - Lens und Octant: Pods, Logs, ...
+* Heroku und Buildpack
+* Continuous Integration (CI) durch eine Jenkins Pipeline
+
+=== Dokumentation
+
+* AsciiDoctor mit PlantUML
+* reveal.js
+* _TODO: Jekyll_
+
+== Nest und REST
+
+* Controller mit `@Controller()` usw.
+* Services durch `@Injectable`
+* Entity-Klasse mit `@Entity()` und Decorators für die Properties, wie z.B. `@Column()`, für TypeORM
+* Guards und Strategies
+* Middleware, z.B. `RequestLoggerMiddleware`
+* Interceptor, z.B. für Antwortzeit und Statuscode
+* `@Module()`
+
+=== Decorator für die Controller-Klasse
+
+* `@Controller()`
+* `@UseGuards()`
+* `@UseInterceptors()`
+
+=== Decorator für die Controller-Funktionen
+
+* `@Get()`, `@Post()`, `@Put()`, `@Delete()`
+* `@Param()`, `@Query()`
+* `@Req()`, `@Res()`, `@Body()`, `@Header()`
+* `@Roles()`
+
+== Nest und GraphQL
+
+* Wrapper für Apollo Server
+* Schema-Definition mit Typen, Query und Mutation
+* Resolver mit `@Resolver()`, `@Query()`, `@Mutation()`, `@Args()`
+* RESTclient
+
+== TypeORM
+
+* OR-Mapping
+* ähnlich wie Hibernate
+* Entity-Klassen
+* Decorators: @Entity(), @Column(), @PrimaryColumn(), @OneToOne(), ..., @VersionColumn(), @CreateDateColumn(), @UpdateDateColumn()
+* Repository
+* QueryBuilder
+
+== Security
+
+* JWT
+  - Private und Public Key
+  - Header
+  - Payload
+  - Signature
+* Guards durch Nest für RBAC
+* Lokale Strategie für Passport
+* Argon2
+
+=== JWT
+
+* Header
+  - alg, z.B. RS256
+  - typ
+*  Payload
+  - iat (issued at)
+  - exp (expiration)
+  - iss (issuer)
+
+== Jest, Axios und Istanbul
+
+* Jest
+* ts-jest
+* Axios
+* Istanbul
+
+== OpenAPI durch Swagger
+
+* Wrapper durch Nest
+* @Api...() einschl. `@ApiBearerAuth()`
+* Button _Try it out_

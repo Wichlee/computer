@@ -1,0 +1,82 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#  "." am Anfang bezeichnet den Top-Level Namensraum
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "mysql.name" . }}-db-volume
+  labels:
+    app.kubernetes.io/name: {{ include "mysql.name" . }}-db
+    app.kubernetes.io/instance: {{ include "mysql.name" . }}-db
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: datenbank
+    app.kubernetes.io/part-of: acme
+    helm.sh/chart: {{ include "mysql.chart" . }}
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes: [ReadWriteOnce]
+  storageClassName: manual
+  hostPath:
+    path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/db
+    type: Directory
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "mysql.name" . }}-tmp-volume
+  labels:
+    app.kubernetes.io/name: {{ include "mysql.name" . }}-tmp
+    app.kubernetes.io/instance: {{ include "mysql.name" . }}-tmp
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: datenbank
+    app.kubernetes.io/part-of: acme
+    helm.sh/chart: {{ include "mysql.chart" . }}
+spec:
+  capacity:
+    storage: 128Ki
+  accessModes: [ReadWriteOnce]
+  storageClassName: manual
+  hostPath:
+    path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/tmp
+    type: Directory
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "mysql.name" . }}-mysqld-volume
+  labels:
+    app.kubernetes.io/name: {{ include "mysql.name" . }}-mysqld
+    app.kubernetes.io/instance: {{ include "mysql.name" . }}-mysqld
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: datenbank
+    app.kubernetes.io/part-of: acme
+    helm.sh/chart: {{ include "mysql.chart" . }}
+spec:
+  capacity:
+    storage: 256Ki
+  accessModes: [ReadWriteOnce]
+  storageClassName: manual
+  hostPath:
+    path: /run/desktop/mnt/host/c/Zimmermann/volumes/mysql/mysqld
+    type: Directory

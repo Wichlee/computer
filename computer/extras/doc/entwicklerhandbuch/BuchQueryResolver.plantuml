@@ -1,0 +1,75 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/graphql {
+  class "@Resolver" as Resolver
+  hide Resolver circle
+
+  class "@UseInterceptors" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "@Query" as Query
+  hide Query circle
+
+  class "@Args" as Args
+  hide Args circle
+
+  Resolver .left[hidden].> Promise
+}
+
+package buch {
+  package entity {
+    class Buch <<entity>>
+  }
+
+  package service {
+    class BuchReadService << control >>
+  }
+
+  package graphql #DDDDDD {
+    class "type BuchDTO = Omit<Buch, 'aktualisiert' | 'erzeugt' | 'schlagwoerter'> & { schlagwoerter: string[] }" as BuchDTO
+    hide BuchDTO circle
+
+    class BuchQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
+      + @Query() async findById(@Args() id: string): Promise<BuchDTO>
+      + @Query() async find(@Args() titel: string |undefined): Promise<BuchDTO[]>
+    }
+
+    BuchQueryResolver o-up-> "1" BuchReadService : service
+    BuchQueryResolver ..> BuchDTO
+    BuchDTO ..> Buch
+    BuchQueryResolver ..> Resolver
+
+    BuchQueryResolver ..> Promise
+
+    BuchDTO .[hidden].> Buch
+    Buch .[hidden].> Promise
+    BuchReadService .[hidden].> Promise
+    Buch .[hidden].> Resolver
+    BuchReadService .[hidden].> Resolver
+  }
+}
+
+hide empty members
+
+footer (c) Juergen Zimmermann
+
+@enduml

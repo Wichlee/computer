@@ -1,0 +1,98 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# siehe app.module.ts
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"Funktionen, um Bücherdaten zu lesen"
+type Query {
+  buecher(titel: String): [Buch!]
+
+  buch(id: ID!): Buch
+}
+
+"Funktionen, um Bücher neu anzulegen, zu aktualisieren oder zu löschen"
+type Mutation {
+  create(input: BuchInput!): String
+
+  update(input: BuchUpdateInput!): Int
+
+  delete(id: ID!): Boolean
+}
+
+"Datenschema zu einem Buch, das gelesen wird"
+type Buch {
+  id: ID
+  version: Int
+  titel: String
+  rating: Int
+  art: Art
+  verlag: Verlag
+  preis: Float
+  rabatt: Float
+  lieferbar: Boolean
+  datum: String
+  isbn: String
+  homepage: String
+  schlagwoerter: [String]
+}
+
+"Enum-Typ für die Art eines Buches"
+enum Art {
+  DRUCKAUSGABE
+  KINDLE
+}
+
+"Enum-Typ für den Verlag eines Buches"
+enum Verlag {
+  FOO_VERLAG
+  BAR_VERLAG
+}
+
+"Daten für ein neues Buch"
+input BuchInput {
+  titel: String!
+  rating: Int
+  art: Art
+  verlag: Verlag!
+  preis: Float
+  rabatt: Float
+  lieferbar: Boolean
+  datum: String
+  isbn: String
+  homepage: String
+  schlagwoerter: [String]
+}
+
+"Daten für ein zu änderndes Buch"
+input BuchUpdateInput {
+  id: ID
+  version: Int
+  titel: String!
+  rating: Int
+  art: Art
+  verlag: Verlag!
+  preis: Float
+  rabatt: Float
+  lieferbar: Boolean
+  datum: String
+  isbn: String
+  homepage: String
+  schlagwoerter: [String]
+}

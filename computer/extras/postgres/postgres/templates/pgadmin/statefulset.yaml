@@ -1,0 +1,132 @@
+# Copyright (C) 2022 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#  "." am Anfang bezeichnet den Top-Level Namensraum
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.pgadmin.name }}
+  labels:
+    {{- include "pgadmin.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ .Values.pgadmin.name }}
+  selector:
+    matchLabels:
+      {{- include "pgadmin.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        {{- include "pgadmin.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - image: {{ .Values.pgadmin.imageName }}:{{ .Values.pgadmin.version }}
+          name: {{ .Values.pgadmin.name }}
+          imagePullPolicy: Always
+          #imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.pgadmin.name }}
+          env:
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgres.fullname" . }}
+                  key: password
+          ports:
+            - containerPort: 80
+              name: {{ .Values.pgadmin.name }}
+          securityContext:
+            # User "pgadmin"
+            runAsUser: 5050
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            # Schreibzugriff auf Homedirectory "/pgadmin4"
+            #readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+            # Shell-Kommando: capsh --print
+            # default capabilities: cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap
+            # https://snyk.io/blog/kubernetes-securitycontext-linux-capabilities
+            # https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/policy/container-capabilities
+            capabilities:
+              drop: [ALL]
+              # add: [CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, SETGID, SETUID, SETPCAP, NET_BIND_SERVICE, NET_RAW, SYS_CHROOT, MKNOD, AUDIT_WRITE, SETFCAP]
+              # Webserver mit Python starten, sudo usw.
+              add: [SETUID, NET_BIND_SERVICE]
+          resources:
+            requests:
+              # vor allem fuer den Start des Webservers
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.pgadmin.name }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 2
+            terminationGracePeriodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.pgadmin.name }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 2
+          volumeMounts:
+            - mountPath: /var/lib/pgadmin
+              name: {{ .Values.pgadmin.name }}-pgadmin-volume
+            - mountPath: /var/lib/pgadmin4
+              name: {{ .Values.pgadmin.name }}-pgadmin4-volume
+      serviceAccountName: {{ .Values.pgadmin.name }}
+      automountServiceAccountToken: false
+      volumes:
+        - name: {{ .Values.pgadmin.name }}-pgadmin-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.pgadmin.name }}-pgadmin-volume-pgadmin-0
+        - name: {{ .Values.pgadmin.name }}-pgadmin4-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.pgadmin.name }}-pgadmin4-volume-pgadmin-0
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Values.pgadmin.name }}-pgadmin-volume
+        labels:
+          app.kubernetes.io/name: {{ .Values.pgadmin.name }}-pgadmin
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 512Ki
+        storageClassName: manual
+    - metadata:
+        name: {{ .Values.pgadmin.name }}-pgadmin4-volume
+        labels:
+          app.kubernetes.io/name: {{ .Values.pgadmin.name }}-pgadmin4
+        finalizers: []
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 64Ki
+        storageClassName: manual

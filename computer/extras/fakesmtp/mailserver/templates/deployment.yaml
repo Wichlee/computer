@@ -1,0 +1,150 @@
+# Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# "." am Anfang bezeichnet den Top-Level Namensraum bei Helm
+
+apiVersion: apps/v1
+# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#deployment-v1-apps
+kind: Deployment
+metadata:
+  name: {{ include "mailserver.fullname" . }}
+  # Kennzeichen bzw. Markierung
+  # https://kubernetes.io/docs/concepts/overview/working-with-objects/labels
+  # https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels
+  # https://helm.sh/docs/chart_best_practices/labels
+  labels:
+    # https://helm.sh/docs/chart_template_guide/function_list
+    # nindent rueckt um eine bestimmte Anzahl ("n") Zeichen ein
+    {{- include "mailserver.labels" . | nindent 4 }}
+spec:
+  # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#selector
+  selector:
+    # Labels, mit denen z.B. ein Service einen Pod (zu diesem Deployment) identifizieren kann
+    # z.B. fuer:   kubectl delete deployment --selector app=kunde,version=2.0.0 --namespace acme
+    # i.a. gleicher Wert wie in template.metadata.labels
+    matchLabels:
+      {{- include "mailserver.selectorLabels" . | nindent 6 }}
+  # Anzahl laufender Pods fuer das Template zu diesem Deployment (s.u.) -> ReplicaSet
+  replicas: {{ .Values.replicaCount }}
+  # https://kubernetes.io/docs/concepts/workloads/pods/#pod-templates
+  # Template (Schablone, Beschreibung) fuer die zu startenden Pods
+  template:
+    metadata:
+      # Labels fuer einen Pod (NICHT fuer dieses Deployment), der durch dieses Deployment installiert wurde
+      labels:
+        {{- include "mailserver.labels" . | nindent 8 }}
+    # Spezifikation fuer jeden Pod
+    spec:
+      containers:
+        # https://kubernetes.io/docs/concepts/containers/images
+        # Images mit einem Mailserver: analogic/poste.io und axigen/axigen
+        - image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: {{ .Chart.Name }}
+          # https://kubernetes.io/docs/tasks/inject-data-application/define-interdependent-environment-variables
+          # https://opensource.com/article/19/6/introduction-kubernetes-secrets-and-configmaps
+          envFrom:
+            # https://kubernetes.io/docs/concepts/configuration/configmap
+            - configMapRef:
+                name: {{ include "mailserver.fullname" . }}
+          ports:
+            - containerPort: 5025
+              name: smtp
+            - containerPort: 5080
+              name: http
+            - containerPort: 5081
+              name: actuator
+          # https://snyk.io/blog/10-kubernetes-security-context-settings-you-should-understand
+          # https://kubesec.io/basics
+          securityContext:
+            # KEIN eingebauter User im Image vorhanden
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            # Logdatei in einem Verzeichnis durch Mounting; Zertifikate werden durch Paketo installiert
+            #readOnlyRootFilesystem: true
+            # https://kubernetes.io/docs/tutorials/security/seccomp
+            seccompProfile:
+              # 44 system calls sind deaktiviert
+              type: RuntimeDefault
+            seLinuxOptions: {}
+            # https://snyk.io/blog/10-kubernetes-security-context-settings-you-should-understand
+            capabilities:
+              # keine Linux kernel capabilities
+              # bei "baseline" erlaubt: AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT
+              drop: [all]
+          resources:
+            # https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-resource-requests-and-limits
+            # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers
+            # Mindestanforderung an Ressourcen:
+            #   Ohne Begrenzung: zu viele Anwendungen werden bedient, d.h. Ueberlast
+            #   Zu restriktive Begrenzungen: CPU-Leistung ist nicht ausreichend
+            requests:
+              # CPU-Ressourcen werden in "millicores" definiert, z.B. "500m" oder "1"
+              # Beachte: Bei Hyper-Threading koennen in 1 CPU-Kern 2 verschiedene Threads bearbeitet werden
+              #          d.h. das Betriebssystem sieht scheinbar 2x so viele Kerne wie tatsaechlich vorhanden sind
+              cpu: {{ .Values.resourcesRequests.cpu }}
+              # Memory-Resources werden i.a. als "mebibyte" Wert definiert
+              # https://en.wikipedia.org/wiki/Byte#Multiple-byte_units
+              memory: {{ .Values.resourcesRequests.memory }}
+              # fluechtiger Speicher fuer z.B. Caching oder Logs
+              # Siehe "Allocated resources" am Ende der Ausgabe vom Kommando "kubectl describe node docker-desktop"
+              # https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#setting-requests-and-limits-for-local-ephemeral-storage
+              ephemeral-storage: {{ .Values.resourcesRequests.ephemeral }}
+            limits:
+              cpu: {{ .Values.resourcesLimits.cpu }}
+              memory: {{ .Values.resourcesLimits.memory }}
+              ephemeral-storage: {{ .Values.resourcesLimits.ephemeral }}
+          # Ist der Container "alive" oder "dead" (= "failing")? Im Fehlerfall: Neustart des Pods
+          # https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+          # https://developers.redhat.com/blog/2020/11/10/you-probably-need-liveness-and-readiness-probes
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: actuator
+            # Anzahl Sekunden, bis die Probe fuer Liveness abgesetzt wird
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelay }}
+            # default: 1 Sek.
+            timeoutSeconds: {{ .Values.livenessProbe.timeout }}
+            # periodischer Abstand zwischen den Proben (default: 10 Sek.)
+            periodSeconds: {{ .Values.livenessProbe.period }}
+            # max. Anzahl an Fehlversuchen (default: 3)
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            terminationGracePeriodSeconds: 5
+          # Ist der Container "ready", um Requests zu beantworten? Sind Nachbarsysteme, z.B. DB-Server, ebenfalls "ready"?
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: actuator
+            # Anzahl Sekunden, bis die Probe fuer Readiness abgesetzt wird
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelay }}
+            # default: 1 Sek.
+            timeoutSeconds: {{ .Values.readinessProbe.timeout }}
+            # periodischer Abstand zwischen den Proben (default: 10 Sek.)
+            periodSeconds: {{ .Values.readinessProbe.period }}
+            # max. Anzahl an Fehlversuchen (default: 3)
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          volumeMounts:
+            - mountPath: /tmp
+              name: log-{{ include "mailserver.name" . }}
+      volumes:
+        - name: log-{{ include "mailserver.name" . }}
+          # https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
+          hostPath:
+            path: /run/desktop/mnt/host/c/Zimmermann/volumes/fakesmtp
+            type: Directory
+          # https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+          #emptyDir: {}
+      serviceAccountName: {{ include "mailserver.fullname" . }}
+      automountServiceAccountToken: false
