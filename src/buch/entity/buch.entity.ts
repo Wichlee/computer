@@ -37,6 +37,7 @@
  * Das Modul besteht aus der Entity-Klasse.
  * @packageDocumentation
  */
+// hallo, ich war hier
 
 import {
     Column,
