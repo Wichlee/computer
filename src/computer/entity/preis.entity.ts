@@ -20,7 +20,7 @@
  * @packageDocumentation
  */
 
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Computer } from './computer.entity.js';
 /**
@@ -33,12 +33,12 @@ export class Preis {
     id: string | undefined;
 
     // https://typeorm.io/many-to-one-one-to-many-relations
-    @OneToOne(() => Buch, (buch) => buch.schlagwoerter)
+    @OneToOne(() => Computer, (computer) => computer.preis)
     // https://typeorm.io/relations#joincolumn-options
-    @JoinColumn({ name: 'buch_id' })
+    @JoinColumn({ name: 'computer_id' })
     readonly computer: Computer | null | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Das Schlagwort', type: String })
-    readonly schlagwort: string | null | undefined; //NOSONAR
+    @ApiProperty({ example: 'Der Preis', type: String })
+    readonly preis: string | null | undefined; //NOSONAR
 }
