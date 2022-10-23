@@ -37,7 +37,6 @@
  * Das Modul besteht aus der Entity-Klasse.
  * @packageDocumentation
  */
-// hallo, ich war hier
 
 import {
     Column,
@@ -53,22 +52,22 @@ import { DecimalTransformer } from './decimal-transformer.js';
 import { Schlagwort } from './schlagwort.entity.js';
 
 /**
- * Alias-Typ für gültige Strings bei Verlagen.
+ * Alias-Typ für gültige Strings bei den Farbangaben.
  * "Enums get compiled in a big monster of JavaScript".
  */
-export type Verlag = 'BAR_VERLAG' | 'FOO_VERLAG';
+export type Farbe = 'rot' | 'schwarz' | 'silber' | 'weiss';
 
 /**
- * Alias-Typ für gültige Strings bei der Art eines Buches.
+ * Alias-Typ für gültige Strings bei dem Modell eines Computers.
  */
-export type BuchArt = 'DRUCKAUSGABE' | 'KINDLE';
+export type ComputerModell = 'Desktop-PC' | 'Gaming-PC' | 'Laptop';
 
 /**
  * Entity-Klasse zu einem relationalen Tabelle
  */
 // https://typeorm.io/entities
 @Entity()
-export class Buch {
+export class Computer {
     @Column('char')
     // https://typeorm.io/entities#primary-columns
     // CAVEAT: zuerst @Column() und erst dann @PrimaryColumn()
@@ -88,7 +87,7 @@ export class Buch {
 
     @Column('varchar')
     @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
-    readonly art: BuchArt | undefined;
+    readonly modell: ComputerModell | undefined;
 
     @Column('varchar')
     @ApiProperty({ example: 'FOO_VERLAG', type: String })
@@ -113,12 +112,8 @@ export class Buch {
     readonly datum: Date | string | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: '0-0070-0644-6', type: String })
-    readonly isbn!: string;
-
-    @Column('varchar')
-    @ApiProperty({ example: 'https://test.de/', type: String })
-    readonly homepage: string | undefined;
+    @ApiProperty({ example: 'PC-49XJ9F', type: String })
+    readonly seriennummer!: string;
 
     // https://typeorm.io/many-to-one-one-to-many-relations
     // Bei TypeORM gibt es nur bidirektionale Beziehungen, keine gerichteten
@@ -140,12 +135,3 @@ export class Buch {
     @UpdateDateColumn({ type: 'timestamp' })
     readonly aktualisiert: Date | undefined = new Date();
 }
-
-export const removeIsbnDash = (buch: Buch) => {
-    // https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#mapping-modifiers
-    const copy = buch as {
-        -readonly [K in keyof Buch]: Buch[K]; // eslint-disable-line no-use-before-define
-    };
-    copy.isbn = buch.isbn.replaceAll('-', '');
-    return copy;
-};

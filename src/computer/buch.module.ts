@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { AuthModule } from '../security/auth/auth.module.js';
-import { Buch } from './entity/buch.entity.js';
+import { Buch } from './entity/computer.entity.js';
 import { BuchGetController } from './rest/buch-get.controller.js';
 import { BuchMutationResolver } from './graphql/buch-mutation.resolver.js';
 import { BuchQueryResolver } from './graphql/buch-query.resolver.js';

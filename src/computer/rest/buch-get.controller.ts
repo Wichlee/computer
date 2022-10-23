@@ -32,7 +32,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { type Buch, type BuchArt, type Verlag } from '../entity/buch.entity.js';
+import { type Buch, type BuchArt, type Verlag } from '../entity/computer.entity.js';
 import {
     BuchReadService,
     type Suchkriterien,

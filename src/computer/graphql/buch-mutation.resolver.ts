@@ -17,7 +17,7 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { type Buch } from '../entity/buch.entity.js';
+import { type Buch } from '../entity/computer.entity.js';
 import { BuchWriteService } from '../service/buch-write.service.js';
 import { type IdInput } from './buch-query.resolver.js';
 import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';

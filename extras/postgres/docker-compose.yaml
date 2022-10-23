@@ -71,7 +71,7 @@ services:
 
   # http://localhost:8888 mit Emailadresse "pgadmin@acme.com" und Passwort "p"
   pgadmin:
-    image: dpage/pgadmin4:6.14
+    image: dpage/pgadmin4:6.15
     ports:
       # Gunicorn ("Green Unicorn") ist ein Webserver in Python fuer UNIX (hier: BusyBox)
       - published: 8888

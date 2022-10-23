@@ -48,7 +48,7 @@ import {
 } from '@nestjs/common';
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { Request, Response } from 'express';
-import { type Buch } from '../entity/buch.entity.js';
+import { type Buch } from '../entity/computer.entity.js';
 import { BuchWriteService } from '../service/buch-write.service.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';

@@ -91,6 +91,6 @@ pgadmin:
   # -- Name des Image für pgAdmin
   imageName: dpage/pgadmin4
   # -- Versionsnummer bzw. Tag von pgAdmin
-  version: "6.14"
+  version: "6.15"
   # -- Default-Emailadresse für das Login bei pgAdmin
   email: pgadmin@acme.com

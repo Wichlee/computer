@@ -27,7 +27,7 @@
 // https://ajv.js.org/guide/schema-language.html#draft-2019-09-and-draft-2012-12
 // https://github.com/ajv-validator/ajv/blob/master/docs/validation.md
 import Ajv2020 from 'ajv/dist/2020.js';
-import { type Buch } from '../entity/buch.entity.js';
+import { type Buch } from '../entity/computer.entity.js';
 import { type FormatValidator } from 'ajv/dist/types/index.js';
 import { Injectable } from '@nestjs/common';
 import RE2 from 're2';

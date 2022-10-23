@@ -22,7 +22,7 @@
  * @packageDocumentation
  */
 
-import { Buch, removeIsbnDash } from '../entity/buch.entity.js';
+import { Buch, removeIsbnDash } from '../entity/computer.entity.js';
 import {
     type BuchNotExists,
     type CreateError,

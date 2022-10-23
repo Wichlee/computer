@@ -22,7 +22,7 @@
 
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Buch } from './buch.entity.js';
+import { Buch } from './computer.entity.js';
 
 /**
  * Entity-Klasse zu einem relationalen Tabelle

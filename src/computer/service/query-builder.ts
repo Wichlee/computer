@@ -21,7 +21,7 @@
  */
 
 import { FindOptionsUtils, Repository, type SelectQueryBuilder } from 'typeorm';
-import { Buch } from '../entity/buch.entity.js';
+import { Buch } from '../entity/computer.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { getLogger } from '../../logger/logger.js';

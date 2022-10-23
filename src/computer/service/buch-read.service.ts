@@ -20,7 +20,7 @@
  * @packageDocumentation
  */
 
-import { Buch, type BuchArt, type Verlag } from './../entity/buch.entity.js';
+import { Buch, type BuchArt, type Verlag } from '../entity/computer.entity.js';
 import { BuchValidationService } from './buch-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
