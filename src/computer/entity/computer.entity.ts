@@ -55,12 +55,12 @@ import { Schlagwort } from './schlagwort.entity.js';
  * Alias-Typ für gültige Strings bei den Farbangaben.
  * "Enums get compiled in a big monster of JavaScript".
  */
-export type Farbe = 'rot' | 'schwarz' | 'silber' | 'weiss';
+export type ComputerFarbe = 'rot' | 'schwarz' | 'silber' | 'weiss';
 
 /**
  * Alias-Typ für gültige Strings bei dem Modell eines Computers.
  */
-export type ComputerModell = 'Desktop-PC' | 'Gaming-PC' | 'Laptop';
+export type ComputerModell = 'Desktop-PC' | 'Gaming-PC' | 'Notebook';
 
 /**
  * Entity-Klasse zu einem relationalen Tabelle
@@ -78,55 +78,29 @@ export class Computer {
     readonly version: number | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Der Titel', type: String })
-    readonly titel!: string; //NOSONAR
-
-    @Column('int')
-    @ApiProperty({ example: 5, type: Number })
-    readonly rating: number | undefined;
+    @ApiProperty({ example: 'Der Hersteller', type: String })
+    readonly hersteller!: string; //NOSONAR
 
     @Column('varchar')
-    @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
+    @ApiProperty({ example: 'Desktop-PC', type: String })
     readonly modell: ComputerModell | undefined;
 
-    @Column('varchar')
-    @ApiProperty({ example: 'FOO_VERLAG', type: String })
-    readonly verlag!: Verlag;
+    @Column('date')
+    @ApiProperty({ example: '2021-01-31' })
+    readonly herstelldatum: Date | string | undefined;
 
     @Column({ type: 'decimal', transformer: new DecimalTransformer() })
     @ApiProperty({ example: 1, type: Number })
     // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
     readonly preis!: number;
 
-    @Column({ type: 'decimal', transformer: new DecimalTransformer() })
-    @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: number | undefined;
-
-    @Column('boolean')
-    @ApiProperty({ example: true, type: Boolean })
-    readonly lieferbar: boolean | undefined;
-
-    // das Temporal-API ab ES2022 wird von TypeORM noch nicht unterstuetzt
-    @Column('date')
-    @ApiProperty({ example: '2021-01-31' })
-    readonly datum: Date | string | undefined;
+    @Column('varchar')
+    @ApiProperty({ example: 'Desktop-PC', type: String })
+    readonly farbe: ComputerFarbe | undefined;
 
     @Column('varchar')
     @ApiProperty({ example: 'PC-49XJ9F', type: String })
     readonly seriennummer!: string;
-
-    // https://typeorm.io/many-to-one-one-to-many-relations
-    // Bei TypeORM gibt es nur bidirektionale Beziehungen, keine gerichteten
-    @OneToMany(() => Schlagwort, (schlagwort) => schlagwort.buch, {
-        // https://typeorm.io/eager-and-lazy-relations
-        // Join beim Lesen durch find-Methoden des Repositories
-        eager: true,
-        // https://typeorm.io/relations#cascades
-        // kaskadierendes INSERT INTO
-        cascade: ['insert'],
-    })
-    @ApiProperty({ example: ['JAVASCRIPT', 'TYPESCRIPT'] })
-    readonly schlagwoerter!: Schlagwort[];
 
     // https://typeorm.io/entities#special-columns
     @CreateDateColumn({ type: 'timestamp' })
