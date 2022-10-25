@@ -69,9 +69,8 @@ interface Links {
 // Interface fuer GET-Request mit Links fuer HATEOAS
 export type ComputerModel = Omit<
     Computer,
-    'aktualisiert' | 'erzeugt' | 'id' | 'schlagwoerter' | 'version'
+    'aktualisiert' | 'erzeugt' | 'id' | 'version'
 > & {
-    schlagwoerter: string[];
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _links: Links;
 };
@@ -275,10 +274,6 @@ export class ComputerGetController {
         const baseUri = getBaseUri(req);
         this.#logger.debug('#toModel: baseUri=%s', baseUri);
         const { id } = computer;
-        const schlagwoerter = computer.schlagwoerter.map(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            (schlagwort) : string => schlagwort.schlagwort!,
-        );
         const links = all
             ? {
                   self: { href: `${baseUri}/${id}` },
@@ -302,7 +297,6 @@ export class ComputerGetController {
             datum: buch.datum,
             isbn: buch.isbn,
             homepage: buch.homepage,
-            schlagwoerter,
             _links: links,
         };
         /* eslint-enable unicorn/consistent-destructuring */
