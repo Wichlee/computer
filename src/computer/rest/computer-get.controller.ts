@@ -104,7 +104,7 @@ export class ComputerQuery implements Suchkriterien {
     declare readonly herstelldatum: string;
 
     @ApiProperty({ required: false })
-    declare readonly preis: Preis;
+    declare readonly preis: number;
     
     @ApiProperty({ required: false })
     declare readonly computerFarbe: ComputerFarbe;
