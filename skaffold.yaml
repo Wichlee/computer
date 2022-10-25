@@ -23,11 +23,11 @@
 apiVersion: skaffold/v3
 kind: Config
 metadata:
-  name: buch
+  name: computer
 # https://skaffold.dev/docs/pipeline-stages/builders
 #build:
 #  artifacts:
-#    - image: juergenzimmermann/buch
+#    - image: gruppe2/computer
 #      # https://skaffold.dev/docs/pipeline-stages/builders/buildpacks
 #      buildpacks:
 #        builder: paketobuildpacks/builder:base
@@ -42,9 +42,9 @@ deploy:
   # Alternativen: Kustomize, kpt, kubectl
   helm:
     releases:
-      - name: buch
-        chartPath: extras/buch
-        valuesFiles: [extras/buch/values.yaml]
+      - name: computer
+        chartPath: extras/computer
+        valuesFiles: [extras/computer/values.yaml]
         namespace: acme
 # https://skaffold.dev/docs/environment/profiles
 profiles:
@@ -54,12 +54,12 @@ profiles:
     deploy:
       helm:
         releases:
-          - name: buch
-            chartPath: extras/buch
-            valuesFiles: [extras/buch/values.yaml, extras/buch/dev.yaml]
+          - name: computer
+            chartPath: extras/computer
+            valuesFiles: [extras/computer/values.yaml, extras/computer/dev.yaml]
             namespace: acme
     # https://skaffold.dev/docs/pipeline-stages/port-forwarding
     portForward:
       - resourceType: service
-        resourceName: buch
+        resourceName: computer
         port: 3000
