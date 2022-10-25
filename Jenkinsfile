@@ -24,7 +24,7 @@ pipeline {
     agent {
         docker {
             // https://www.debian.org/releases: Bullseye = Debian 11
-            image 'node:18.1.0-bullseye'
+            image 'node:19.0.0-bullseye'
             // https://stackoverflow.com/questions/62330354/jenkins-pipeline-alpine-agent-apk-update-error-unable-to-lock-database-permis
             // https://stackoverflow.com/questions/42630894/jenkins-docker-how-to-control-docker-user-when-using-image-inside-command/51986870#51986870
             // https://stackoverflow.com/questions/42743201/npm-install-fails-in-jenkins-pipeline-in-docker
@@ -77,7 +77,7 @@ pipeline {
 
                 // https://www.jenkins.io/doc/pipeline/steps/git
                 // "named arguments" statt Funktionsaufruf mit Klammern
-                git url: 'https://github.com/?????', branch: 'main', poll: true
+                git url: 'https://github.com/juergenzimmermann/buch', branch: 'main', poll: true
             }
         }
 
@@ -197,14 +197,14 @@ pipeline {
 
                 success {
                     script {
-                        if (fileExists("${env.WORKSPACE}/computer.zip")) {
-                            sh 'rm computer.zip'
+                        if (fileExists("${env.WORKSPACE}/buch.zip")) {
+                            sh 'rm buch.zip'
                         }
                     }
                     // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
-                    zip zipFile: 'computer.zip', archive: false, dir: 'dist'
-                    // jobs/computer/builds/.../archive/computer.zip
-                    archiveArtifacts 'computer.zip'
+                    zip zipFile: 'buch.zip', archive: false, dir: 'dist'
+                    // jobs/buch/builds/.../archive/buch.zip
+                    archiveArtifacts 'buch.zip'
                 }
             }
         }
@@ -213,7 +213,7 @@ pipeline {
             steps {
               echo 'TODO: Docker-Image bauen: dockerd starten, pack installieren'
               // Docker-Installation und laufender Docker-Daemon erforderlich
-              // sh 'docker build --tag gruppe2/computer:1.0.0 .'
+              // sh 'docker build --tag juergenzimmermann/buch:1.0.0 .'
             }
         }
 
