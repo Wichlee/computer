@@ -287,21 +287,17 @@ export class ComputerGetController {
         this.#logger.debug('#toModel: computer=%o, links=%o', computer, links);
         /* eslint-disable unicorn/consistent-destructuring */
         const computerModel: ComputerModel = {
-            titel: buch.titel,
-            rating: buch.rating,
-            art: buch.art,
-            verlag: buch.verlag,
-            preis: buch.preis,
-            rabatt: buch.rabatt,
-            lieferbar: buch.lieferbar,
-            datum: buch.datum,
-            isbn: buch.isbn,
-            homepage: buch.homepage,
+            hersteller: computer.hersteller,
+            modell: computer.modell,
+            herstelldatum: computer.herstelldatum,
+            preis: computer.preis,
+            farbe: computer.farbe,
+            seriennummer: computer.seriennummer,
             _links: links,
         };
         /* eslint-enable unicorn/consistent-destructuring */
 
-        return buchModel;
+        return computerModel;
     }
 }
 /* eslint-enable max-lines */
