@@ -182,7 +182,7 @@ export class ComputerGetController {
         @Req() req: Request,
         @Headers('If-None-Match') version: string | undefined,
         @Res() res: Response,
-    ): Promise<Response<BuchModel | undefined>> {
+    ): Promise<Response<ComputerModel | undefined>> {
         this.#logger.debug('findById: id=%s, version=%s"', id, version);
 
         if (req.accepts(['json', 'html']) === false) {
@@ -190,10 +190,10 @@ export class ComputerGetController {
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        let buch: Buch | undefined;
+        let computer: Computer | undefined;
         try {
             // vgl. Kotlin: Aufruf einer suspend-Function
-            buch = await this.#service.findById(id);
+            computer = await this.#service.findById(id);
         } catch (err) {
             // err ist implizit vom Typ "unknown", d.h. keine Operationen koennen ausgefuehrt werden
             // Exception einer export async function bei der Ausfuehrung fangen:
@@ -202,14 +202,14 @@ export class ComputerGetController {
             return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (buch === undefined) {
+        if (computer === undefined) {
             this.#logger.debug('findById: NOT_FOUND');
             return res.sendStatus(HttpStatus.NOT_FOUND);
         }
-        this.#logger.debug('findById(): buch=%o', buch);
+        this.#logger.debug('findById(): computer=%o', computer);
 
         // ETags
-        const versionDb = buch.version;
+        const versionDb = computer.version;
         if (version === `"${versionDb}"`) {
             this.#logger.debug('findById: NOT_MODIFIED');
             return res.sendStatus(HttpStatus.NOT_MODIFIED);
@@ -218,9 +218,9 @@ export class ComputerGetController {
         res.header('ETag', `"${versionDb}"`);
 
         // HATEOAS mit Atom Links und HAL (= Hypertext Application Language)
-        const buchModel = this.#toModel(buch, req);
-        this.#logger.debug('findById: buchModel=%o', buchModel);
-        return res.json(buchModel);
+        const computerModel = this.#toModel(computer, req);
+        this.#logger.debug('findById: computerModel=%o', computerModel);
+        return res.json(computerModel);
     }
 
     /**
