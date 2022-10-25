@@ -84,55 +84,37 @@ export interface ComputersModel {
 }
 
 /**
- * Klasse für `BuchGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
- * formulieren. `BuchController` hat dieselben Properties wie die Basisklasse
- * `Buch` - allerdings mit dem Unterschied, dass diese Properties beim Ableiten
+ * Klasse für `ComputerGetController`, um Queries in _OpenAPI_ bzw. Swagger zu
+ * formulieren. `ComputerController` hat dieselben Properties wie die Basisklasse
+ * `Computer` - allerdings mit dem Unterschied, dass diese Properties beim Ableiten
  * so überschrieben sind, dass sie auch nicht gesetzt bzw. undefined sein
  * dürfen, damit die Queries flexibel formuliert werden können. Deshalb ist auch
  * immer der zusätzliche Typ undefined erforderlich.
  * Außerdem muss noch `string` statt `Date` verwendet werden, weil es in OpenAPI
  * den Typ Date nicht gibt.
  */
-export class BuchQuery implements Suchkriterien {
+export class ComptuerQuery implements Suchkriterien {
     @ApiProperty({ required: false })
-    declare readonly titel: string;
+    declare readonly hersteller: string;
 
     @ApiProperty({ required: false })
-    declare readonly rating: number;
+    declare readonly computerModell: ComputerModell;
 
     @ApiProperty({ required: false })
-    declare readonly art: BuchArt;
+    declare readonly herstelldatum: string;
 
     @ApiProperty({ required: false })
-    declare readonly verlag: Verlag;
+    declare readonly preis: Preis;
+    
+    @ApiProperty({ required: false })
+    declare readonly computerFarbe: ComputerFarbe;
 
     @ApiProperty({ required: false })
-    declare readonly preis: number;
-
-    @ApiProperty({ required: false })
-    declare readonly rabatt: number;
-
-    @ApiProperty({ required: false })
-    declare readonly lieferbar: boolean;
-
-    @ApiProperty({ required: false })
-    declare readonly datum: string;
-
-    @ApiProperty({ required: false })
-    declare readonly isbn: string;
-
-    @ApiProperty({ required: false })
-    declare readonly homepage: string;
-
-    @ApiProperty({ required: false })
-    declare readonly javascript: boolean;
-
-    @ApiProperty({ required: false })
-    declare readonly typescript: boolean;
+    declare readonly seriennummer: string;
 }
 
 /**
- * Die Controller-Klasse für die Verwaltung von Bücher.
+ * Die Controller-Klasse für die Verwaltung von Buechern.
  */
 // Decorator in TypeScript, zur Standardisierung in ES vorgeschlagen (stage 3)
 // https://github.com/tc39/proposal-decorators
