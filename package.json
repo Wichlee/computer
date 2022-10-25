@@ -15,7 +15,7 @@
     "build": "echo '\"npm build\" fuer \"npm pack\": Uebersetzte Dateien aus dem Verzeichnis dist werden uebernommen, siehe project.toml'",
     "prebuild:nest": "npm run clean",
     "build:nest": "nest build",
-    "start": "node dist/src/main.js",reveal
+    "start": "node dist/src/main.js",
     "prestart:dev": "npm run copy-resources",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
