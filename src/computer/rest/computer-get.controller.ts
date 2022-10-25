@@ -32,11 +32,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { type Buch, type BuchArt, type Verlag } from '../entity/computer.entity.js';
+import { type Computer, type ComputerFarbe, type ComputerModell } from '../entity/computer.entity.js';
 import {
-    BuchReadService,
+    ComputerReadService,
     type Suchkriterien,
-} from '../service/buch-read.service.js';
+} from '../service/computer-read.service.js';
 import {
     Controller,
     Get,
