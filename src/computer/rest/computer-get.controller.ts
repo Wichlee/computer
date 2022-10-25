@@ -138,16 +138,16 @@ export class ComputerGetController {
     }
 
     /**
-     * Ein Buch wird asynchron anhand seiner ID als Pfadparameter gesucht.
+     * Ein Computer wird asynchron anhand seiner ID als Pfadparameter gesucht.
      *
-     * Falls es ein solches Buch gibt und `If-None-Match` im Request-Header
-     * auf die aktuelle Version des Buches gesetzt war, wird der Statuscode
+     * Falls es einen solchen Computer gibt und `If-None-Match` im Request-Header
+     * auf die aktuelle Version des Computers gesetzt war, wird der Statuscode
      * `304` (`Not Modified`) zurückgeliefert. Falls `If-None-Match` nicht
-     * gesetzt ist oder eine veraltete Version enthält, wird das gefundene
-     * Buch im Rumpf des Response als JSON-Datensatz mit Atom-Links für HATEOAS
+     * gesetzt ist oder eine veraltete Version enthält, wird der gefundene
+     * Computer im Rumpf des Response als JSON-Datensatz mit Atom-Links für HATEOAS
      * und dem Statuscode `200` (`OK`) zurückgeliefert.
      *
-     * Falls es kein Buch zur angegebenen ID gibt, wird der Statuscode `404`
+     * Falls es keinen Computer zur angegebenen ID gibt, wird der Statuscode `404`
      * (`Not Found`) zurückgeliefert.
      *
      * @param id Pfad-Parameter `id`
@@ -161,7 +161,7 @@ export class ComputerGetController {
     // vgl Kotlin: Schluesselwort "suspend"
     // eslint-disable-next-line max-params, max-lines-per-function
     @Get(':id')
-    @ApiOperation({ summary: 'Suche mit der Buch-ID', tags: ['Suchen'] })
+    @ApiOperation({ summary: 'Suche mit der Computer-ID', tags: ['Suchen'] })
     @ApiParam({
         name: 'id',
         description: 'Z.B. 00000000-0000-0000-0000-000000000001',
@@ -171,11 +171,11 @@ export class ComputerGetController {
         description: 'Header für bedingte GET-Requests, z.B. "0"',
         required: false,
     })
-    @ApiOkResponse({ description: 'Das Buch wurde gefunden' })
-    @ApiNotFoundResponse({ description: 'Kein Buch zur ID gefunden' })
+    @ApiOkResponse({ description: 'Der Computer wurde gefunden' })
+    @ApiNotFoundResponse({ description: 'Keinen Computer zur ID gefunden' })
     @ApiResponse({
         status: HttpStatus.NOT_MODIFIED,
-        description: 'Das Buch wurde bereits heruntergeladen',
+        description: 'Der Computer wurde bereits heruntergeladen',
     })
     async findById(
         @Param('id') id: string,
