@@ -114,26 +114,26 @@ export class ComptuerQuery implements Suchkriterien {
 }
 
 /**
- * Die Controller-Klasse für die Verwaltung von Buechern.
+ * Die Controller-Klasse für die Verwaltung von Computer.
  */
 // Decorator in TypeScript, zur Standardisierung in ES vorgeschlagen (stage 3)
 // https://github.com/tc39/proposal-decorators
 @Controller()
 // @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(ResponseTimeInterceptor)
-@ApiTags('Buch API')
+@ApiTags('Computer API')
 // @ApiBearerAuth()
 // Klassen ab ES 2015
-export class BuchGetController {
+export class ComputerGetController {
     // readonly in TypeScript, vgl. C#
     // private ab ES 2019
-    readonly #service: BuchReadService;
+    readonly #service: ComputerReadService;
 
-    readonly #logger = getLogger(BuchGetController.name);
+    readonly #logger = getLogger(ComputerGetController.name);
 
     // Dependency Injection (DI) bzw. Constructor Injection
-    // constructor(private readonly service: BuchReadService) {}
-    constructor(service: BuchReadService) {
+    // constructor(private readonly service: ComputerReadService) {}
+    constructor(service: ComputerReadService) {
         this.#service = service;
     }
 
