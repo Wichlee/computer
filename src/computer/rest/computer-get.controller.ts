@@ -93,7 +93,7 @@ export interface ComputersModel {
  * Außerdem muss noch `string` statt `Date` verwendet werden, weil es in OpenAPI
  * den Typ Date nicht gibt.
  */
-export class ComptuerQuery implements Suchkriterien {
+export class ComputerQuery implements Suchkriterien {
     @ApiProperty({ required: false })
     declare readonly hersteller: string;
 
@@ -224,15 +224,15 @@ export class ComputerGetController {
     }
 
     /**
-     * Bücher werden mit Query-Parametern asynchron gesucht. Falls es mindestens
-     * ein solches Buch gibt, wird der Statuscode `200` (`OK`) gesetzt. Im Rumpf
-     * des Response ist das JSON-Array mit den gefundenen Büchern, die jeweils
+     * Computer werden mit Query-Parametern asynchron gesucht. Falls es mindestens
+     * einen solchen Computer gibt, wird der Statuscode `200` (`OK`) gesetzt. Im Rumpf
+     * des Response ist das JSON-Array mit den gefundenen Computern, die jeweils
      * um Atom-Links für HATEOAS ergänzt sind.
      *
-     * Falls es kein Buch zu den Suchkriterien gibt, wird der Statuscode `404`
+     * Falls es keinen Computer zu den Suchkriterien gibt, wird der Statuscode `404`
      * (`Not Found`) gesetzt.
      *
-     * Falls es keine Query-Parameter gibt, werden alle Bücher ermittelt.
+     * Falls es keine Query-Parameter gibt, werden alle Computer ermittelt.
      *
      * @param query Query-Parameter von Express.
      * @param req Request-Objekt von Express.
@@ -241,12 +241,12 @@ export class ComputerGetController {
      */
     @Get()
     @ApiOperation({ summary: 'Suche mit Suchkriterien', tags: ['Suchen'] })
-    @ApiOkResponse({ description: 'Eine evtl. leere Liste mit Büchern' })
+    @ApiOkResponse({ description: 'Eine evtl. leere Liste mit Computern' })
     async find(
-        @Query() query: BuchQuery,
+        @Query() query: ComputerQuery,
         @Req() req: Request,
         @Res() res: Response,
-    ): Promise<Response<BuecherModel | undefined>> {
+    ): Promise<Response<ComputersModel | undefined>> {
         this.#logger.debug('find: query=%o', query);
 
         if (req.accepts(['json', 'html']) === false) {
@@ -254,30 +254,30 @@ export class ComputerGetController {
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        const buecher = await this.#service.find(query);
-        this.#logger.debug('find: %o', buecher);
-        if (buecher.length === 0) {
+        const computers = await this.#service.find(query);
+        this.#logger.debug('find: %o', computers);
+        if (computers.length === 0) {
             this.#logger.debug('find: NOT_FOUND');
             return res.sendStatus(HttpStatus.NOT_FOUND);
         }
 
-        // HATEOAS: Atom Links je Buch
-        const buecherModel = buecher.map((buch )=>
-            this.#toModel(buch, req, false),
+        // HATEOAS: Atom Links je Computer
+        const computersModel = computers.map((computer : Computer )=>
+            this.#toModel(computer, req, false),
         );
-        this.#logger.debug('find: buecherModel=%o', buecherModel);
+        this.#logger.debug('find: computersModel=%o', computersModel);
 
-        const result: BuecherModel = { _embedded: { buecher: buecherModel } };
+        const result: ComputersModel = { _embedded: { computers: computersModel } };
         return res.json(result).send();
     }
 
-    #toModel(buch: Buch, req: Request, all = true) {
+    #toModel(computer: Computer, req: Request, all = true) : ComputerModel {
         const baseUri = getBaseUri(req);
         this.#logger.debug('#toModel: baseUri=%s', baseUri);
-        const { id } = buch;
-        const schlagwoerter = buch.schlagwoerter.map(
+        const { id } = computer;
+        const schlagwoerter = computer.schlagwoerter.map(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            (schlagwort) => schlagwort.schlagwort!,
+            (schlagwort) : string => schlagwort.schlagwort!,
         );
         const links = all
             ? {
@@ -289,9 +289,9 @@ export class ComputerGetController {
               }
             : { self: { href: `${baseUri}/${id}` } };
 
-        this.#logger.debug('#toModel: buch=%o, links=%o', buch, links);
+        this.#logger.debug('#toModel: computer=%o, links=%o', computer, links);
         /* eslint-disable unicorn/consistent-destructuring */
-        const buchModel: BuchModel = {
+        const computerModel: ComputerModel = {
             titel: buch.titel,
             rating: buch.rating,
             art: buch.art,
