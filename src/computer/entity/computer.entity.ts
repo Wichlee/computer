@@ -42,14 +42,12 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    OneToMany,
     PrimaryColumn,
     UpdateDateColumn,
     VersionColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { DecimalTransformer } from './decimal-transformer.js';
-import { Schlagwort } from './schlagwort.entity.js';
 
 /**
  * Alias-Typ für gültige Strings bei den Farbangaben.
