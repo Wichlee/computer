@@ -67,8 +67,8 @@ interface Links {
 }
 
 // Interface fuer GET-Request mit Links fuer HATEOAS
-export type BuchModel = Omit<
-    Buch,
+export type ComputerModel = Omit<
+    Computer,
     'aktualisiert' | 'erzeugt' | 'id' | 'schlagwoerter' | 'version'
 > & {
     schlagwoerter: string[];
@@ -76,10 +76,10 @@ export type BuchModel = Omit<
     _links: Links;
 };
 
-export interface BuecherModel {
+export interface ComputersModel {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _embedded: {
-        buecher: BuchModel[];
+        computers: ComputerModel[];
     };
 }
 
