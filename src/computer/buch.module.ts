@@ -22,7 +22,7 @@ import { BuchQueryResolver } from './graphql/buch-query.resolver.js';
 import { BuchReadService } from './service/computer-read.service.js';
 import { BuchValidationService } from './service/computer-validation.service.js';
 import { BuchWriteController } from './rest/buch-write.controller.js';
-import { BuchWriteService } from './service/buch-write.service.js';
+import { BuchWriteService } from './service/computer-write.service.js';
 import { MailModule } from '../mail/mail.module.js';
 import { Module } from '@nestjs/common';
 import { QueryBuilder } from './service/query-builder.js';

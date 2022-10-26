@@ -49,7 +49,7 @@ import {
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { Request, Response } from 'express';
 import { type Buch } from '../entity/computer.entity.js';
-import { BuchWriteService } from '../service/buch-write.service.js';
+import { BuchWriteService } from '../service/computer-write.service.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { Roles } from '../../security/auth/roles/roles.decorator.js';
