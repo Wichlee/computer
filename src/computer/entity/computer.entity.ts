@@ -61,7 +61,7 @@ export type ComputerFarbe = 'rot' | 'schwarz' | 'silber' | 'weiss';
 export type ComputerModell = 'Desktop-PC' | 'Gaming-PC' | 'Notebook';
 
 /**
- * Entity-Klasse zu einem relationalen Tabelle
+ * Entity-Klasse zu einer relationalen Tabelle
  */
 // https://typeorm.io/entities
 @Entity()
