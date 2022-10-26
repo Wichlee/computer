@@ -16,7 +16,7 @@
  */
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { type Buch } from '../entity/computer.entity.js';
-import { BuchReadService } from '../service/buch-read.service.js';
+import { BuchReadService } from '../service/computer-read.service.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { UseInterceptors } from '@nestjs/common';
 import { UserInputError } from 'apollo-server-express';

@@ -32,7 +32,7 @@ import {
     type VersionOutdated,
 } from './errors.js';
 import { type DeleteResult, Repository } from 'typeorm';
-import { BuchReadService } from './buch-read.service.js';
+import { BuchReadService } from './computer-read.service.js';
 import { BuchValidationService } from './buch-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';

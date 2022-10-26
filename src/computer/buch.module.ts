@@ -19,7 +19,7 @@ import { Buch } from './entity/computer.entity.js';
 import { BuchGetController } from './rest/buch-get.controller.js';
 import { BuchMutationResolver } from './graphql/buch-mutation.resolver.js';
 import { BuchQueryResolver } from './graphql/buch-query.resolver.js';
-import { BuchReadService } from './service/buch-read.service.js';
+import { BuchReadService } from './service/computer-read.service.js';
 import { BuchValidationService } from './service/buch-validation.service.js';
 import { BuchWriteController } from './rest/buch-write.controller.js';
 import { BuchWriteService } from './service/buch-write.service.js';
