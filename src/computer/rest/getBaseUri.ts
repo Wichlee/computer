@@ -20,7 +20,7 @@
  * @packageDocumentation
  */
 
-import { ID_PATTERN } from '../service/buch-validation.service.js';
+import { ID_PATTERN } from '../service/computer-validation.service.js';
 import { type Request } from 'express';
 import { cloud } from '../../config/cloud.js';
 import { nodeConfig } from '../../config/node.js';
