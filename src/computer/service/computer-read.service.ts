@@ -80,7 +80,7 @@ export class ComputerReadService {
     //              Im Promise-Objekt ist dann die Fehlerursache enthalten.
 
     /**
-     * Ein Buch asynchron anhand seiner ID suchen
+     * Einen Computer asynchron anhand seiner ID suchen
      * @param id ID des gesuchten Computers
      * @returns Der gefundene Computer vom Typ [Computer](computer_entity_computer_entity.Computer.html) oder undefined
      *          in einem Promise aus ES2015 (vgl.: Mono aus Project Reactor oder
