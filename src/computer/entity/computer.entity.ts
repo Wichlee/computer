@@ -93,7 +93,7 @@ export class Computer {
     readonly preis!: number;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Desktop-PC', type: String })
+    @ApiProperty({ example: 'rot', type: String })
     readonly farbe: ComputerFarbe | undefined;
 
     @Column('varchar')
