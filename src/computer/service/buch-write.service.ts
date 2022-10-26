@@ -17,12 +17,12 @@
  */
 
 /**
- * Das Modul besteht aus der Klasse {@linkcode BuchWriteService} für die
+ * Das Modul besteht aus der Klasse {@linkcode ComputerWriteService} für die
  * Schreiboperationen im Anwendungskern.
  * @packageDocumentation
  */
 
-import { Buch, removeIsbnDash } from '../entity/computer.entity.js';
+import { Computer } from '../entity/computer.entity.js';
 import {
     type BuchNotExists,
     type CreateError,
@@ -33,7 +33,7 @@ import {
 } from './errors.js';
 import { type DeleteResult, Repository } from 'typeorm';
 import { BuchReadService } from './computer-read.service.js';
-import { BuchValidationService } from './buch-validation.service.js';
+import { BuchValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { MailService } from '../../mail/mail.service.js';
@@ -43,53 +43,46 @@ import { getLogger } from '../../logger/logger.js';
 import { v4 as uuid } from 'uuid';
 
 /**
- * Die Klasse `BuchWriteService` implementiert den Anwendungskern für das
- * Schreiben von Bücher und greift mit _TypeORM_ auf die DB zu.
+ * Die Klasse `ComputerWriteService` implementiert den Anwendungskern für das
+ * Schreiben von Computer und greift mit _TypeORM_ auf die DB zu.
  */
 @Injectable()
-export class BuchWriteService {
+export class ComputerWriteService {
     private static readonly VERSION_PATTERN = new RE2('^"\\d*"');
 
-    readonly #repo: Repository<Buch>;
+    readonly #repo: Repository<Computer>;
 
-    readonly #readService: BuchReadService;
+    readonly #readService: ComputerReadService;
 
-    readonly #validationService: BuchValidationService;
+    readonly #validationService: ComputerValidationService;
 
-    readonly #mailService: MailService;
-
-    readonly #logger = getLogger(BuchWriteService.name);
+    readonly #logger = getLogger(ComputerWriteService.name);
 
     // eslint-disable-next-line max-params
     constructor(
-        @InjectRepository(Buch) repo: Repository<Buch>,
-        readService: BuchReadService,
-        validationService: BuchValidationService,
-        mailService: MailService,
+        @InjectRepository(Computer) repo: Repository<Computer>,
+        readService: ComputerReadService,
+        validationService: ComputerValidationService,
     ) {
         this.#repo = repo;
         this.#readService = readService;
         this.#validationService = validationService;
-        this.#mailService = mailService;
     }
 
     /**
-     * Ein neues Buch soll angelegt werden.
-     * @param buch Das neu abzulegende Buch
-     * @returns Die ID des neu angelegten Buches oder im Fehlerfall
-     * [CreateError](../types/buch_service_errors.CreateError.html)
+     * Ein neuer Computer soll angelegt werden.
+     * @param computer Der neu abzulegende Computer
+     * @returns Die ID des neu angelegten Computers oder im Fehlerfall
+     * [CreateError](../types/computer_service_errors.CreateError.html)
      */
-    async create(buch: Buch): Promise<CreateError | string> {
-        this.#logger.debug('create: buch=%o', buch);
-        const validateResult = await this.#validateCreate(buch);
+    async create(computer: Computer): Promise<CreateError | string> {
+        this.#logger.debug('create: computer=%o', computer);
+        const validateResult = await this.#validateCreate(computer);
         if (validateResult !== undefined) {
             return validateResult;
         }
 
-        buch.id = uuid(); // eslint-disable-line require-atomic-updates
-        buch.schlagwoerter.forEach((schlagwort) => {
-            schlagwort.id = uuid();
-        });
+        computer.id = uuid(); // eslint-disable-line require-atomic-updates
 
         // implizite Transaktion
         const buchDb = await this.#repo.save(removeIsbnDash(buch)); // implizite Transaktion
@@ -101,37 +94,37 @@ export class BuchWriteService {
     }
 
     /**
-     * Ein vorhandenes Buch soll aktualisiert werden.
-     * @param buch Das zu aktualisierende Buch
-     * @param id ID des zu aktualisierenden Buchs
+     * Ein vorhandener Computer soll aktualisiert werden.
+     * @param computer Der zu aktualisierende Computer
+     * @param id ID des zu aktualisierenden Computers
      * @param version Die Versionsnummer für optimistische Synchronisation
      * @returns Die neue Versionsnummer gemäß optimistischer Synchronisation
-     *  oder im Fehlerfall [UpdateError](../types/buch_service_errors.UpdateError.html)
+     *  oder im Fehlerfall [UpdateError](../types/computer_service_errors.UpdateError.html)
      */
     async update(
         id: string | undefined,
-        buch: Buch,
+        computer: Computer,
         version: string,
     ): Promise<UpdateError | number> {
         this.#logger.debug(
-            'update: id=%s, buch=%o, version=%s',
+            'update: id=%s, computer=%o, version=%s',
             id,
-            buch,
+            computer,
             version,
         );
         if (id === undefined || !this.#validationService.validateId(id)) {
             this.#logger.debug('update: Keine gueltige ID');
-            return { type: 'BuchNotExists', id };
+            return { type: 'ComputerNotExists', id };
         }
 
-        const validateResult = await this.#validateUpdate(buch, id, version);
+        const validateResult = await this.#validateUpdate(computer, id, version);
         this.#logger.debug('update: validateResult=%o', validateResult);
-        if (!(validateResult instanceof Buch)) {
+        if (!(validateResult instanceof Computer)) {
             return validateResult;
         }
 
-        const buchNeu = validateResult;
-        const merged = this.#repo.merge(buchNeu, removeIsbnDash(buch));
+        const computerNeu = validateResult;
+        const merged = this.#repo.merge(computerNeu, removeIsbnDash(buch));
         this.#logger.debug('update: merged=%o', merged);
         const updated = await this.#repo.save(merged); // implizite Transaktion
         this.#logger.debug('update: updated=%o', updated);
@@ -140,10 +133,10 @@ export class BuchWriteService {
     }
 
     /**
-     * Ein Buch wird asynchron anhand seiner ID gelöscht.
+     * Ein Computer wird asynchron anhand seiner ID gelöscht.
      *
-     * @param id ID des zu löschenden Buches
-     * @returns true, falls das Buch vorhanden war und gelöscht wurde. Sonst false.
+     * @param id ID des zu löschenden Computers
+     * @returns true, falls der Computer vorhanden war und gelöscht wurde. Sonst false.
      */
     async delete(id: string) {
         this.#logger.debug('delete: id=%s', id);
@@ -152,14 +145,14 @@ export class BuchWriteService {
             return false;
         }
 
-        const buch = await this.#readService.findById(id);
-        if (buch === undefined) {
+        const computer = await this.#readService.findById(id);
+        if (computer === undefined) {
             return false;
         }
 
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
-            // Das Buch zur gegebenen ID asynchron loeschen
+            // Der Computer zur gegebenen ID asynchron loeschen
             const { schlagwoerter } = buch;
             const schlagwoerterIds = schlagwoerter.map(
                 (schlagwort) => schlagwort.id,
@@ -183,18 +176,18 @@ export class BuchWriteService {
         );
     }
 
-    async #validateCreate(buch: Buch): Promise<CreateError | undefined> {
-        const validateResult = this.#validationService.validate(buch);
+    async #validateCreate(computer: Computer): Promise<CreateError | undefined> {
+        const validateResult = this.#validationService.validate(computer);
         if (validateResult !== undefined) {
             const messages = validateResult;
             this.#logger.debug('#validateCreate: messages=%o', messages);
             return { type: 'ConstraintViolations', messages };
         }
 
-        const { titel } = buch;
-        let buecher = await this.#readService.find({ titel: titel }); // eslint-disable-line object-shorthand
-        if (buecher.length > 0) {
-            return { type: 'TitelExists', titel };
+        const { hersteller } = computer;
+        let computerList = await this.#readService.find({ hersteller: hersteller }); // eslint-disable-line object-shorthand
+        if (computerList.length > 0) {
+            return { type: 'HerstellerExists', hersteller };
         }
 
         const { isbn } = buch;
@@ -205,12 +198,6 @@ export class BuchWriteService {
 
         this.#logger.debug('#validateCreate: ok');
         return undefined;
-    }
-
-    async #sendmail(buch: Buch) {
-        const subject = `Neues Buch ${buch.id}`;
-        const body = `Das Buch mit dem Titel <strong>${buch.titel}</strong> ist angelegt`;
-        await this.#mailService.sendmail(subject, body);
     }
 
     async #validateUpdate(
