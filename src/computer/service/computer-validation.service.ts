@@ -52,7 +52,7 @@ export class ComputerValidationService {
         // https://github.com/ajv-validator/ajv-formats#formats
         formatsPlugin(this.#ajv, ['date', 'email', 'uri']);
         ajvErrors(this.#ajv);
-        this.#ajv.addFormat('ISBN', {
+        this.#ajv.addFormat('Seriennummer', {
             type: 'string',
             validate: this.#validateSeriennummer,
         });
