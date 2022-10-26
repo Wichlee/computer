@@ -18,7 +18,7 @@
 // https://json-schema.org/implementations.html
 
 /**
- * Das Modul besteht aus der Klasse {@linkcode BuchValidationService}.
+ * Das Modul besteht aus der Klasse {@linkcode ComputerValidationService}.
  * @packageDocumentation
  */
 
@@ -27,7 +27,7 @@
 // https://ajv.js.org/guide/schema-language.html#draft-2019-09-and-draft-2012-12
 // https://github.com/ajv-validator/ajv/blob/master/docs/validation.md
 import Ajv2020 from 'ajv/dist/2020.js';
-import { type Buch } from '../entity/computer.entity.js';
+import { type Computer } from '../entity/computer.entity.js';
 import { type FormatValidator } from 'ajv/dist/types/index.js';
 import { Injectable } from '@nestjs/common';
 import RE2 from 're2';
@@ -40,13 +40,13 @@ export const ID_PATTERN = new RE2(
     '^[\\dA-Fa-f]{8}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{12}$',
 );
 @Injectable()
-export class BuchValidationService {
+export class ComputerValidationService {
     #ajv = new Ajv2020({
         allowUnionTypes: true,
         allErrors: true,
     });
 
-    readonly #logger = getLogger(BuchValidationService.name);
+    readonly #logger = getLogger(ComputerValidationService.name);
 
     constructor() {
         // https://github.com/ajv-validator/ajv-formats#formats
@@ -54,7 +54,7 @@ export class BuchValidationService {
         ajvErrors(this.#ajv);
         this.#ajv.addFormat('ISBN', {
             type: 'string',
-            validate: this.#validateISBN,
+            validate: this.#validateSeriennummer,
         });
     }
 
@@ -94,7 +94,7 @@ export class BuchValidationService {
     }
 
     // https://github.com/ajv-validator/ajv-formats/issues/14#issuecomment-826340298
-    #validateISBN: FormatValidator<string> = (subject: string) => {
+    #validateSeriennummer: FormatValidator<string> = (subject: string) => {
         // Checks for ISBN-10 or ISBN-13 format
         // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
         /* eslint-disable max-len, unicorn/no-unsafe-regex, security/detect-unsafe-regex, regexp/no-super-linear-backtracking */
@@ -122,13 +122,13 @@ export class BuchValidationService {
     };
 
     /**
-     * Funktion zur Validierung, wenn neue Bücher angelegt oder vorhandene Bücher
+     * Funktion zur Validierung, wenn neue Computer angelegt oder vorhandene Computer
      * aktualisiert bzw. überschrieben werden sollen.
      */
-    validate(buch: Buch) {
-        this.#logger.debug('validate: buch=%o', buch);
-        const validate = this.#ajv.compile<Buch>(jsonSchema);
-        validate(buch);
+    validate(computer: Computer) {
+        this.#logger.debug('validate: computer=%o', computer);
+        const validate = this.#ajv.compile<Computer>(jsonSchema);
+        validate(computer);
 
         // nullish coalescing
         const errors = validate.errors ?? [];

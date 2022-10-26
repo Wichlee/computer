@@ -16,14 +16,12 @@
  */
 import { type GenericJsonSchema } from './GenericJsonSchema.js';
 
-export const MAX_RATING = 5;
-
 export const jsonSchema: GenericJsonSchema = {
     // naechstes Release: 2021-02-01
     $schema: 'https://json-schema.org/draft/2020-12/schema',
-    $id: 'https://acme.com/buch.json#',
-    title: 'Buch',
-    description: 'Eigenschaften eines Buches: Typen und Constraints',
+    $id: 'https://acme.com/computer.json#',
+    title: 'Computer',
+    description: 'Eigenschaften eines Computers: Typen und Constraints',
     type: 'object',
     properties: {
         id: {
@@ -35,58 +33,38 @@ export const jsonSchema: GenericJsonSchema = {
             type: 'number',
             minimum: 0,
         },
-        titel: {
+        hersteller: {
             type: 'string',
             pattern: '^\\w.*',
         },
-        rating: {
-            type: 'number',
-            minimum: 0,
-            maximum: MAX_RATING,
-        },
-        art: {
+        modell: {
             type: 'string',
-            enum: ['DRUCKAUSGABE', 'KINDLE', ''],
+            enum: ['Desktop-PC', 'Gaming-PC', ''],
         },
-        verlag: {
-            type: 'string',
-            enum: ['BAR_VERLAG', 'FOO_VERLAG', ''],
-        },
+        herstelldatum: { type: 'string', format: 'date' },
         preis: {
             type: 'number',
             minimum: 0,
         },
-        rabatt: {
-            type: 'number',
-            exclusiveMinimum: 0,
-            exclusiveMaximum: 1,
+        farbe: {
+            type: 'string',
+            enum: ['rot', 'schwarz', ''],
         },
-        lieferbar: { type: 'boolean' },
-        datum: { type: 'string', format: 'date' },
-        isbn: { type: 'string', format: 'ISBN' },
-        homepage: { type: 'string', format: 'uri' },
-        schlagwoerter: {
-            type: 'array',
-            items: { type: 'object' },
-        },
+        seriennummer: { type: 'string', format: 'Seriennummer' },
         erzeugt: { type: ['string', 'null'] },
         aktualisiert: { type: ['string', 'null'] },
     },
-    required: ['titel', 'verlag', 'preis', 'isbn'],
+    required: ['hersteller', 'preis', 'seriennummer'],
     additionalProperties: false,
     errorMessage: {
         properties: {
             version: 'Die Versionsnummer muss mindestens 0 sein.',
-            titel: 'Ein Buchtitel muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
-            rating: 'Eine Bewertung muss zwischen 0 und 5 liegen.',
-            art: 'Die Art eines Buches muss KINDLE oder DRUCKAUSGABE sein.',
-            verlag: 'Der Verlag eines Buches muss FOO_VERLAG oder BAR_VERLAG sein.',
+            hersteller: 'Ein Hersteller muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
+            modell: 'Das Modell eines Computers muss Desktop-PC oder Gaming-PC sein.',
+            herstelldatum: 'Das Datum muss im Format yyyy-MM-dd sein.',
             preis: 'Der Preis darf nicht negativ sein.',
-            rabatt: 'Der Rabatt muss ein Wert zwischen 0 und 1 sein.',
-            lieferbar: '"lieferbar" muss auf true oder false gesetzt sein.',
-            datum: 'Das Datum muss im Format yyyy-MM-dd sein.',
-            isbn: 'Die ISBN-Nummer ist nicht korrekt.',
-            homepage: 'Die Homepage ist nicht korrekt.',
+            farbe: 'Die Farbe eines Computers muss rot oder schwarz sein.',
+            seriennummer: 'Die Seriennummer ist nicht korrekt.',
         },
     },
 };

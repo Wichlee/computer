@@ -16,12 +16,12 @@
  */
 
 /**
- * Das Modul besteht aus der Klasse {@linkcode BuchReadService}.
+ * Das Modul besteht aus der Klasse {@linkcode ComputerReadService}.
  * @packageDocumentation
  */
 
-import { Buch, type BuchArt, type Verlag } from '../entity/computer.entity.js';
-import { BuchValidationService } from './buch-validation.service.js';
+import { Computer, type ComputerFarbe, type ComputerModell } from '../entity/computer.entity.js';
+import { ComputerValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { QueryBuilder } from './query-builder.js';
@@ -29,44 +29,40 @@ import { Repository } from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
 
 export interface Suchkriterien {
-    readonly titel?: string;
-    readonly rating?: number;
-    readonly art?: BuchArt;
-    readonly verlag?: Verlag;
+    readonly hersteller?: string;
+    readonly modell?: ComputerModell;
+    readonly herstelldatum?: Date;
     readonly preis?: number;
-    readonly rabatt?: number;
-    readonly lieferbar?: boolean;
-    readonly datum?: string;
-    readonly isbn?: string;
-    readonly homepage?: string;
+    readonly farbe?: ComputerFarbe;
+    readonly seriennummer?: string;
     readonly javascript?: boolean;
     readonly typescript?: boolean;
 }
 
 /**
- * Die Klasse `BuchReadService` implementiert das Lesen für Bücher und greift
+ * Die Klasse `ComputerReadService` implementiert das Lesen für Computer und greift
  * mit _TypeORM_ auf eine relationale DB zu.
  */
 @Injectable()
-export class BuchReadService {
-    readonly #repo: Repository<Buch>;
+export class ComputerReadService {
+    readonly #repo: Repository<Computer>;
 
-    readonly #buchProps: string[];
+    readonly #computerProps: string[];
 
     readonly #queryBuilder: QueryBuilder;
 
-    readonly #validationService: BuchValidationService;
+    readonly #validationService: ComputerValidationService;
 
-    readonly #logger = getLogger(BuchReadService.name);
+    readonly #logger = getLogger(ComputerReadService.name);
 
     constructor(
-        @InjectRepository(Buch) repo: Repository<Buch>,
+        @InjectRepository(Computer) repo: Repository<Computer>,
         queryBuilder: QueryBuilder,
-        validationService: BuchValidationService,
+        validationService: ComputerValidationService,
     ) {
         this.#repo = repo;
-        const buchDummy = new Buch();
-        this.#buchProps = Object.getOwnPropertyNames(buchDummy);
+        const computerDummy = new Computer();
+        this.#computerProps = Object.getOwnPropertyNames(computerDummy);
         this.#queryBuilder = queryBuilder;
         this.#validationService = validationService;
     }
@@ -84,9 +80,9 @@ export class BuchReadService {
     //              Im Promise-Objekt ist dann die Fehlerursache enthalten.
 
     /**
-     * Ein Buch asynchron anhand seiner ID suchen
-     * @param id ID des gesuchten Buches
-     * @returns Das gefundene Buch vom Typ [Buch](buch_entity_buch_entity.Buch.html) oder undefined
+     * Einen Computer asynchron anhand seiner ID suchen
+     * @param id ID des gesuchten Computers
+     * @returns Der gefundene Computer vom Typ [Computer](computer_entity_computer_entity.Computer.html) oder undefined
      *          in einem Promise aus ES2015 (vgl.: Mono aus Project Reactor oder
      *          Future aus Java)
      */
@@ -101,20 +97,20 @@ export class BuchReadService {
         // https://typeorm.io/working-with-repository
         // Das Resultat ist undefined, falls kein Datensatz gefunden
         // Lesen: Keine Transaktion erforderlich
-        const buch = await this.#queryBuilder.buildId(id).getOne();
-        if (buch === null) {
-            this.#logger.debug('findById: Kein Buch gefunden');
+        const computer = await this.#queryBuilder.buildId(id).getOne();
+        if (computer === null) {
+            this.#logger.debug('findById: Kein Computer gefunden');
             return;
         }
 
-        this.#logger.debug('findById: buch=%o', buch);
-        return buch;
+        this.#logger.debug('findById: computer=%o', computer);
+        return computer;
     }
 
     /**
-     * Bücher asynchron suchen.
+     * Computer asynchron suchen.
      * @param suchkriterien JSON-Objekt mit Suchkriterien
-     * @returns Ein JSON-Array mit den gefundenen Büchern. Ggf. ist das Array leer.
+     * @returns Ein JSON-Array mit den gefundenen Computern. Ggf. ist das Array leer.
      */
     async find(suchkriterien?: Suchkriterien) {
         this.#logger.debug('find: suchkriterien=%o', suchkriterien);
@@ -136,24 +132,24 @@ export class BuchReadService {
         // QueryBuilder https://typeorm.io/select-query-builder
         // Das Resultat ist eine leere Liste, falls nichts gefunden
         // Lesen: Keine Transaktion erforderlich
-        const buecher = await this.#queryBuilder.build(suchkriterien).getMany();
-        this.#logger.debug('find: buecher=%o', buecher);
+        const computerList = await this.#queryBuilder.build(suchkriterien).getMany();
+        this.#logger.debug('find: computerList=%o', computerList);
 
-        return buecher;
+        return computerList;
     }
 
     async #findAll() {
-        const buecher = await this.#repo.find();
-        this.#logger.debug('#findAll: alle buecher=%o', buecher);
-        return buecher;
+        const computerList = await this.#repo.find();
+        this.#logger.debug('#findAll: alle computerList=%o', computerList);
+        return computerList;
     }
 
     #checkKeys(keys: string[]) {
-        // Ist jedes Suchkriterium auch eine Property von Buch oder "schlagwoerter"?
+        // Ist jedes Suchkriterium auch eine Property von Computer?
         let validKeys = true;
         keys.forEach((key) => {
             if (
-                !this.#buchProps.includes(key) &&
+                !this.#computerProps.includes(key) &&
                 key !== 'javascript' &&
                 key !== 'typescript'
             ) {

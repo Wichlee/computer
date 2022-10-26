@@ -61,7 +61,7 @@ export type ComputerFarbe = 'rot' | 'schwarz' | 'silber' | 'weiss';
 export type ComputerModell = 'Desktop-PC' | 'Gaming-PC' | 'Notebook';
 
 /**
- * Entity-Klasse zu einem relationalen Tabelle
+ * Entity-Klasse zu einer relationalen Tabelle
  */
 // https://typeorm.io/entities
 @Entity()
@@ -93,7 +93,7 @@ export class Computer {
     readonly preis!: number;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Desktop-PC', type: String })
+    @ApiProperty({ example: 'rot', type: String })
     readonly farbe: ComputerFarbe | undefined;
 
     @Column('varchar')
