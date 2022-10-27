@@ -97,7 +97,7 @@ export class ComputerMutationResolver {
         const idStr = id.id;
         this.#logger.debug('delete: id=%s', idStr);
         const result = await this.#service.delete(idStr);
-        this.#logger.debug('deleteBuch: result=%s', result);
+        this.#logger.debug('deleteComputer: result=%s', result);
         return result;
     }
 
