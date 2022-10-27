@@ -32,7 +32,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { type Computer, type ComputerFarbe, type ComputerModell } from '../entity/computer.entity.js';
+import {
+    type Computer,
+    type ComputerFarbe,
+    type ComputerModell,
+} from '../entity/computer.entity.js';
 import {
     ComputerReadService,
     type Suchkriterien,
@@ -104,7 +108,7 @@ export class ComputerQuery implements Suchkriterien {
 
     @ApiProperty({ required: false })
     declare readonly preis: number;
-    
+
     @ApiProperty({ required: false })
     declare readonly computerFarbe: ComputerFarbe;
 
@@ -192,6 +196,7 @@ export class ComputerGetController {
         let computer: Computer | undefined;
         try {
             // vgl. Kotlin: Aufruf einer suspend-Function
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             computer = await this.#service.findById(id);
         } catch (err) {
             // err ist implizit vom Typ "unknown", d.h. keine Operationen koennen ausgefuehrt werden
@@ -261,16 +266,18 @@ export class ComputerGetController {
         }
 
         // HATEOAS: Atom Links je Computer
-        const computersModel = computers.map((computer : Computer )=>
+        const computersModel = computers.map((computer: Computer) =>
             this.#toModel(computer, req, false),
         );
         this.#logger.debug('find: computersModel=%o', computersModel);
 
-        const result: ComputersModel = { _embedded: { computers: computersModel } };
+        const result: ComputersModel = {
+            _embedded: { computers: computersModel },
+        };
         return res.json(result).send();
     }
 
-    #toModel(computer: Computer, req: Request, all = true) : ComputerModel {
+    #toModel(computer: Computer, req: Request, all = true): ComputerModel {
         const baseUri = getBaseUri(req);
         this.#logger.debug('#toModel: baseUri=%s', baseUri);
         const { id } = computer;
