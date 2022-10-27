@@ -208,7 +208,7 @@ export class ComputerWriteController {
     }
 
     /**
-     * Ein Buch wird anhand seiner ID-gelöscht, die als Pfad-Parameter angegeben
+     * Ein Computer wird anhand seiner ID-gelöscht, die als Pfad-Parameter angegeben
      * ist. Der zurückgelieferte Statuscode ist `204` (`No Content`).
      *
      * @param id Pfad-Paramater für die ID.
@@ -217,14 +217,17 @@ export class ComputerWriteController {
      */
     @Delete(':id')
     @Roles('admin')
-    @ApiOperation({ summary: 'Buch mit der ID löschen', tags: ['Loeschen'] })
+    @ApiOperation({
+        summary: 'Computer mit der ID löschen',
+        tags: ['Loeschen'],
+    })
     @ApiHeader({
         name: 'Authorization',
         description: 'Header für JWT',
         required: true,
     })
     @ApiNoContentResponse({
-        description: 'Das Buch wurde gelöscht oder war nicht vorhanden',
+        description: 'Der Computer wurde gelöscht oder war nicht vorhanden',
     })
     async delete(
         @Param('id') id: string,
