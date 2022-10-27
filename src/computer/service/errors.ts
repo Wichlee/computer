@@ -17,7 +17,7 @@
 
 /**
  * Das Modul besteht aus den Klassen für die Fehlerbehandlung bei der Verwaltung
- * von Büchern, z.B. beim DB-Zugriff.
+ * von Computer, z.B. beim DB-Zugriff.
  * @packageDocumentation
  */
 
