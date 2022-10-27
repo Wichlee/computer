@@ -61,7 +61,9 @@ export class ComputerMutationResolver {
     async create(@Args('input') computerDTO: ComputerCreateDTO) {
         this.#logger.debug('create: computerDTO=%o', computerDTO);
 
-        const result = await this.#service.create(this.#dtoToComputer(computerDTO));
+        const result = await this.#service.create(
+            this.#dtoToComputer(computerDTO),
+        );
         this.#logger.debug('createComputer: result=%o', result);
 
         if (Object.prototype.hasOwnProperty.call(result, 'type')) {
