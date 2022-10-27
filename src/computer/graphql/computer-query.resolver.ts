@@ -38,62 +38,57 @@ export class ComputerQueryResolver {
         this.#service = service;
     }
 
-    @Query('buch')
+    @Query('computer')
     async findById(@Args() id: IdInput) {
         const idStr = id.id;
         this.#logger.debug('findById: id=%s', idStr);
 
-        const buch = await this.#service.findById(idStr);
-        if (buch === undefined) {
+        const computer = await this.#service.findById(idStr);
+        if (computer === undefined) {
             // UserInputError liefert Statuscode 200
             // Weitere Error-Klasse in apollo-server-errors:
             // SyntaxError, ValidationError, AuthenticationError, ForbiddenError,
             // PersistedQuery, PersistedQuery
             // https://www.apollographql.com/blog/graphql/error-handling/full-stack-error-handling-with-graphql-apollo
             throw new UserInputError(
-                `Es wurde kein Buch mit der ID ${idStr} gefunden.`,
+                `Es wurde kein Computer mit der ID ${idStr} gefunden.`,
             );
         }
-        const buchDTO = this.#toBuchDTO(buch);
-        this.#logger.debug('findById: buchDTO=%o', buchDTO);
-        return buchDTO;
+        const computerDTO = this.#toComputerDTO(computer);
+        this.#logger.debug('findById: computerDTO=%o', computerDTO);
+        return computerDTO;
     }
 
-    @Query('buecher')
-    async find(@Args() titel: { titel: string } | undefined) {
-        const titelStr = titel?.titel;
-        this.#logger.debug('find: titel=%s', titelStr);
-        const suchkriterium = titelStr === undefined ? {} : { titel: titelStr };
-        const buecher = await this.#service.find(suchkriterium);
-        if (buecher.length === 0) {
+    @Query('computers')
+    async find(@Args() hersteller: { hersteller: string } | undefined) {
+        const herstellerStr = hersteller?.hersteller;
+        this.#logger.debug('find: hersteller=%s', herstellerStr);
+        const suchkriterium =
+            herstellerStr === undefined ? {} : { hersteller: herstellerStr };
+        const computers = await this.#service.find(suchkriterium);
+        if (computers.length === 0) {
             // UserInputError liefert Statuscode 200
-            throw new UserInputError('Es wurden keine Buecher gefunden.');
+            throw new UserInputError('Es wurden keine Computer gefunden.');
         }
 
-        const buecherDTO = buecher.map((buch) => this.#toBuchDTO(buch));
-        this.#logger.debug('find: buecherDTO=%o', buecherDTO);
-        return buecherDTO;
+        const computersDTO = computers.map((computer) =>
+            this.#toComputerDTO(computer),
+        );
+        this.#logger.debug('find: comutersDTO=%o', computersDTO);
+        return computersDTO;
     }
 
-    #toBuchDTO(buch: Buch) {
-        const schlagwoerter = buch.schlagwoerter.map(
-            (schlagwort) => schlagwort.schlagwort!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
-        );
-        const buchDTO: BuchDTO = {
-            id: buch.id,
-            version: buch.version,
-            titel: buch.titel,
-            rating: buch.rating,
-            art: buch.art,
-            verlag: buch.verlag,
-            preis: buch.preis,
-            rabatt: buch.rabatt,
-            lieferbar: buch.lieferbar,
-            datum: buch.datum,
-            isbn: buch.isbn,
-            homepage: buch.homepage,
-            schlagwoerter,
+    #toComputerDTO(computer: Computer) {
+        const computerDTO: ComputerDTO = {
+            id: computer.id,
+            version: computer.version,
+            hersteller: computer.hersteller,
+            modell: computer.modell,
+            herstelldatum: computer.herstelldatum,
+            preis: computer.preis,
+            farbe: computer.farbe,
+            seriennummer: computer.seriennummer,
         };
-        return buchDTO;
+        return computerDTO;
     }
 }
