@@ -22,7 +22,7 @@
  */
 
 /**
- * Klasse für fehlerhafte Buchdaten. Die Meldungstexte sind in der Property
+ * Klasse für fehlerhafte Computerdaten. Die Meldungstexte sind in der Property
  * `msg` gekapselt.
  */
 export interface ConstraintViolations {
@@ -31,30 +31,30 @@ export interface ConstraintViolations {
 }
 
 /**
- * Klasse für einen bereits existierenden Titel.
+ * Klasse für einen bereits existierenden Hersteller.
  */
-export interface TitelExists {
-    readonly type: 'TitelExists';
-    readonly titel: string | null | undefined;
+export interface HerstellerExists {
+    readonly type: 'HerstellerExists';
+    readonly hersteller: string | null | undefined;
     readonly id?: string;
 }
 
 /**
- * Klasse für eine bereits existierende ISBN-Nummer.
+ * Klasse für eine bereits existierende Seriennummer.
  */
-export interface IsbnExists {
-    readonly type: 'IsbnExists';
-    readonly isbn: string | null | undefined;
+export interface SeriennummerExists {
+    readonly type: 'SeriennummerExists';
+    readonly seriennummer: string | null | undefined;
     readonly id?: string;
 }
 
 /**
- * Union-Type für Fehler beim Neuanlegen eines Buches:
+ * Union-Type für Fehler beim Neuanlegen eines Computers:
  * - {@linkcode ConstraintViolations}
- * - {@linkcode IsbnExists}
- * - {@linkcode TitelExists}
+ * - {@linkcode SeriennummerExists}
+ * - {@linkcode HerstellerExists}
  */
-export type CreateError = ConstraintViolations | IsbnExists | TitelExists;
+export type CreateError = ConstraintViolations | SeriennummerExists | HerstellerExists;
 
 /**
  * Klasse für eine ungültige Versionsnummer beim Ändern.
@@ -74,25 +74,25 @@ export interface VersionOutdated {
 }
 
 /**
- * Klasse für ein nicht-vorhandenes Buch beim Ändern.
+ * Klasse für einen nicht-vorhandenen Computer beim Ändern.
  */
-export interface BuchNotExists {
-    readonly type: 'BuchNotExists';
+export interface ComputerNotExists {
+    readonly type: 'ComputerNotExists';
     readonly id: string | undefined;
 }
 
 /**
- * Union-Type für Fehler beim Ändern eines Buches:
- * - {@linkcode BuchNotExists}
+ * Union-Type für Fehler beim Ändern eines Computers:
+ * - {@linkcode ComputerNotExists}
  * - {@linkcode ConstraintViolations}
- * - {@linkcode TitelExists}
+ * - {@linkcode HerstellerExists}
  * - {@linkcode VersionInvalid}
  * - {@linkcode VersionOutdated}
  */
 export type UpdateError =
-    | BuchNotExists
+    | ComputerNotExists
     | ConstraintViolations
-    | TitelExists
+    | HerstellerExists
     | VersionInvalid
     | VersionOutdated;
 
@@ -105,7 +105,7 @@ export interface FileNotFound {
 }
 
 /**
- * Klasse, falls es mehrere Binärdateien zu einem Buch gibt.
+ * Klasse, falls es mehrere Binärdateien zu einem Computer gibt.
  */
 export interface MultipleFiles {
     readonly type: 'MultipleFiles';
@@ -120,14 +120,14 @@ export interface InvalidContentType {
 }
 
 /**
- * Union-Type für Fehler beim Lesen einer Binärdatei zu einem Buch:
- * - {@linkcode BuchNotExists}
+ * Union-Type für Fehler beim Lesen einer Binärdatei zu einem Computer:
+ * - {@linkcode ComputerNotExists}
  * - {@linkcode FileNotFound}
  * - {@linkcode InvalidContentType}
  * - {@linkcode MultipleFiles}
  */
 export type FileFindError =
-    | BuchNotExists
+    | ComputerNotExists
     | FileNotFound
     | InvalidContentType
     | MultipleFiles;
