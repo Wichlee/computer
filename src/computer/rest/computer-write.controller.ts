@@ -95,7 +95,7 @@ export class ComputerWriteController {
      * gesetzt und genauso auch wenn die Seriennummer bereits
      * existiert.
      *
-     * @param computer JSON-Daten für ein Buch im Request-Body.
+     * @param computer JSON-Daten für einen Computer im Request-Body.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
