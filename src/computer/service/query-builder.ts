@@ -33,25 +33,25 @@ import { typeOrmModuleOptions } from '../../config/db.js';
  */
 @Injectable()
 export class QueryBuilder {
-    readonly #buchAlias = `${Buch.name
+    readonly #computerAlias = `${Computer.name
         .charAt(0)
-        .toLowerCase()}${Buch.name.slice(1)}`;
+        .toLowerCase()}${Computer.name.slice(1)}`;
 
-    readonly #repo: Repository<Buch>;
+    readonly #repo: Repository<Computer>;
 
     readonly #logger = getLogger(QueryBuilder.name);
 
-    constructor(@InjectRepository(Buch) repo: Repository<Buch>) {
+    constructor(@InjectRepository(Computer) repo: Repository<Computer>) {
         this.#repo = repo;
     }
 
     /**
-     * Ein Buch mit der ID suchen.
-     * @param id ID des gesuchten Buches
+     * Einen Computer mit der ID suchen.
+     * @param id ID des gesuchten Computers
      * @returns QueryBuilder
      */
     buildId(id: string) {
-        const queryBuilder = this.#repo.createQueryBuilder(this.#buchAlias);
+        const queryBuilder = this.#repo.createQueryBuilder(this.#computerAlias);
         // Option { eager: true } in der Entity-Klasse wird nur bei find-Methoden des Repositories beruecksichtigt
         // https://github.com/typeorm/typeorm/issues/8292#issuecomment-1036991980
         // https://github.com/typeorm/typeorm/issues/7142
@@ -61,12 +61,12 @@ export class QueryBuilder {
             this.#repo.metadata,
         );
 
-        queryBuilder.where(`${this.#buchAlias}.id = :id`, { id: id }); // eslint-disable-line object-shorthand
+        queryBuilder.where(`${this.#computerAlias}.id = :id`, { id: id }); // eslint-disable-line object-shorthand
         return queryBuilder;
     }
 
     /**
-     * Bücher asynchron suchen.
+     * Computer asynchron suchen.
      * @param suchkriterien JSON-Objekt mit Suchkriterien
      * @returns QueryBuilder
      */
@@ -74,7 +74,7 @@ export class QueryBuilder {
     build(suchkriterien: Record<string, any>) {
         this.#logger.debug('build: suchkriterien=%o', suchkriterien);
 
-        let queryBuilder = this.#repo.createQueryBuilder(this.#buchAlias);
+        let queryBuilder = this.#repo.createQueryBuilder(this.#computerAlias);
         // Option { eager: true } in der Entity-Klasse wird nur bei find-Methoden des Repositories beruecksichtigt
         // https://github.com/typeorm/typeorm/issues/8292#issuecomment-1036991980
         // https://github.com/typeorm/typeorm/issues/7142
@@ -84,43 +84,37 @@ export class QueryBuilder {
             this.#repo.metadata,
         );
 
-        // z.B. { titel: 'a', rating: 5, javascript: true }
+        // z.B. { hersteller: 'a', rating: 5, javascript: true }
         // Rest Properties fuer anfaengliche WHERE-Klausel
         // type-coverage:ignore-next-line
-        const { titel, isbn, javascript, typescript, ...props } = suchkriterien;
-
-        queryBuilder = this.#buildSchlagwoerter(
-            queryBuilder,
-            javascript, // eslint-disable-line @typescript-eslint/no-unsafe-argument
-            typescript, // eslint-disable-line @typescript-eslint/no-unsafe-argument
-        );
+        const { hersteller, seriennummer, javascript, typescript, ...props } = suchkriterien;
 
         let useWhere = true;
 
-        // Titel in der Query: Teilstring des Titels und "case insensitive"
+        // Hersteller in der Query: Teilstring des Herstellers und "case insensitive"
         // CAVEAT: MySQL hat keinen Vergleich mit "case insensitive"
         // type-coverage:ignore-next-line
-        if (titel !== undefined && typeof titel === 'string') {
+        if (hersteller !== undefined && typeof hersteller === 'string') {
             const ilike =
                 typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
             queryBuilder = queryBuilder.where(
-                `${this.#buchAlias}.titel ${ilike} :titel`,
-                { titel: `%${titel}%` },
+                `${this.#computerAlias}.hersteller ${ilike} :hersteller`,
+                { hersteller: `%${hersteller}%` },
             );
             useWhere = false;
         }
 
         // type-coverage:ignore-next-line
-        if (isbn !== undefined && typeof isbn === 'string') {
-            // "-" aus ISBN-Nummer entfernen, da diese nicht abgespeichert sind
-            const isbnOhne = isbn.replaceAll('-', '');
+        if (seriennummer !== undefined && typeof seriennummer === 'string') {
+            // "-" aus Seriennummer entfernen, da diese nicht abgespeichert sind
+            const seriennummerOhne = seriennummer.replaceAll('-', '');
             const param = {
-                isbn: isbnOhne,
+                seriennummer: seriennummerOhne,
             };
             queryBuilder = useWhere
-                ? queryBuilder.where(`${this.#buchAlias}.isbn = :isbn`, param)
+                ? queryBuilder.where(`${this.#computerAlias}.seriennummer = :seriennummer`, param)
                 : queryBuilder.andWhere(
-                      `${this.#buchAlias}.isbn = :isbn`,
+                      `${this.#computerAlias}.seriennummer = :seriennummer`,
                       param,
                   );
         }
@@ -131,44 +125,16 @@ export class QueryBuilder {
             param[key] = props[key]; // eslint-disable-line @typescript-eslint/no-unsafe-assignment, security/detect-object-injection
             queryBuilder = useWhere
                 ? queryBuilder.where(
-                      `${this.#buchAlias}.${key} = :${key}`,
+                      `${this.#computerAlias}.${key} = :${key}`,
                       param,
                   )
                 : queryBuilder.andWhere(
-                      `${this.#buchAlias}.${key} = :${key}`,
+                      `${this.#computerAlias}.${key} = :${key}`,
                       param,
                   );
         });
 
         this.#logger.debug('build: sql=%s', queryBuilder.getSql());
-        return queryBuilder;
-    }
-
-    #buildSchlagwoerter(
-        queryBuilder: SelectQueryBuilder<Buch>,
-        javascript: string | undefined,
-        typescript: string | undefined,
-    ) {
-        // Schlagwort JAVASCRIPT aus der 2. Tabelle
-        if (javascript === 'true') {
-            // https://typeorm.io/select-query-builder#inner-and-left-joins
-            // eslint-disable-next-line no-param-reassign
-            queryBuilder = queryBuilder.innerJoinAndSelect(
-                `${this.#buchAlias}.schlagwoerter`,
-                'swJS',
-                'swJS.schlagwort = :javascript',
-                { javascript: 'JAVASCRIPT' },
-            );
-        }
-        if (typescript === 'true') {
-            // eslint-disable-next-line no-param-reassign
-            queryBuilder = queryBuilder.innerJoinAndSelect(
-                `${this.#buchAlias}.schlagwoerter`,
-                'swTS',
-                'swTS.schlagwort = :typescript',
-                { typescript: 'TYPESCRIPT' },
-            );
-        }
         return queryBuilder;
     }
 }
