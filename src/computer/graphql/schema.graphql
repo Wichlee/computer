@@ -20,79 +20,67 @@ schema {
   mutation: Mutation
 }
 
-"Funktionen, um Bücherdaten zu lesen"
+"Funktionen, um Computerdaten zu lesen"
 type Query {
-  buecher(titel: String): [Buch!]
+  computers(seriennummer: String): [Computer!]
 
-  buch(id: ID!): Buch
+  computer(id: ID!): Computer
 }
 
-"Funktionen, um Bücher neu anzulegen, zu aktualisieren oder zu löschen"
+"Funktionen, um Computer neu anzulegen, zu aktualisieren oder zu löschen"
 type Mutation {
-  create(input: BuchInput!): String
+  create(input: ComputerInput!): String
 
-  update(input: BuchUpdateInput!): Int
+  update(input: ComputerUpdateInput!): Int
 
   delete(id: ID!): Boolean
 }
 
-"Datenschema zu einem Buch, das gelesen wird"
-type Buch {
+"Datenschema zu einem Computer, der gelesen wird"
+type Computer {
   id: ID
   version: Int
-  titel: String
-  rating: Int
-  art: Art
-  verlag: Verlag
-  preis: Float
-  rabatt: Float
-  lieferbar: Boolean
-  datum: String
-  isbn: String
-  homepage: String
-  schlagwoerter: [String]
+  hersteller: String
+  modell: Modell
+  herstelldatum: String
+  preis: Number
+  farbe: Farbe
+  seriennummer: String
 }
 
-"Enum-Typ für die Art eines Buches"
-enum Art {
-  DRUCKAUSGABE
-  KINDLE
+"Enum-Typ für das Modell eines Computers"
+enum Modell {
+  DESKTOP-PC
+  GAMING-PC
+  NOTEBOOK
 }
 
-"Enum-Typ für den Verlag eines Buches"
-enum Verlag {
-  FOO_VERLAG
-  BAR_VERLAG
+"Enum-Typ für die Farbe eines Computers"
+enum Farbe {
+  ROT
+  SCHWARZ
+  SILBER
+  WEISS
 }
 
-"Daten für ein neues Buch"
-input BuchInput {
-  titel: String!
-  rating: Int
-  art: Art
-  verlag: Verlag!
-  preis: Float
-  rabatt: Float
-  lieferbar: Boolean
-  datum: String
-  isbn: String
-  homepage: String
-  schlagwoerter: [String]
+"Daten für einen neuen Computer"
+input ComputerInput {
+  hersteller: String
+  modell: Modell
+  herstelldatum: String
+  preis: Number
+  farbe: Farbe
+  seriennummer: String!
 }
 
-"Daten für ein zu änderndes Buch"
-input BuchUpdateInput {
+"Daten für einen zu ändernden Computer"
+input ComputerUpdateInput {
   id: ID
   version: Int
-  titel: String!
-  rating: Int
-  art: Art
-  verlag: Verlag!
-  preis: Float
-  rabatt: Float
-  lieferbar: Boolean
-  datum: String
-  isbn: String
-  homepage: String
-  schlagwoerter: [String]
+  hersteller: String
+  modell: Modell
+  herstelldatum: String
+  preis: Number
+  farbe: Farbe
+  seriennummer: String!
 }
