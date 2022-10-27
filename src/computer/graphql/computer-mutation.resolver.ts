@@ -61,13 +61,13 @@ export class ComputerMutationResolver {
     async create(@Args('input') computerDTO: ComputerCreateDTO) {
         this.#logger.debug('create: computerDTO=%o', computerDTO);
 
-        const result = await this.#service.create(this.#dtoToComputer(comuterDTO));
+        const result = await this.#service.create(this.#dtoToComputer(computerDTO));
         this.#logger.debug('createComputer: result=%o', result);
 
         if (Object.prototype.hasOwnProperty.call(result, 'type')) {
             // UserInputError liefert Statuscode 200
             throw new UserInputError(
-                this.#errorMsgCreateBuch(result as CreateError),
+                this.#errorMsgCreateComputer(result as CreateError),
             );
         }
         return result;
@@ -101,64 +101,54 @@ export class ComputerMutationResolver {
         return result;
     }
 
-    #dtoToBuch(buchDTO: BuchCreateDTO): Buch {
-        const buch: Buch = {
+    #dtoToComputer(computerDTO: ComputerCreateDTO): Computer {
+        const computer: Computer = {
             id: undefined,
             version: undefined,
-            titel: buchDTO.titel,
-            rating: buchDTO.rating,
-            art: buchDTO.art,
-            verlag: buchDTO.verlag,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
-            lieferbar: buchDTO.lieferbar,
-            datum: buchDTO.datum,
-            isbn: buchDTO.isbn,
-            homepage: buchDTO.homepage,
-            schlagwoerter: [],
+            hersteller: computerDTO.hersteller,
+            modell: computerDTO.modell,
+            herstelldatum: computerDTO.herstelldatum,
+            preis: computerDTO.preis,
+            farbe: computerDTO.farbe,
+            seriennummer: computerDTO.seriennummer,
             erzeugt: undefined,
             aktualisiert: undefined,
         };
 
-        buchDTO.schlagwoerter.forEach((s) => {
-            const schlagwort: Schlagwort = {
-                id: undefined,
-                schlagwort: s,
-                buch,
-            };
-            buch.schlagwoerter.push(schlagwort);
-        });
-
-        return buch;
+        return computer;
     }
 
-    #errorMsgCreateBuch(err: CreateError) {
+    #errorMsgCreateComputer(err: CreateError) {
         switch (err.type) {
-            case 'ConstraintViolations':
+            case 'ConstraintViolations': {
                 return err.messages.join(' ');
-            case 'TitelExists':
-                return `Der Titel "${err.titel}" existiert bereits`;
-            case 'IsbnExists':
-                return `Die ISBN ${err.isbn} existiert bereits`;
-            default:
+            }
+            case 'SeriennummerExists': {
+                return `Die Seriennummer ${err.seriennummer} existiert bereits`;
+            }
+            default: {
                 return 'Unbekannter Fehler';
+            }
         }
     }
 
-    #errorMsgUpdateBuch(err: UpdateError) {
+    #errorMsgUpdateComputer(err: UpdateError) {
         switch (err.type) {
-            case 'ConstraintViolations':
+            case 'ConstraintViolations': {
                 return err.messages.join(' ');
-            case 'TitelExists':
-                return `Der Titel "${err.titel}" existiert bereits`;
-            case 'BuchNotExists':
-                return `Es gibt kein Buch mit der ID ${err.id}`;
-            case 'VersionInvalid':
+            }
+            case 'ComputerNotExists': {
+                return `Es gibt keinen Computer mit der ID ${err.id}`;
+            }
+            case 'VersionInvalid': {
                 return `"${err.version}" ist keine gueltige Versionsnummer`;
-            case 'VersionOutdated':
+            }
+            case 'VersionOutdated': {
                 return `Die Versionsnummer "${err.version}" ist nicht mehr aktuell`;
-            default:
+            }
+            default: {
                 return 'Unbekannter Fehler';
+            }
         }
     }
 }
