@@ -86,28 +86,33 @@ describe('GET /:id', () => {
         await shutdownServer();
     });
 
-    each(idVorhanden).test('Buch zu vorhandener ID %s', async (id: string) => {
-        // given - arrange
-        const url = `/${id}`;
+    each(idVorhanden).test(
+        'Computer zu vorhandener ID %s',
+        async (id: string) => {
+            // given - arrange
+            const url = `/${id}`;
 
-        // when - act
-        const response: AxiosResponse<ComputerModel> = await client.get(url);
+            // when - act
+            const response: AxiosResponse<ComputerModel> = await client.get(
+                url,
+            );
 
-        // then - assert
-        const { status, headers, data } = response; //destructuring
+            // then - assert
+            const { status, headers, data } = response; //destructuring
 
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu); //iu = caseinsensitive unicode
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu); //iu = caseinsensitive unicode
 
-        // eslint-disable-next-line no-underscore-dangle
-        const selfLink = data._links.self.href;
+            // eslint-disable-next-line no-underscore-dangle
+            const selfLink = data._links.self.href;
 
-        // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
-        expect(selfLink).toMatch(new RegExp(`${url}$`, 'u'));
-    });
+            // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
+            expect(selfLink).toMatch(new RegExp(`${url}$`, 'u'));
+        },
+    );
 
     each(idNichtVorhanden).test(
-        'Kein Buch zu nicht-vorhandener ID %s',
+        'Kein Computer zu nicht-vorhandener ID %s',
         async (id: string) => {
             // given
             const url = `/${id}`;
