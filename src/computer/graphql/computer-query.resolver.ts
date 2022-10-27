@@ -15,29 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { type Buch } from '../entity/computer.entity.js';
-import { BuchReadService } from '../service/computer-read.service.js';
+import { type Computer } from '../entity/computer.entity.js';
+import { ComputerReadService } from '../service/computer-read.service.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { UseInterceptors } from '@nestjs/common';
 import { UserInputError } from 'apollo-server-express';
 import { getLogger } from '../../logger/logger.js';
 
-export type BuchDTO = Omit<
-    Buch,
-    'aktualisiert' | 'erzeugt' | 'schlagwoerter'
-> & { schlagwoerter: string[] };
+export type ComputerDTO = Omit<Computer, 'aktualisiert' | 'erzeugt'>;
 export interface IdInput {
     id: string;
 }
 
 @Resolver()
 @UseInterceptors(ResponseTimeInterceptor)
-export class BuchQueryResolver {
-    readonly #service: BuchReadService;
+export class ComputerQueryResolver {
+    readonly #service: ComputerReadService;
 
-    readonly #logger = getLogger(BuchQueryResolver.name);
+    readonly #logger = getLogger(ComputerQueryResolver.name);
 
-    constructor(service: BuchReadService) {
+    constructor(service: ComputerReadService) {
         this.#service = service;
     }
 

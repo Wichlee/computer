@@ -18,7 +18,7 @@ import { AuthModule } from '../security/auth/auth.module.js';
 import { Buch } from './entity/computer.entity.js';
 import { BuchGetController } from './rest/buch-get.controller.js';
 import { BuchMutationResolver } from './graphql/buch-mutation.resolver.js';
-import { BuchQueryResolver } from './graphql/buch-query.resolver.js';
+import { BuchQueryResolver } from './graphql/computer-query.resolver.js';
 import { BuchReadService } from './service/computer-read.service.js';
 import { BuchValidationService } from './service/computer-validation.service.js';
 import { BuchWriteController } from './rest/buch-write.controller.js';

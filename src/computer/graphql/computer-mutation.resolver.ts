@@ -19,7 +19,7 @@ import { type CreateError, type UpdateError } from '../service/errors.js';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { type Computer } from '../entity/computer.entity.js';
 import { ComputerWriteService } from '../service/computer-write.service.js';
-import { type IdInput } from './buch-query.resolver.js';
+import { type IdInput } from './computer-query.resolver.js';
 import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { Roles } from '../../security/auth/roles/roles.decorator.js';
