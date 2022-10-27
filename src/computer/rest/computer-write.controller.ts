@@ -300,26 +300,21 @@ export class ComputerWriteController {
             .send(msg);
     }
 
-    #updateDtoToBuch(buchDTO: BuchUpdateDTO): Buch {
-        const buch: Buch = {
+    #updateDtoToComputer(computerDTO: ComputerUpdateDTO): Computer {
+        const computer: Computer = {
             id: undefined,
             version: undefined,
-            titel: buchDTO.titel,
-            rating: buchDTO.rating,
-            art: buchDTO.art,
-            verlag: buchDTO.verlag,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
-            lieferbar: buchDTO.lieferbar,
-            datum: buchDTO.datum,
-            isbn: buchDTO.isbn,
-            homepage: buchDTO.homepage,
-            schlagwoerter: [],
+            hersteller: computerDTO.hersteller,
+            modell: computerDTO.modell,
+            herstelldatum: computerDTO.herstelldatum,
+            preis: computerDTO.preis,
+            farbe: computerDTO.farbe,
+            seriennummer: computerDTO.seriennummer,
             erzeugt: undefined,
             aktualisiert: undefined,
         };
 
-        return buch;
+        return computer;
     }
 
     #handleUpdateError(err: UpdateError, res: Response): Response {
