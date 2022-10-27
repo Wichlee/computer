@@ -17,14 +17,13 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { type Buch } from '../entity/computer.entity.js';
-import { BuchWriteService } from '../service/computer-write.service.js';
+import { type Computer } from '../entity/computer.entity.js';
+import { ComputerWriteService } from '../service/computer-write.service.js';
 import { type IdInput } from './buch-query.resolver.js';
 import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { Roles } from '../../security/auth/roles/roles.decorator.js';
 import { RolesGraphQlGuard } from '../../security/auth/roles/roles-graphql.guard.js';
-import { type Schlagwort } from '../entity/schlagwort.entity.js';
 import { UserInputError } from 'apollo-server-express';
 import { getLogger } from '../../logger/logger.js';
 
