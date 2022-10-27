@@ -75,19 +75,19 @@ export class ComputerMutationResolver {
 
     @Mutation()
     @Roles('admin', 'mitarbeiter')
-    async update(@Args('input') buch: BuchUpdateDTO) {
-        this.#logger.debug('update: buch=%o', buch);
-        const versionStr = `"${buch.version?.toString()}"`;
+    async update(@Args('input') computer: ComputerUpdateDTO) {
+        this.#logger.debug('update: computer=%o', computer);
+        const versionStr = `"${computer.version?.toString()}"`;
 
         const result = await this.#service.update(
-            buch.id,
-            buch as Buch,
+            computer.id,
+            computer as Computer,
             versionStr,
         );
         if (typeof result === 'object') {
-            throw new UserInputError(this.#errorMsgUpdateBuch(result));
+            throw new UserInputError(this.#errorMsgUpdateComputer(result));
         }
-        this.#logger.debug('updateBuch: result=%d', result);
+        this.#logger.debug('updateComputer: result=%d', result);
         return result;
     }
 
