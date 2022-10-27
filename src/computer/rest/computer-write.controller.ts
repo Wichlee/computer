@@ -319,21 +319,19 @@ export class ComputerWriteController {
 
     #handleUpdateError(err: UpdateError, res: Response): Response {
         switch (err.type) {
-            case 'ConstraintViolations':
+            case 'ConstraintViolations': {
                 return this.#handleValidationError(err.messages, res);
+            }
 
-            case 'BuchNotExists': {
+            case 'ComputerNotExists': {
                 const { id } = err;
-                const msg = `Es gibt kein Buch mit der ID "${id}".`;
+                const msg = `Es gibt keinen Computer mit der ID "${id}".`;
                 this.#logger.debug('#handleUpdateError: msg=%s', msg);
                 return res
                     .status(HttpStatus.PRECONDITION_FAILED)
                     .set('Content-Type', 'text/plain')
                     .send(msg);
             }
-
-            case 'TitelExists':
-                return this.#handleTitelExists(err.titel, res);
 
             case 'VersionInvalid': {
                 const { version } = err;
@@ -355,8 +353,9 @@ export class ComputerWriteController {
                     .send(msg);
             }
 
-            default:
+            default: {
                 return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }
