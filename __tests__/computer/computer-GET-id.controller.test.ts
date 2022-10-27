@@ -42,7 +42,7 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchModel } from '../../src/buch/rest/buch-get.controller.js';
+import { type ComputerModel } from '../../src/computer/rest/computer-get.controller.js';
 import { HttpStatus } from '@nestjs/common';
 import each from 'jest-each';
 
@@ -91,7 +91,7 @@ describe('GET /:id', () => {
         const url = `/${id}`;
 
         // when - act
-        const response: AxiosResponse<BuchModel> = await client.get(url);
+        const response: AxiosResponse<ComputerModel> = await client.get(url);
 
         // then - assert
         const { status, headers, data } = response; //destructuring
