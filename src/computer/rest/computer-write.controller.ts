@@ -57,16 +57,14 @@ import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';
 
-export type BuchDTO = Omit<
-    Buch,
-    'aktualisiert' | 'erzeugt' | 'id' | 'schlagwoerter' | 'version'
-> & {
-    schlagwoerter: string[];
-};
+export type ComputerDTO = Omit<
+    Computer,
+    'aktualisiert' | 'erzeugt' | 'id' | 'version'
+>;
 
-export type BuchUpdateDTO = Omit<
-    Buch,
-    'aktualisiert' | 'erzeugt' | 'id' | 'schlagwoerter' | 'version'
+export type ComputerUpdateDTO = Omit<
+    Computer,
+    'aktualisiert' | 'erzeugt' | 'id' | 'version'
 >;
 
 /**
