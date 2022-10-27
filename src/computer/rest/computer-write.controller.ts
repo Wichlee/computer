@@ -68,50 +68,50 @@ export type ComputerUpdateDTO = Omit<
 >;
 
 /**
- * Die Controller-Klasse für die Verwaltung von Bücher.
+ * Die Controller-Klasse für die Verwaltung von COmputern.
  */
 @Controller()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(ResponseTimeInterceptor)
-@ApiTags('Buch API')
+@ApiTags('Computer API')
 @ApiBearerAuth()
-export class BuchWriteController {
-    readonly #service: BuchWriteService;
+export class ComputerWriteController {
+    readonly #service: ComputerWriteService;
 
-    readonly #logger = getLogger(BuchWriteController.name);
+    readonly #logger = getLogger(ComputerWriteController.name);
 
-    constructor(service: BuchWriteService) {
+    constructor(service: ComputerWriteService) {
         this.#service = service;
     }
 
     /**
-     * Ein neues Buch wird asynchron angelegt. Das neu anzulegende Buch ist als
+     * Ein neuer Computer wird asynchron angelegt. Der neu anzulegende Computer ist als
      * JSON-Datensatz im Request-Objekt enthalten. Wenn es keine
      * Verletzungen von Constraints gibt, wird der Statuscode `201` (`Created`)
      * gesetzt und im Response-Header wird `Location` auf die URI so gesetzt,
-     * dass damit das neu angelegte Buch abgerufen werden kann.
+     * dass damit der neu angelegte Computer abgerufen werden kann.
      *
      * Falls Constraints verletzt sind, wird der Statuscode `400` (`Bad Request`)
-     * gesetzt und genauso auch wenn der Titel oder die ISBN-Nummer bereits
-     * existieren.
+     * gesetzt und genauso auch wenn die Seriennummer bereits
+     * existiert.
      *
-     * @param buch JSON-Daten für ein Buch im Request-Body.
+     * @param computer JSON-Daten für ein Buch im Request-Body.
      * @param res Leeres Response-Objekt von Express.
      * @returns Leeres Promise-Objekt.
      */
     @Post()
     @Roles('admin', 'mitarbeiter')
-    @ApiOperation({ summary: 'Ein neues Buch anlegen' })
+    @ApiOperation({ summary: 'Einen neuen Computer anlegen' })
     @ApiCreatedResponse({ description: 'Erfolgreich neu angelegt' })
-    @ApiBadRequestResponse({ description: 'Fehlerhafte Buchdaten' })
+    @ApiBadRequestResponse({ description: 'Fehlerhafte Computerdaten' })
     async create(
-        @Body() buchDTO: BuchDTO,
+        @Body() computerDTO: ComputerDTO,
         @Req() req: Request,
         @Res() res: Response,
     ): Promise<Response> {
-        this.#logger.debug('create: buchDTO=%o', buchDTO);
+        this.#logger.debug('create: computerDTO=%o', computerDTO);
 
-        const result = await this.#service.create(this.#dtoToBuch(buchDTO));
+        const result = await this.#service.create(this.#dtoToComputer(computerDTO));
         if (Object.prototype.hasOwnProperty.call(result, 'type')) {
             return this.#handleCreateError(result as CreateError, res);
         }
