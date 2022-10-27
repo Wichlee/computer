@@ -31,7 +31,7 @@ import { getLogger } from '../../logger/logger.js';
 export interface Suchkriterien {
     readonly hersteller?: string;
     readonly modell?: ComputerModell;
-    readonly herstelldatum?: Date;
+    readonly herstelldatum?: string;
     readonly preis?: number;
     readonly farbe?: ComputerFarbe;
     readonly seriennummer?: string;
