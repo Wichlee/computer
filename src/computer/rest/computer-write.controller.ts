@@ -111,7 +111,9 @@ export class ComputerWriteController {
     ): Promise<Response> {
         this.#logger.debug('create: computerDTO=%o', computerDTO);
 
-        const result = await this.#service.create(this.#dtoToComputer(computerDTO));
+        const result = await this.#service.create(
+            this.#dtoToComputer(computerDTO),
+        );
         if (Object.prototype.hasOwnProperty.call(result, 'type')) {
             return this.#handleCreateError(result as CreateError, res);
         }
@@ -268,12 +270,8 @@ export class ComputerWriteController {
                 return this.#handleValidationError(err.messages, res);
             }
 
-            case 'TitelExists': {
-                return this.#handleTitelExists(err.titel, res);
-            }
-
-            case 'IsbnExists': {
-                return this.#handleIsbnExists(err.isbn, res);
+            case 'SeriennummerExists': {
+                return this.#handleSeriennummerExists(err.seriennummer, res);
             }
 
             default: {
@@ -290,24 +288,12 @@ export class ComputerWriteController {
         return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(messages);
     }
 
-    #handleTitelExists(
-        titel: string | null | undefined,
+    #handleSeriennummerExists(
+        seriennummer: string | null | undefined,
         res: Response,
     ): Response {
-        const msg = `Der Titel "${titel}" existiert bereits.`;
-        this.#logger.debug('#handleTitelExists(): msg=%s', msg);
-        return res
-            .status(HttpStatus.UNPROCESSABLE_ENTITY)
-            .set('Content-Type', 'text/plain')
-            .send(msg);
-    }
-
-    #handleIsbnExists(
-        isbn: string | null | undefined,
-        res: Response,
-    ): Response {
-        const msg = `Die ISBN-Nummer "${isbn}" existiert bereits.`;
-        this.#logger.debug('#handleIsbnExists(): msg=%s', msg);
+        const msg = `Die Seriennummer "${seriennummer}" existiert bereits.`;
+        this.#logger.debug('#handleSeriennummerExists(): msg=%s', msg);
         return res
             .status(HttpStatus.UNPROCESSABLE_ENTITY)
             .set('Content-Type', 'text/plain')
