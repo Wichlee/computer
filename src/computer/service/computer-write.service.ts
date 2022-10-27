@@ -32,8 +32,8 @@ import {
     type VersionOutdated,
 } from './errors.js';
 import { type DeleteResult, Repository } from 'typeorm';
-import { BuchReadService } from './computer-read.service.js';
-import { BuchValidationService } from './computer-validation.service.js';
+import { ComputerReadService } from './computer-read.service.js';
+import { ComputerValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { MailService } from '../../mail/mail.service.js';
