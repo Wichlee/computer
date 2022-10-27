@@ -122,11 +122,11 @@ export class ComputerWriteController {
     }
 
     /**
-     * Ein vorhandenes Buch wird asynchron aktualisiert.
+     * Ein vorhandener Computer wird asynchron aktualisiert.
      *
-     * Im Request-Objekt von Express muss die ID des zu aktualisierenden Buches
-     * als Pfad-Parameter enthalten sein. Außerdem muss im Rumpf das zu
-     * aktualisierende Buch als JSON-Datensatz enthalten sein. Damit die
+     * Im Request-Objekt von Express muss die ID des zu aktualisierenden Computers
+     * als Pfad-Parameter enthalten sein. Außerdem muss im Rumpf der zu
+     * aktualisierende Computer als JSON-Datensatz enthalten sein. Damit die
      * Aktualisierung überhaupt durchgeführt werden kann, muss im Header
      * `If-Match` auf die korrekte Version für optimistische Synchronisation
      * gesetzt sein.
@@ -137,10 +137,10 @@ export class ComputerWriteController {
      * Falls die Versionsnummer fehlt, wird der Statuscode `428` (`Precondition
      * required`) gesetzt; und falls sie nicht korrekt ist, der Statuscode `412`
      * (`Precondition failed`). Falls Constraints verletzt sind, wird der
-     * Statuscode `400` (`Bad Request`) gesetzt und genauso auch wenn der neue
-     * Titel oder die neue ISBN-Nummer bereits existieren.
+     * Statuscode `400` (`Bad Request`) gesetzt und genauso auch wenn
+     * die neue Seriennummer bereits existiert.
      *
-     * @param buch Buchdaten im Body des Request-Objekts.
+     * @param computer Computerdaten im Body des Request-Objekts.
      * @param id Pfad-Paramater für die ID.
      * @param version Versionsnummer aus dem Header _If-Match_.
      * @param res Leeres Response-Objekt von Express.
@@ -150,7 +150,7 @@ export class ComputerWriteController {
     @Put(':id')
     @Roles('admin', 'mitarbeiter')
     @ApiOperation({
-        summary: 'Ein vorhandenes Buch aktualisieren',
+        summary: 'Einen vorhandenen Computer aktualisieren',
         tags: ['Aktualisieren'],
     })
     @ApiHeader({
@@ -164,7 +164,7 @@ export class ComputerWriteController {
         required: true,
     })
     @ApiNoContentResponse({ description: 'Erfolgreich aktualisiert' })
-    @ApiBadRequestResponse({ description: 'Fehlerhafte Buchdaten' })
+    @ApiBadRequestResponse({ description: 'Fehlerhafte Computerdaten' })
     @ApiPreconditionFailedResponse({
         description: 'Falsche Version im Header "If-Match"',
     })
@@ -173,15 +173,15 @@ export class ComputerWriteController {
         description: 'Header "If-Match" fehlt',
     })
     async update(
-        @Body() buchDTO: BuchUpdateDTO,
+        @Body() computerDTO: ComputerUpdateDTO,
         @Param('id') id: string,
         @Headers('If-Match') version: string | undefined,
         @Res() res: Response,
     ): Promise<Response> {
         this.#logger.debug(
-            'update: id=%s, buchDTO=%o, version=%s',
+            'update: id=%s, computerDTO=%o, version=%s',
             id,
-            buchDTO,
+            computerDTO,
             version,
         );
 
@@ -196,7 +196,7 @@ export class ComputerWriteController {
 
         const result = await this.#service.update(
             id,
-            this.#updateDtoToBuch(buchDTO),
+            this.#updateDtoToComputer(computerDTO),
             version,
         );
         if (typeof result === 'object') {
