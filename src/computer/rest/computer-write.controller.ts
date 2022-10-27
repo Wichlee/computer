@@ -48,13 +48,12 @@ import {
 } from '@nestjs/common';
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { Request, Response } from 'express';
-import { type Buch } from '../entity/computer.entity.js';
-import { BuchWriteService } from '../service/computer-write.service.js';
+import { type Computer } from '../entity/computer.entity.js';
+import { ComputerWriteService } from '../service/computer-write.service.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { Roles } from '../../security/auth/roles/roles.decorator.js';
 import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
-import { type Schlagwort } from '../entity/schlagwort.entity.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';
 
