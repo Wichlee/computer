@@ -87,7 +87,7 @@ describe('GET /:id', () => {
     });
 
     each(idVorhanden).test(
-        'Computer zu vorhandener ID %s',
+        'Computer zu vorhandener ID %s gefunden',
         async (id: string) => {
             // given - arrange
             const url = `/${id}`;
@@ -112,7 +112,7 @@ describe('GET /:id', () => {
     );
 
     each(idNichtVorhanden).test(
-        'Kein Computer zu nicht-vorhandener ID %s',
+        'Kein Computer zu nicht-vorhandener ID %s gefunden',
         async (id: string) => {
             // given
             const url = `/${id}`;
