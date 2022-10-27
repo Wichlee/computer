@@ -245,51 +245,40 @@ export class ComputerWriteController {
         return res.sendStatus(HttpStatus.NO_CONTENT);
     }
 
-    #dtoToBuch(buchDTO: BuchDTO): Buch {
-        const buch: Buch = {
+    #dtoToComputer(computerDTO: ComputerDTO): Computer {
+        const computer: Computer = {
             id: undefined,
             version: undefined,
-            titel: buchDTO.titel,
-            rating: buchDTO.rating,
-            art: buchDTO.art,
-            verlag: buchDTO.verlag,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
-            lieferbar: buchDTO.lieferbar,
-            datum: buchDTO.datum,
-            isbn: buchDTO.isbn,
-            homepage: buchDTO.homepage,
-            schlagwoerter: [],
+            hersteller: computerDTO.hersteller,
+            modell: computerDTO.modell,
+            herstelldatum: computerDTO.herstelldatum,
+            preis: computerDTO.preis,
+            farbe: computerDTO.farbe,
+            seriennummer: computerDTO.seriennummer,
             erzeugt: undefined,
             aktualisiert: undefined,
         };
 
-        // Rueckwaertsverweis von Schlagwort zu Buch
-        buchDTO.schlagwoerter.forEach((s) => {
-            const schlagwort: Schlagwort = {
-                id: undefined,
-                schlagwort: s,
-                buch,
-            };
-            buch.schlagwoerter.push(schlagwort);
-        });
-
-        return buch;
+        return computer;
     }
 
     #handleCreateError(err: CreateError, res: Response) {
         switch (err.type) {
-            case 'ConstraintViolations':
+            case 'ConstraintViolations': {
                 return this.#handleValidationError(err.messages, res);
+            }
 
-            case 'TitelExists':
+            case 'TitelExists': {
                 return this.#handleTitelExists(err.titel, res);
+            }
 
-            case 'IsbnExists':
+            case 'IsbnExists': {
                 return this.#handleIsbnExists(err.isbn, res);
+            }
 
-            default:
+            default: {
                 return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
