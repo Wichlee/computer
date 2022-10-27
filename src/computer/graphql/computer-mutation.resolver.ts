@@ -27,11 +27,11 @@ import { RolesGraphQlGuard } from '../../security/auth/roles/roles-graphql.guard
 import { UserInputError } from 'apollo-server-express';
 import { getLogger } from '../../logger/logger.js';
 
-type BuchCreateDTO = Omit<
-    Buch,
-    'aktualisiert' | 'erzeugt' | 'id' | 'schlagwoerter' | 'version'
-> & { schlagwoerter: string[] };
-type BuchUpdateDTO = Omit<Buch, 'aktualisiert' | 'erzeugt' | 'schlagwoerter'>;
+type ComputerCreateDTO = Omit<
+    Computer,
+    'aktualisiert' | 'erzeugt' | 'id' | 'version'
+>;
+type ComputerUpdateDTO = Omit<Computer, 'aktualisiert' | 'erzeugt'>;
 
 // Authentifizierung und Autorisierung durch
 //  GraphQL Shield
@@ -47,22 +47,22 @@ type BuchUpdateDTO = Omit<Buch, 'aktualisiert' | 'erzeugt' | 'schlagwoerter'>;
 // alternativ: globale Aktivierung der Guards https://docs.nestjs.com/security/authorization#basic-rbac-implementation
 @UseGuards(JwtAuthGraphQlGuard, RolesGraphQlGuard)
 @UseInterceptors(ResponseTimeInterceptor)
-export class BuchMutationResolver {
-    readonly #service: BuchWriteService;
+export class ComputerMutationResolver {
+    readonly #service: ComputerWriteService;
 
-    readonly #logger = getLogger(BuchMutationResolver.name);
+    readonly #logger = getLogger(ComputerMutationResolver.name);
 
-    constructor(service: BuchWriteService) {
+    constructor(service: ComputerWriteService) {
         this.#service = service;
     }
 
     @Mutation()
     @Roles('admin', 'mitarbeiter')
-    async create(@Args('input') buchDTO: BuchCreateDTO) {
-        this.#logger.debug('create: buchDTO=%o', buchDTO);
+    async create(@Args('input') computerDTO: ComputerCreateDTO) {
+        this.#logger.debug('create: computerDTO=%o', computerDTO);
 
-        const result = await this.#service.create(this.#dtoToBuch(buchDTO));
-        this.#logger.debug('createBuch: result=%o', result);
+        const result = await this.#service.create(this.#dtoToComputer(comuterDTO));
+        this.#logger.debug('createComputer: result=%o', result);
 
         if (Object.prototype.hasOwnProperty.call(result, 'type')) {
             // UserInputError liefert Statuscode 200
