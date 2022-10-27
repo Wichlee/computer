@@ -129,7 +129,7 @@ describe('GET /:id', () => {
     );
 
     each(idVorhandenETag).test(
-        'Buch zu vorhandener ID %s mit ETag %s',
+        'Computer zu vorhandener ID %s mit ETag %s gefunden',
         async (id: string, etag: string) => {
             // given
             const url = `/${id}`;
