@@ -95,12 +95,8 @@ export class ComputerValidationService {
 
     // https://github.com/ajv-validator/ajv-formats/issues/14#issuecomment-826340298
     #validateSeriennummer: FormatValidator<string> = (subject: string) => {
-        // Checks for ISBN-10 or ISBN-13 format
-        // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
-        /* eslint-disable max-len, unicorn/no-unsafe-regex, security/detect-unsafe-regex, regexp/no-super-linear-backtracking */
-        const regex =
-            /^(?:ISBN(?:-1[03])?:? )?(?=[\dX]{10}$|(?=(?:\d+[- ]){3})[- \dX]{13}$|97[89]\d{10}$|(?=(?:\d+[- ]){4})[- \d]{17}$)(?:97[89][- ]?)?\d{1,5}[- ]?\d+[- ]?\d+[- ]?[\dX]$/u; //NOSONAR
-        /* eslint-enable max-len, unicorn/no-unsafe-regex, security/detect-unsafe-regex, regexp/no-super-linear-backtracking */
+        // Checks for serial number format
+        const regex = /PC-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
 
         if (regex.test(subject)) {
             // Remove non ISBN digits, then split into an array
