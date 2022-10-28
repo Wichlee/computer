@@ -99,19 +99,7 @@ export class ComputerValidationService {
         const regex = /PC-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
 
         if (regex.test(subject)) {
-            // Remove non ISBN digits, then split into an array
-            const chars = subject
-                .replace(/[ -]|^ISBN(?:-1[03])?:?/gu, '')
-                .split(''); // eslint-disable-line unicorn/prefer-spread
-            // Remove the final ISBN digit from `chars`, and assign it to `last`
-            const last = chars.pop();
-
-            const check = this.#checkChars(chars);
-
-            // eslint-disable-next-line eqeqeq
-            if (check == last) {
-                return true;
-            }
+            return true;
         }
 
         return false;
