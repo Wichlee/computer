@@ -50,7 +50,7 @@ services:
         read_only: true
     env_file: [postgres.env]
     # beim 1. Start *NICHT* den eingeschraenkten Linux-User "postgres" verwenden, d.h. implizit "root"
-    user: "postgres:postgres"
+    # user: "postgres:postgres"
     # docker inspect postgres --format '{{ .Id }}: SecurityOpt={{ .HostConfig.SecurityOpt }}'
     security_opt:
       - label:user:postgres
