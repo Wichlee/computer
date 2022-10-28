@@ -36,9 +36,8 @@ import formatsPlugin from 'ajv-formats';
 import { getLogger } from '../../logger/logger.js';
 import { jsonSchema } from './jsonSchema.js';
 
-export const ID_PATTERN = new RE2(
-    '^[\\dA-Fa-f]{8}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{12}$',
-);
+export const REGEX = /PC-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
+
 @Injectable()
 export class ComputerValidationService {
     #ajv = new Ajv2020({
@@ -59,15 +58,13 @@ export class ComputerValidationService {
     }
 
     validateId(id: string) {
-        return ID_PATTERN.test(id);
+        return REGEX.test(id);
     }
 
     // https://github.com/ajv-validator/ajv-formats/issues/14#issuecomment-826340298
     #validateSeriennummer: FormatValidator<string> = (subject: string) => {
         // Checks for serial number format
-        const regex = /PC-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
-
-        if (regex.test(subject)) {
+        if (REGEX.test(subject)) {
             return true;
         }
 
