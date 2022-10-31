@@ -54,7 +54,10 @@ export interface SeriennummerExists {
  * - {@linkcode SeriennummerExists}
  * - {@linkcode HerstellerExists}
  */
-export type CreateError = ConstraintViolations | SeriennummerExists | HerstellerExists;
+export type CreateError =
+    | ConstraintViolations
+    | HerstellerExists
+    | SeriennummerExists;
 
 /**
  * Klasse für eine ungültige Versionsnummer beim Ändern.
