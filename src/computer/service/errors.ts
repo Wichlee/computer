@@ -31,15 +31,6 @@ export interface ConstraintViolations {
 }
 
 /**
- * Klasse für einen bereits existierenden Hersteller.
- */
-export interface HerstellerExists {
-    readonly type: 'HerstellerExists';
-    readonly hersteller: string | null | undefined;
-    readonly id?: string;
-}
-
-/**
  * Klasse für eine bereits existierende Seriennummer.
  */
 export interface SeriennummerExists {
@@ -52,12 +43,8 @@ export interface SeriennummerExists {
  * Union-Type für Fehler beim Neuanlegen eines Computers:
  * - {@linkcode ConstraintViolations}
  * - {@linkcode SeriennummerExists}
- * - {@linkcode HerstellerExists}
  */
-export type CreateError =
-    | ConstraintViolations
-    | HerstellerExists
-    | SeriennummerExists;
+export type CreateError = ConstraintViolations | SeriennummerExists;
 
 /**
  * Klasse für eine ungültige Versionsnummer beim Ändern.
@@ -88,14 +75,12 @@ export interface ComputerNotExists {
  * Union-Type für Fehler beim Ändern eines Computers:
  * - {@linkcode ComputerNotExists}
  * - {@linkcode ConstraintViolations}
- * - {@linkcode HerstellerExists}
  * - {@linkcode VersionInvalid}
  * - {@linkcode VersionOutdated}
  */
 export type UpdateError =
     | ComputerNotExists
     | ConstraintViolations
-    | HerstellerExists
     | VersionInvalid
     | VersionOutdated;
 
