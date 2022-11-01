@@ -20,7 +20,11 @@
  * @packageDocumentation
  */
 
-import { Computer, type ComputerFarbe, type ComputerModell } from '../entity/computer.entity.js';
+import {
+    Computer,
+    type ComputerFarbe,
+    type ComputerModell,
+} from '../entity/computer.entity.js';
 import { ComputerValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
@@ -132,7 +136,9 @@ export class ComputerReadService {
         // QueryBuilder https://typeorm.io/select-query-builder
         // Das Resultat ist eine leere Liste, falls nichts gefunden
         // Lesen: Keine Transaktion erforderlich
-        const computerList = await this.#queryBuilder.build(suchkriterien).getMany();
+        const computerList = await this.#queryBuilder
+            .build(suchkriterien)
+            .getMany();
         this.#logger.debug('find: computerList=%o', computerList);
 
         return computerList;

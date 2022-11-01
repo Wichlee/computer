@@ -30,7 +30,6 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import { type Computer } from '../entity/computer.entity.js';
 import { type FormatValidator } from 'ajv/dist/types/index.js';
 import { Injectable } from '@nestjs/common';
-import RE2 from 're2';
 import ajvErrors from 'ajv-errors';
 import formatsPlugin from 'ajv-formats';
 import { getLogger } from '../../logger/logger.js';
