@@ -20,7 +20,7 @@
  * @packageDocumentation
  */
 
-import { FindOptionsUtils, Repository, type SelectQueryBuilder } from 'typeorm';
+import { FindOptionsUtils, Repository } from 'typeorm';
 import { Computer } from '../entity/computer.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
@@ -87,7 +87,8 @@ export class QueryBuilder {
         // z.B. { hersteller: 'a', rating: 5, javascript: true }
         // Rest Properties fuer anfaengliche WHERE-Klausel
         // type-coverage:ignore-next-line
-        const { hersteller, seriennummer, javascript, typescript, ...props } = suchkriterien;
+        const { hersteller, seriennummer, javascript, typescript, ...props } =
+            suchkriterien;
 
         let useWhere = true;
 
@@ -112,7 +113,10 @@ export class QueryBuilder {
                 seriennummer: seriennummerOhne,
             };
             queryBuilder = useWhere
-                ? queryBuilder.where(`${this.#computerAlias}.seriennummer = :seriennummer`, param)
+                ? queryBuilder.where(
+                      `${this.#computerAlias}.seriennummer = :seriennummer`,
+                      param,
+                  )
                 : queryBuilder.andWhere(
                       `${this.#computerAlias}.seriennummer = :seriennummer`,
                       param,

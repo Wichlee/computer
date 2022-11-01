@@ -59,7 +59,8 @@ export const jsonSchema: GenericJsonSchema = {
     errorMessage: {
         properties: {
             version: 'Die Versionsnummer muss mindestens 0 sein.',
-            hersteller: 'Ein Hersteller muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
+            hersteller:
+                'Ein Hersteller muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
             modell: 'Das Modell eines Computers muss Desktop-PC oder Gaming-PC sein.',
             herstelldatum: 'Das Datum muss im Format yyyy-MM-dd sein.',
             preis: 'Der Preis darf nicht negativ sein.',
