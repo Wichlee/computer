@@ -24,9 +24,9 @@
 
 import { Computer } from '../entity/computer.entity.js';
 import {
-    type BuchNotExists,
+    type ComputerNotExists,
     type CreateError,
-    type TitelExists,
+    type HerstellerExists,
     type UpdateError,
     type VersionInvalid,
     type VersionOutdated,
@@ -38,7 +38,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { MailService } from '../../mail/mail.service.js';
 import RE2 from 're2';
-import { Schlagwort } from '../entity/schlagwort.entity.js';
 import { getLogger } from '../../logger/logger.js';
 import { v4 as uuid } from 'uuid';
 
@@ -85,12 +84,11 @@ export class ComputerWriteService {
         computer.id = uuid(); // eslint-disable-line require-atomic-updates
 
         // implizite Transaktion
-        const buchDb = await this.#repo.save(removeIsbnDash(buch)); // implizite Transaktion
-        this.#logger.debug('create: buchDb=%o', buchDb);
+        const computerDb =  this.#logger.debug('create: computerDb=%o', computerDb);
 
-        await this.#sendmail(buchDb);
+        await this.#sendmail(computerDb);
 
-        return buchDb.id!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        return computerDb.id!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }
 
     /**
@@ -149,34 +147,11 @@ export class ComputerWriteService {
         if (computer === undefined) {
             return false;
         }
-
-        let deleteResult: DeleteResult | undefined;
-        await this.#repo.manager.transaction(async (transactionalMgr) => {
-            // Der Computer zur gegebenen ID asynchron loeschen
-            const { schlagwoerter } = buch;
-            const schlagwoerterIds = schlagwoerter.map(
-                (schlagwort) => schlagwort.id,
-            );
-            const deleteResultSchlagwoerter = await transactionalMgr.delete(
-                Schlagwort,
-                schlagwoerterIds,
-            );
-            this.#logger.debug(
-                'delete: deleteResultSchlagwoerter=%o',
-                deleteResultSchlagwoerter,
-            );
-            deleteResult = await transactionalMgr.delete(Buch, id);
-            this.#logger.debug('delete: deleteResult=%o', deleteResult);
-        });
-
-        return (
-            deleteResult?.affected !== undefined &&
-            deleteResult.affected !== null &&
-            deleteResult.affected > 0
-        );
     }
 
-    async #validateCreate(computer: Computer): Promise<CreateError | undefined> {
+    async #validateCreate(
+        computer: Computer,
+    ): Promise<CreateError | undefined> {
         const validateResult = this.#validationService.validate(computer);
         if (validateResult !== undefined) {
             const messages = validateResult;
@@ -185,15 +160,19 @@ export class ComputerWriteService {
         }
 
         const { hersteller } = computer;
-        let computerList = await this.#readService.find({ hersteller: hersteller }); // eslint-disable-line object-shorthand
+        const computerList = await this.#readService.find({
+            hersteller: hersteller,
+        }); // eslint-disable-line object-shorthand
         if (computerList.length > 0) {
             return { type: 'HerstellerExists', hersteller };
         }
 
-        const { isbn } = buch;
-        buecher = await this.#readService.find({ isbn: isbn }); // eslint-disable-line object-shorthand
-        if (buecher.length > 0) {
-            return { type: 'IsbnExists', isbn };
+        const { seriennummer } = computer;
+        computerList = await this.#readService.find({
+            seriennummer: seriennummer,
+        }); // eslint-disable-line object-shorthand
+        if (computerList.length > 0) {
+            return { type: 'SeriennummerExists', seriennummer };
         }
 
         this.#logger.debug('#validateCreate: ok');
@@ -201,10 +180,10 @@ export class ComputerWriteService {
     }
 
     async #validateUpdate(
-        buch: Buch,
+        computer: Computer,
         id: string,
         versionStr: string,
-    ): Promise<Buch | UpdateError> {
+    ): Promise<Computer | UpdateError> {
         const result = this.#validateVersion(versionStr);
         if (typeof result !== 'number') {
             return result;
@@ -212,19 +191,19 @@ export class ComputerWriteService {
 
         const version = result;
         this.#logger.debug(
-            '#validateUpdate: buch=%o, version=%s',
-            buch,
+            '#validateUpdate: computer=%o, version=%s',
+            computer,
             version,
         );
 
-        const validateResult = this.#validationService.validate(buch);
+        const validateResult = this.#validationService.validate(computer);
         if (validateResult !== undefined) {
             const messages = validateResult;
             this.#logger.debug('#validateUpdate: messages=%o', messages);
             return { type: 'ConstraintViolations', messages };
         }
 
-        const resultTitel = await this.#checkTitelExists(buch);
+        const resultTitel = await this.#checkTitelExists(computer);
         if (resultTitel !== undefined && resultTitel.id !== id) {
             return resultTitel;
         }
@@ -237,7 +216,7 @@ export class ComputerWriteService {
     #validateVersion(version: string | undefined): VersionInvalid | number {
         if (
             version === undefined ||
-            !BuchWriteService.VERSION_PATTERN.test(version)
+            !ComputerWriteService.VERSION_PATTERN.test(version)
         ) {
             const error: VersionInvalid = { type: 'VersionInvalid', version };
             this.#logger.debug('#validateVersion: VersionInvalid=%o', error);
@@ -288,7 +267,7 @@ export class ComputerWriteService {
             return result;
         }
 
-        return buchDb;
+        return computerDb;
     }
 }
 /* eslint-enable max-lines */
