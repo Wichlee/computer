@@ -23,15 +23,16 @@
  */
 
 import { Computer } from '../entity/computer.entity.js';
+// eslint-disable-next-line sort-imports
 import {
     type ComputerNotExists,
     type CreateError,
-    type HerstellerExists,
     type UpdateError,
     type VersionInvalid,
     type VersionOutdated,
 } from './errors.js';
-import { type DeleteResult, Repository } from 'typeorm';
+import { type Repository } from 'typeorm';
+// eslint-disable-next-line sort-imports
 import { ComputerReadService } from './computer-read.service.js';
 import { ComputerValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -57,7 +58,6 @@ export class ComputerWriteService {
 
     readonly #logger = getLogger(ComputerWriteService.name);
 
-    // eslint-disable-next-line max-params
     constructor(
         @InjectRepository(Computer) repo: Repository<Computer>,
         readService: ComputerReadService,
@@ -115,14 +115,18 @@ export class ComputerWriteService {
             return { type: 'ComputerNotExists', id };
         }
 
-        const validateResult = await this.#validateUpdate(computer, id, version);
+        const validateResult = await this.#validateUpdate(
+            computer,
+            id,
+            version,
+        );
         this.#logger.debug('update: validateResult=%o', validateResult);
         if (!(validateResult instanceof Computer)) {
             return validateResult;
         }
 
         const computerNeu = validateResult;
-        const merged = this.#repo.merge(computerNeu, removeIsbnDash(buch));
+        const merged = this.#repo.merge(computerNeu);
         this.#logger.debug('update: merged=%o', merged);
         const updated = await this.#repo.save(merged); // implizite Transaktion
         this.#logger.debug('update: updated=%o', updated);
@@ -159,18 +163,11 @@ export class ComputerWriteService {
             return { type: 'ConstraintViolations', messages };
         }
 
-        const { hersteller } = computer;
-        const computerList = await this.#readService.find({
-            hersteller: hersteller,
-        }); // eslint-disable-line object-shorthand
-        if (computerList.length > 0) {
-            return { type: 'HerstellerExists', hersteller };
-        }
-
         const { seriennummer } = computer;
-        computerList = await this.#readService.find({
+        const computerList = await this.#readService.find({
+            // eslint-disable-next-line object-shorthand
             seriennummer: seriennummer,
-        }); // eslint-disable-line object-shorthand
+        });
         if (computerList.length > 0) {
             return { type: 'SeriennummerExists', seriennummer };
         }
@@ -203,11 +200,6 @@ export class ComputerWriteService {
             return { type: 'ConstraintViolations', messages };
         }
 
-        const resultTitel = await this.#checkTitelExists(computer);
-        if (resultTitel !== undefined && resultTitel.id !== id) {
-            return resultTitel;
-        }
-
         const resultFindById = await this.#findByIdAndCheckVersion(id, version);
         this.#logger.debug('#validateUpdate: %o', resultFindById);
         return resultFindById;
@@ -226,34 +218,19 @@ export class ComputerWriteService {
         return Number.parseInt(version.slice(1, -1), 10);
     }
 
-    async #checkTitelExists(buch: Buch): Promise<TitelExists | undefined> {
-        const { titel } = buch;
-
-        const buecher = await this.#readService.find({ titel: titel }); // eslint-disable-line object-shorthand
-        if (buecher.length > 0) {
-            const [gefundenesBuch] = buecher;
-            const { id } = gefundenesBuch!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-            this.#logger.debug('#checkTitelExists: id=%s', id);
-            return { type: 'TitelExists', titel, id: id! }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-        }
-
-        this.#logger.debug('#checkTitelExists: ok');
-        return undefined;
-    }
-
     async #findByIdAndCheckVersion(
         id: string,
         version: number,
-    ): Promise<Buch | BuchNotExists | VersionOutdated> {
-        const buchDb = await this.#readService.findById(id);
-        if (buchDb === undefined) {
-            const result: BuchNotExists = { type: 'BuchNotExists', id };
-            this.#logger.debug('#checkIdAndVersion: BuchNotExists=%o', result);
+    ): Promise<Computer | ComputerNotExists | VersionOutdated> {
+        const computerDb = await this.#readService.findById(id);
+        if (computerDb === undefined) {
+            const result: ComputerNotExists = { type: 'ComputerNotExists', id };
+            this.#logger.debug('#checkIdAndVersion: ComputerNotExists=%o', result);
             return result;
         }
 
         // nullish coalescing
-        const versionDb = buchDb.version!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        const versionDb = computerDb.version!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
         if (version < versionDb) {
             const result: VersionOutdated = {
                 type: 'VersionOutdated',
