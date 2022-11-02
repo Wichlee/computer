@@ -225,7 +225,10 @@ export class ComputerWriteService {
         const computerDb = await this.#readService.findById(id);
         if (computerDb === undefined) {
             const result: ComputerNotExists = { type: 'ComputerNotExists', id };
-            this.#logger.debug('#checkIdAndVersion: ComputerNotExists=%o', result);
+            this.#logger.debug(
+                '#checkIdAndVersion: ComputerNotExists=%o',
+                result,
+            );
             return result;
         }
 
