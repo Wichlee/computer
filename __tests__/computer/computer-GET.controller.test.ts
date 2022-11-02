@@ -34,8 +34,8 @@ import each from 'jest-each';
 // -----------------------------------------------------------------------------
 const modellVorhanden = ['k', 'g', 't'];
 const modellNichtVorhanden = ['xx', 'yy'];
-const schlagwoerterVorhanden = ['javascript', 'typescript'];
-const schlagwoerterNichtVorhanden = ['csharp', 'php'];
+const farbeVorhanden = ['rot', 'schwarz'];
+const farbeNichtVorhanden = ['gelb', 'pink'];
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -60,11 +60,11 @@ describe('GET /', () => {
         await shutdownServer();
     });
 
-    test('Alle Buecher', async () => {
+    test('Alle computers', async () => {
         // given
 
         // when
-        const response: AxiosResponse<BuecherModel> = await client.get('/');
+        const response: AxiosResponse<computersModel> = await client.get('/');
 
         // then
         const { status, headers, data } = response;
@@ -73,9 +73,9 @@ describe('GET /', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data).toBeDefined();
 
-        const { buecher } = data._embedded;
+        const { computers } = data._embedded;
 
-        buecher
+        computers
             .map((buch) => buch._links.self.href)
             .forEach((selfLink) => {
                 // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
@@ -102,21 +102,21 @@ describe('GET /', () => {
             expect(headers['content-type']).toMatch(/json/iu);
             expect(data).toBeDefined();
 
-            const { buecher } = data._embedded;
+            const { computers } = data._embedded;
 
             // Jedes Buch hat einen Titel mit dem Teilstring 'a'
-            buecher
-                .map((buch) => buch.titel)
-                .forEach((titel: string) =>
-                    expect(titel.toLowerCase()).toEqual(
+            computers
+                .map((computer) => computer.modell)
+                .forEach((modell: string) =>
+                    expect(modell.toLowerCase()).toEqual(
                         expect.stringContaining(teilModell),
                     ),
                 );
         },
     );
 
-    each(modellNichtVorhanden).test(
-        'Keine Buecher mit einem Titel, der "%s" enthaelt',
+    each(farbeNichtVorhanden).test(
+        'Keine computers mit einem Titel, der "%s" enthaelt',
         async (teilModell: string) => {
             // given
             const params = { titel: teilModell };
@@ -134,59 +134,60 @@ describe('GET /', () => {
         },
     );
 
-    each(schlagwoerterVorhanden).test(
-        'Mind. 1 Buch mit dem Schlagwort "%s"',
-        async (schlagwort: string) => {
-            // given
-            const params = { [schlagwort]: 'true' };
+    each(farbeVorhanden)
+        .test(
+            'Mind. 1 Buch mit dem Schlagwort "%s"',
+            async (schlagwort: string) => {
+                // given
+                const params = { [schlagwort]: 'true' };
 
-            // when
-            const response: AxiosResponse<BuecherModel> = await client.get(
-                '/',
-                { params },
-            );
-
-            // then
-            const { status, headers, data } = response;
-
-            expect(status).toBe(HttpStatus.OK);
-            expect(headers['content-type']).toMatch(/json/iu);
-            // JSON-Array mit mind. 1 JSON-Objekt
-            expect(data).toBeDefined();
-
-            const { buecher } = data._embedded;
-
-            // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
-            buecher
-                .map((buch) => buch.schlagwoerter)
-                .forEach((schlagwoerter) =>
-                    expect(schlagwoerter).toEqual(
-                        expect.arrayContaining([schlagwort.toUpperCase()]),
-                    ),
+                // when
+                const response: AxiosResponse<ComputerModel> = await client.get(
+                    '/',
+                    { params },
                 );
-        },
-    );
 
-    each(schlagwoerterNichtVorhanden).test(
-        'Keine Buecher mit dem Schlagwort "%s"',
-        async (schlagwort: string) => {
-            // given
-            const params = { [schlagwort]: 'true' };
+                // then
+                const { status, headers, data } = response;
 
-            // when
-            const response: AxiosResponse<string> = await client.get('/', {
-                params,
-            });
+                expect(status).toBe(HttpStatus.OK);
+                expect(headers['content-type']).toMatch(/json/iu);
+                // JSON-Array mit mind. 1 JSON-Objekt
+                expect(data).toBeDefined();
 
-            // then
-            const { status, data } = response;
+                const { computers } = data._embedded;
 
-            expect(status).toBe(HttpStatus.NOT_FOUND);
-            expect(data).toMatch(/^not found$/iu);
-        },
-    );
+                // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
+                computers
+                    .map((computer) => computer.farbe)
+                    .forEach((farbe) =>
+                        expect(farbe).toEqual(
+                            expect.arrayContaining([farbe.toUpperCase()]),
+                        ),
+                    );
+            },
+            farbe,
+        )
+        .test(
+            'Keine computers mit dem Schlagwort "%s"',
+            async (schlagwort: string) => {
+                // given
+                const params = { [schlagwort]: 'true' };
 
-    test('Keine Buecher zu einer nicht-vorhandenen Property', async () => {
+                // when
+                const response: AxiosResponse<string> = await client.get('/', {
+                    params,
+                });
+
+                // then
+                const { status, data } = response;
+
+                expect(status).toBe(HttpStatus.NOT_FOUND);
+                expect(data).toMatch(/^not found$/iu);
+            },
+        );
+
+    test('Keine computers zu einer nicht-vorhandenen Property', async () => {
         // given
         const params = { foo: 'bar' };
 
