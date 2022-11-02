@@ -25,15 +25,15 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuecherModel } from '../../src/buch/rest/buch-get.controller.js';
+import { type ComputerModel } from '../../src/computer/rest/computer-get.controller.js';
 import { HttpStatus } from '@nestjs/common';
 import each from 'jest-each';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const titelVorhanden = ['a', 't', 'g'];
-const titelNichtVorhanden = ['xx', 'yy'];
+const modellVorhanden = ['k', 'g', 't'];
+const modellNichtVorhanden = ['xx', 'yy'];
 const schlagwoerterVorhanden = ['javascript', 'typescript'];
 const schlagwoerterNichtVorhanden = ['csharp', 'php'];
 
@@ -83,14 +83,14 @@ describe('GET /', () => {
             });
     });
 
-    each(titelVorhanden).test(
-        'Buecher mit einem Titel, der "%s" enthaelt',
-        async (teilTitel: string) => {
+    each(modellVorhanden).test(
+        'Computer mit Modellbezeichnung, die "%s" enthaelt',
+        async (teilModell: string) => {
             // given
-            const params = { titel: teilTitel };
+            const params = { titel: teilModell };
 
             // when
-            const response: AxiosResponse<BuecherModel> = await client.get(
+            const response: AxiosResponse<ComputerModel> = await client.get(
                 '/',
                 { params },
             );
@@ -109,17 +109,17 @@ describe('GET /', () => {
                 .map((buch) => buch.titel)
                 .forEach((titel: string) =>
                     expect(titel.toLowerCase()).toEqual(
-                        expect.stringContaining(teilTitel),
+                        expect.stringContaining(teilModell),
                     ),
                 );
         },
     );
 
-    each(titelNichtVorhanden).test(
+    each(modellNichtVorhanden).test(
         'Keine Buecher mit einem Titel, der "%s" enthaelt',
-        async (teilTitel: string) => {
+        async (teilModell: string) => {
             // given
-            const params = { titel: teilTitel };
+            const params = { titel: teilModell };
 
             // when
             const response: AxiosResponse<string> = await client.get('/', {
