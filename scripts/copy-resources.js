@@ -53,7 +53,7 @@ mkdirSync(jwtPemDist, { recursive: true });
 copySync(jwtPemSrc, jwtPemDist);
 
 // GraphQL-Schema kopieren
-const businessDir = 'buch'
+const businessDir = 'computer'
 const graphqlSrc = join(src, businessDir, 'graphql');
 const graphqlDist = join(dist, src, businessDir, 'graphql');
 mkdirSync(graphqlDist, { recursive: true });
