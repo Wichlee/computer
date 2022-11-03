@@ -56,6 +56,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         QueryBuilder,
     ],
     // Export der Provider fuer DI in anderen Modulen
-    exports: [ComputerReadService, ComputerWriteService, ComputerValidationService],
+    exports: [
+        ComputerReadService,
+        ComputerWriteService,
+        ComputerValidationService,
+    ],
 })
 export class ComputerModule {}
