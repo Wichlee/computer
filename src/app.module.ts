@@ -21,9 +21,9 @@ import {
 } from '@nestjs/common';
 import { ApolloDriver } from '@nestjs/apollo';
 import { AuthModule } from './security/auth/auth.module.js';
-import { BuchGetController } from './buch/rest/buch-get.controller.js';
-import { BuchModule } from './buch/buch.module.js';
-import { BuchWriteController } from './buch/rest/buch-write.controller.js';
+import { ComputerGetController } from './computer/rest/computer-get.controller.js';
+import { ComputerModule } from './computer/computer.module.js';
+import { ComputerWriteController } from './computer/rest/computer-write.controller.js';
 import { DevModule } from './config/dev/dev.module.js';
 import { GraphQLModule } from '@nestjs/graphql';
 import { HealthModule } from './health/health.module.js';
@@ -36,7 +36,7 @@ import { typeOrmModuleOptions } from './config/db.js';
 @Module({
     imports: [
         AuthModule,
-        BuchModule,
+        ComputerModule,
         DevModule,
         GraphQLModule.forRoot({
             typePaths: ['./**/*.graphql'],
@@ -54,8 +54,8 @@ export class AppModule implements NestModule {
         consumer
             .apply(RequestLoggerMiddleware)
             .forRoutes(
-                BuchGetController,
-                BuchWriteController,
+                ComputerGetController,
+                ComputerWriteController,
                 'auth',
                 'graphql',
             );

@@ -20,8 +20,7 @@
  * @packageDocumentation
  */
 
-import { Buch } from '../buch/entity/buch.entity.js';
-import { Schlagwort } from '../buch/entity/schlagwort.entity.js';
+import { Computer } from '../computer/entity/computer.entity.js';
 import { type TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { env } from './env.js';
 import { k8sConfig } from './kubernetes.js';
@@ -30,14 +29,14 @@ import { nodeConfig } from './node.js';
 const { dbConfigEnv } = env;
 
 // nullish coalescing
-const database = dbConfigEnv.name ?? Buch.name.toLowerCase();
+const database = dbConfigEnv.name ?? Computer.name.toLowerCase();
 const { detected } = k8sConfig;
 const dbType =
     dbConfigEnv.type === undefined || dbConfigEnv.type === 'postgres'
         ? 'postgres'
         : 'mysql';
 const host = detected ? dbType : dbConfigEnv.host ?? 'localhost';
-const username = dbConfigEnv.username ?? Buch.name.toLowerCase();
+const username = dbConfigEnv.username ?? Computer.name.toLowerCase();
 const pass = dbConfigEnv.password ?? 'p';
 
 export const typeOrmModuleOptions: TypeOrmModuleOptions =
@@ -49,8 +48,8 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions =
               username,
               password: pass,
               database,
-              // siehe auch src\buch\buch.module.ts
-              entities: [Buch, Schlagwort],
+              // siehe auch src\computer\computer.module.ts
+              entities: [Computer],
               // logging durch console.log()
               logging:
                   nodeConfig.nodeEnv === 'development' ||
@@ -64,8 +63,8 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions =
               username,
               password: pass,
               database,
-              // siehe auch src\buch\buch.module.ts
-              entities: [Buch, Schlagwort],
+              // siehe auch src\computer\computer.module.ts
+              entities: [Computer],
               supportBigNumbers: true,
               // logging durch console.log()
               logging:
