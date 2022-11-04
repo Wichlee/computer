@@ -64,7 +64,7 @@ describe('GET /', () => {
         // given
 
         // when
-        const response: AxiosResponse<computersModel> = await client.get('/');
+        const response: AxiosResponse<ComputerModel> = await client.get('/');
 
         // then
         const { status, headers, data } = response;
