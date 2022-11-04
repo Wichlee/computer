@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /*
  * Copyright (C) 2016 - present Juergen Zimmermann, Hochschule Karlsruhe
  *
@@ -37,7 +36,7 @@ import { ComputerReadService } from './computer-read.service.js';
 import { ComputerValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { MailService } from '../../mail/mail.service.js';
+//import { MailService } from '../../mail/mail.service.js';
 import RE2 from 're2';
 import { getLogger } from '../../logger/logger.js';
 import { v4 as uuid } from 'uuid';
