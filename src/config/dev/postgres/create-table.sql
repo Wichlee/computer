@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS computer (
     version       integer NOT NULL DEFAULT 0,
                   -- impliziter Index als B-Baum durch UNIQUE
                   -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS
-    hersteller    varchar(40) NOT NULL UNIQUE USING INDEX TABLESPACE computerspace,
+    hersteller    varchar(40) NOT NULL,
                   -- https://www.postgresql.org/docs/current/ddl-constraints.html#id-1.5.4.6.6
                   -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS
     modell        varchar(12) NOT NULL CHECK (modell ~ 'Desktop-PC|Gaming-PC'),
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS computer (
                   -- 10 Stellen, davon 2 Nachkommastellen
     preis         decimal(8,2) NOT NULL,
     farbe         varchar(12) NOT NULL CHECK (art ~ 'rot|schwarz'),
-    seriennummer  varchar(16) NOT NULL UNIQUE USING INDEX TABLESPACE buchspace,
+    seriennummer  varchar(9) NOT NULL UNIQUE USING INDEX TABLESPACE computerspace,
                   -- https://www.postgresql.org/docs/current/datatype-datetime.html
     erzeugt       timestamp NOT NULL DEFAULT NOW(),
     aktualisiert  timestamp NOT NULL DEFAULT NOW()
