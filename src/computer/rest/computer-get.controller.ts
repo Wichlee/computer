@@ -196,7 +196,6 @@ export class ComputerGetController {
         let computer: Computer | undefined;
         try {
             // vgl. Kotlin: Aufruf einer suspend-Function
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             computer = await this.#service.findById(id);
         } catch (err) {
             // err ist implizit vom Typ "unknown", d.h. keine Operationen koennen ausgefuehrt werden
