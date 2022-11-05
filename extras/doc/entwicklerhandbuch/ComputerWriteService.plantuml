@@ -1,0 +1,77 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml Anwendungskern
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "@Injectable" as Injectable
+  hide Injectable circle
+}
+
+package typeorm {
+  class Repository<T>
+}
+
+package @nestjs/typeorm {
+  class "@InjectRepository" as InjectRepository
+  hide InjectRepository circle
+}
+
+package computer {
+  package entity {
+    class Computer
+  }
+
+  package service #DDDDDD {
+    class ComputerInvalid
+    class VersionInvalid
+    class VersionOutdated
+
+    class ComputerWriteService << control >> <<@Injectable()>> {
+      + async create(computer: Computer): Promise<string|ComputerInvalid>
+      + async update(id: string, computer: Computer, version: string): Promise<number|ComputerInvalid|VersionInvalid|VersionOutdated>
+      + async delete(id: string): Promise<boolean>
+    }
+
+    ComputerWriteService o--> "1" ComputerValidationService: validationService
+    ComputerWriteService o--> "1" ComputerReadService: readService
+    ComputerWriteService o--> "1" Repository: @InjectRepository repo
+
+    ComputerWriteService .up.> Injectable
+    ComputerWriteService .up.> InjectRepository
+
+    ComputerWriteService .up.> Promise
+    ComputerWriteService ..> Computer
+    ComputerWriteService .up.> ComputerInvalid
+    ComputerWriteService .up.> VersionInvalid
+    ComputerWriteService .up.> VersionOutdated
+
+    ComputerInvalid .up[hidden].> Computer
+    Computer .up[hidden].> Promise
+    Computer .up[hidden].> Injectable
+    Computer .up[hidden].> InjectRepository
+    ComputerValidationService .[hidden].> Repository
+  }
+}
+
+hide empty members
+
+footer (c) Gruppe 2
+
+@enduml
