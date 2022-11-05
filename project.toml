@@ -30,9 +30,8 @@
 # table = Key/Value-Paare
 [project]
 id = "com.acme.computer"
-name = "Microservice computer"
+name = "Microservice Computer"
 version = "1.0.0"
-authors = ["Juergen.Zimmermann@h-ka.de"]
 
 # array of tables
 [[project.licenses]]
