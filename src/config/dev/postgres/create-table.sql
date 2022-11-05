@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS computer (
     hersteller    varchar(40) NOT NULL,
                   -- https://www.postgresql.org/docs/current/ddl-constraints.html#id-1.5.4.6.6
                   -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS
-    modell        varchar(12) NOT NULL CHECK (modell ~ 'Desktop-PC|Gaming-PC'),
+    modell        varchar(12) NOT NULL CHECK (modell ~ 'DESKTOP_PC|GAMING_PC'),
                   -- https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP
     herstelldatum date,
                   -- https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL

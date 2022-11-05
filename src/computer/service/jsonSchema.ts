@@ -39,7 +39,7 @@ export const jsonSchema: GenericJsonSchema = {
         },
         modell: {
             type: 'string',
-            enum: ['Desktop-PC', 'Gaming-PC', ''],
+            enum: ['DESKTOP_PC', 'GAMING_PC', ''],
         },
         herstelldatum: { type: 'string', format: 'date' },
         preis: {
@@ -48,7 +48,7 @@ export const jsonSchema: GenericJsonSchema = {
         },
         farbe: {
             type: 'string',
-            enum: ['rot', 'schwarz', ''],
+            enum: ['ROT', 'SCHWARZ', ''],
         },
         seriennummer: { type: 'string', format: 'Seriennummer' },
         erzeugt: { type: ['string', 'null'] },
@@ -61,10 +61,10 @@ export const jsonSchema: GenericJsonSchema = {
             version: 'Die Versionsnummer muss mindestens 0 sein.',
             hersteller:
                 'Ein Hersteller muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
-            modell: 'Das Modell eines Computers muss Desktop-PC oder Gaming-PC sein.',
+            modell: 'Das Modell eines Computers muss DESKTOP_PC oder GAMING_PC sein.',
             herstelldatum: 'Das Datum muss im Format yyyy-MM-dd sein.',
             preis: 'Der Preis darf nicht negativ sein.',
-            farbe: 'Die Farbe eines Computers muss rot oder schwarz sein.',
+            farbe: 'Die Farbe eines Computers muss ROT oder SCHWARZ sein.',
             seriennummer: 'Die Seriennummer ist nicht korrekt.',
         },
     },
