@@ -30,8 +30,7 @@ import {
     type VersionInvalid,
     type VersionOutdated,
 } from './errors.js';
-import { type Repository } from 'typeorm';
-// eslint-disable-next-line sort-imports
+import { type DeleteResult, Repository } from 'typeorm';
 import { ComputerReadService } from './computer-read.service.js';
 import { ComputerValidationService } from './computer-validation.service.js';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -149,6 +148,13 @@ export class ComputerWriteService {
         if (computer === undefined) {
             return false;
         }
+
+        let deleteResult: DeleteResult | undefined;
+        return (
+            deleteResult?.affected !== undefined &&
+            deleteResult.affected !== null &&
+            deleteResult.affected > 0
+        );
     }
 
     async #validateCreate(
