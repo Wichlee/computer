@@ -24,53 +24,38 @@ package typeorm {
   hide Column circle
   class "@PrimaryColumn" as PrimaryColumn
   hide PrimaryColumn circle
-  class "@OneToMany" as OneToMany
-  hide OneToMany circle
   class "@JoinColumn" as JoinColumn
   hide JoinColumn circle
-  class "@ManyToOne" as ManyToOne
-  hide ManyToOne circle
   class "@CreateDateColumn" as CreateDateColumn
   hide CreateDateColumn circle
   class "@UpdateDateColumn" as UpdateDateColumn
   hide UpdateDateColumn circle
 }
 
-package buch.entity {
-  class "type BuchArt = 'KINDLE' | 'DRUCKAUSGABE'" as BuchArt
-  hide BuchArt circle
+package computer.entity {
+  class "type ComputerFarbe = 'rot' | 'schwarz'" as ComputerFarbe
+  hide ComputerFarbe circle
 
-  class "type Verlag = 'FOO_VERLAG' | 'BAR_VERLAG'" as Verlag
-  hide Verlag circle
+  class "type ComputerModell = 'Desktop-PC' | 'Gaming-PC'" as ComputerModell
+  hide ComputerModell circle
 
-  class Buch <<entity>> <<@Entity>> {
+  class Computer <<entity>> <<@Entity>> {
     @Column() @PrimaryColumn() readonly id: string
-    @Column() readonly titel: string
-    @Column() readonly rating: number
-    @Column() readonly art: BuchArt
-    @Column() readonly verlag: Verlag
+    @Column() readonly hersteller: string
+    @Column() readonly modell: ComputerModell
+    @Column() readonly herstelldatum: Date
     @Column() readonly preis: number
-    @Column() readonly rabatt: number
-    @Column() readonly lieferbar: boolean
-    @Column() readonly datum: Date
-    @Column() readonly isbn: string
-    @Column() readonly homepage?: string
+    @Column() readonly farbe: ComputerFarbe
+    @Column() readonly seriennummer: string
     @CreateDateColumn() readonly erzeugt: Date
     @UpdateDateColumn() readonly aktualisiert: Date
   }
 
-  class Schlagwort <<entity>> <<@Entity>> {
-    @Column() @PrimaryColumn() readonly id: string
-    @Column() readonly schlagwort: string
-    @ManyToOne() readonly buch: Buch
-  }
+  Computer ..> Entity
+  Computer .up.> ComputerFarbe
+  Computer .up.> ComputerModell
 
-  Buch ..> Entity
-  Buch *--> "*" Schlagwort : @OneToMany() schlagwoerter
-  Buch .up.> BuchArt
-  Buch .up.> Verlag
-
-  BuchArt .[hidden].> Verlag
+  ComputerFarbe .[hidden].> ComputerModell
 }
 
 hide empty members
