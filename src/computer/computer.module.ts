@@ -23,7 +23,6 @@ import { ComputerReadService } from './service/computer-read.service.js';
 import { ComputerValidationService } from './service/computer-validation.service.js';
 import { ComputerWriteController } from './rest/computer-write.controller.js';
 import { ComputerWriteService } from './service/computer-write.service.js';
-import { MailModule } from '../mail/mail.module.js';
 import { Module } from '@nestjs/common';
 import { QueryBuilder } from './service/query-builder.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -40,7 +39,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
  */
 @Module({
     imports: [
-        MailModule,
         // siehe auch src\app.module.ts
         TypeOrmModule.forFeature([Computer]),
         AuthModule,

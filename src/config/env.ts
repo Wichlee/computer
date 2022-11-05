@@ -54,9 +54,6 @@ const {
     HEALTH_PRETTY_PRINT,
     JWT_EXPIRES_IN,
     JWT_ISSUER,
-    MAIL_HOST,
-    MAIL_PORT,
-    MAIL_LOG,
     USER_PASSWORD_ENCODED,
 } = process.env; // eslint-disable-line n/no-process-env
 
@@ -145,18 +142,6 @@ const logConfigEnv: LogConfigEnv = {
     defaultValue: LOG_DEFAULT?.toLowerCase() === 'true',
 };
 
-interface MailConfigEnv {
-    readonly host: string | undefined;
-    readonly port: string | undefined;
-    readonly log: string | undefined;
-}
-
-const mailConfigEnv: MailConfigEnv = {
-    host: MAIL_HOST,
-    port: MAIL_PORT,
-    log: MAIL_LOG,
-};
-
 interface Env {
     nodeConfigEnv: NodeConfigEnv;
     apolloConfigEnv: ApolloConfigEnv;
@@ -165,7 +150,6 @@ interface Env {
     dbConfigEnv: DbConfigEnv;
     authConfigEnv: AuthConfigEnv;
     logConfigEnv: LogConfigEnv;
-    mailConfigEnv: MailConfigEnv;
 }
 
 /**
@@ -179,5 +163,4 @@ export const env: Env = {
     dbConfigEnv,
     authConfigEnv,
     logConfigEnv,
-    mailConfigEnv,
 };
