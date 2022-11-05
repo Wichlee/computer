@@ -83,9 +83,8 @@ export class ComputerWriteService {
         computer.id = uuid(); // eslint-disable-line require-atomic-updates
 
         // implizite Transaktion
-        const computerDb =  this.#logger.debug('create: computerDb=%o', computerDb);
-
-        await this.#sendmail(computerDb);
+        const computerDb = await this.#repo.save(computer);
+        this.#logger.debug('create: computerDb=%o', computerDb);
 
         return computerDb.id!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     }
