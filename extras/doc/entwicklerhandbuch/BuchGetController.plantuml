@@ -49,37 +49,36 @@ package express {
   Response .[hidden].> Controller
 }
 
-package buch {
+package computer {
   package entity #FFFFFF {
-    class Buch <<entity>>
+    class Computer <<entity>>
 
-    Buch .[hidden].> Promise
-    Buch .[hidden].> Request
+    Computer .[hidden].> Promise
+    Computer .[hidden].> Request
   }
 
   package service {
-    class BuchReadService << control >>
+    class ComputerReadService << control >>
   }
 
   package rest #DDDDDD {
-    BuchQuery -up-|> Buch
+    ComputerQuery -up-|> computer
 
-    class BuchGetController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
-      + @Get() async findById(@Param() id: string, @Req() req: Request, @Headers() version: string, @Res() res: Response): Promise<Response<BuchModel | undefined>>
-      + @Get() async find(@Query() query: BuchQuery, @Req() req: Request,  @Res() res: Response): Promise<Response<BuecherModel | undefined>>
+    class ComputerGetController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
+      + @Get() async findById(@Param() id: string, @Req() req: Request, @Headers() version: string, @Res() res: Response): Promise<Response<ComputerModel | undefined>>
+      + @Get() async find(@Query() query: ComputerQuery, @Req() req: Request,  @Res() res: Response): Promise<Response<ComputersModel | undefined>>
     }
 
-    BuchGetController o--> "1" BuchReadService : service
+    ComputerGetController o--> "1" ComputerReadService : service
 
-    BuchGetController ..> Controller
-    BuchGetController ..> Request
-    BuchGetController ..> Response
-    BuchGetController ..> Promise
-    BuchGetController .up.> BuchModel
-    BuchGetController .up.> BuchQuery
+    ComputerGetController ..> Controller
+    ComputerGetController ..> Request
+    ComputerGetController ..> Promise
+    ComputerGetController .up.> ComputerModel
+    ComputerGetController .up.> ComputerQuery
 
-    BuchReadService .[hidden].> Request
-    BuchReadService .[hidden].> Promise
+    ComputerReadService .[hidden].> Request
+    ComputerReadService .[hidden].> Promise
     Response .right[hidden].> Controller
   }
 }
