@@ -53,12 +53,12 @@ import { DecimalTransformer } from './decimal-transformer.js';
  * Alias-Typ für gültige Strings bei den Farbangaben.
  * "Enums get compiled in a big monster of JavaScript".
  */
-export type ComputerFarbe = 'rot' | 'schwarz' | 'silber' | 'weiss';
+export type ComputerFarbe = 'ROT' | 'SCHWARZ' | 'SILBER' | 'WEISS';
 
 /**
  * Alias-Typ für gültige Strings bei dem Modell eines Computers.
  */
-export type ComputerModell = 'Desktop-PC' | 'Gaming-PC' | 'Notebook';
+export type ComputerModell = 'DESKTOP_PC' | 'GAMING_PC' | 'NOTEBOOK';
 
 /**
  * Entity-Klasse zu einer relationalen Tabelle
@@ -80,7 +80,7 @@ export class Computer {
     readonly hersteller!: string; //NOSONAR
 
     @Column('varchar')
-    @ApiProperty({ example: 'Desktop-PC', type: String })
+    @ApiProperty({ example: 'DESKTOP_PC', type: String })
     readonly modell: ComputerModell | undefined;
 
     @Column('date')
@@ -93,7 +93,7 @@ export class Computer {
     readonly preis!: number;
 
     @Column('varchar')
-    @ApiProperty({ example: 'rot', type: String })
+    @ApiProperty({ example: 'ROT', type: String })
     readonly farbe: ComputerFarbe | undefined;
 
     @Column('varchar')

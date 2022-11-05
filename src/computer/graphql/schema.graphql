@@ -43,15 +43,15 @@ type Computer {
   hersteller: String
   modell: Modell
   herstelldatum: String
-  preis: Number
+  preis: Float
   farbe: Farbe
   seriennummer: String
 }
 
 "Enum-Typ für das Modell eines Computers"
 enum Modell {
-  DESKTOP-PC
-  GAMING-PC
+  DESKTOP_PC
+  GAMING_PC
   NOTEBOOK
 }
 
@@ -68,7 +68,7 @@ input ComputerInput {
   hersteller: String
   modell: Modell
   herstelldatum: String
-  preis: Number
+  preis: Float
   farbe: Farbe
   seriennummer: String!
 }
@@ -80,7 +80,7 @@ input ComputerUpdateInput {
   hersteller: String
   modell: Modell
   herstelldatum: String
-  preis: Number
+  preis: Float
   farbe: Farbe
   seriennummer: String!
 }
