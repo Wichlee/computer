@@ -62,9 +62,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
             return;
         }
 
-        await (typeOrmModuleOptions.type === 'postgres'
-            : this.#populatePostgres()
-            ? this.#populateMySQL());
+        await (typeOrmModuleOptions.type === 'postgres') : this.#populatePostgres();
     }
 
     async #populatePostgres() {
