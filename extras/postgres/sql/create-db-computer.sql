@@ -13,6 +13,18 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+-- (1) PostgreSQL NICHT als user "postgres" starten, sondern implizit als "root"
+--     d.h. auskommentieren in docker-compose.yaml
+-- (2) docker compose exec postgres sh
+-- (3) chown postgres:postgres /var/lib/postgresql/tablespace
+-- (4) chown postgres:postgres /var/lib/postgresql/tablespace/kunde
+-- (5) docker compose down
+-- (6) in docker-compose.yaml den User "postgres" wieder aktivieren
+-- (7) docker compose up
+-- (8) docker compose exec postgres sh
+-- (9) psql --dbname=postgres --username=postgres --file=/sql/create-db-kunde.sql
+-- (10) exit
+
 -- https://www.postgresql.org/docs/current/sql-createrole.html
 CREATE ROLE computer LOGIN PASSWORD 'p';
 
