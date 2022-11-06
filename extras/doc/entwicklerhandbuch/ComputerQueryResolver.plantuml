@@ -35,41 +35,41 @@ package @nestjs/graphql {
   Resolver .left[hidden].> Promise
 }
 
-package buch {
+package computer {
   package entity {
-    class Buch <<entity>>
+    class Computer <<entity>>
   }
 
   package service {
-    class BuchReadService << control >>
+    class ComputerReadService << control >>
   }
 
   package graphql #DDDDDD {
-    class "type BuchDTO = Omit<Buch, 'aktualisiert' | 'erzeugt' | 'schlagwoerter'> & { schlagwoerter: string[] }" as BuchDTO
-    hide BuchDTO circle
+    class "type ComputerDTO = Omit<Computer, 'aktualisiert' | 'erzeugt'>" as ComputerDTO
+    hide ComputerDTO circle
 
-    class BuchQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
-      + @Query() async findById(@Args() id: string): Promise<BuchDTO>
-      + @Query() async find(@Args() titel: string |undefined): Promise<BuchDTO[]>
+    class ComputerQueryResolver << control >> << @Resolver() >> << @UseInterceptors() >> {
+      + @Query() async findById(@Args() id: string): Promise<ComputerDTO>
+      + @Query() async find(@Args() titel: string |undefined): Promise<ComputerDTO[]>
     }
 
-    BuchQueryResolver o-up-> "1" BuchReadService : service
-    BuchQueryResolver ..> BuchDTO
-    BuchDTO ..> Buch
-    BuchQueryResolver ..> Resolver
+    ComputerQueryResolver o-up-> "1" ComputerReadService : service
+    ComputerQueryResolver ..> ComputerDTO
+    ComputerDTO ..> Computer
+    ComputerQueryResolver ..> Resolver
 
-    BuchQueryResolver ..> Promise
+    ComputerQueryResolver ..> Promise
 
-    BuchDTO .[hidden].> Buch
-    Buch .[hidden].> Promise
-    BuchReadService .[hidden].> Promise
-    Buch .[hidden].> Resolver
-    BuchReadService .[hidden].> Resolver
+    ComputerDTO .[hidden].> Computer
+    Computer .[hidden].> Promise
+    ComputerReadService .[hidden].> Promise
+    Computer .[hidden].> Resolver
+    ComputerReadService .[hidden].> Resolver
   }
 }
 
 hide empty members
 
-footer (c) Juergen Zimmermann
+footer (c) Gruppe 2
 
 @enduml

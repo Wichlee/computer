@@ -46,41 +46,41 @@ package security.auth {
   Roles .right.> Role
 }
 
-package buch #DDDDDD {
+package computer #DDDDDD {
   package entity #FFFFFF {
-    class Buch <<entity>>
+    class Computer <<entity>>
   }
 
   package service #FFFFFF {
-    class BuchWriteService << control >>
+    class ComputerWriteService << control >>
   }
 
-  class "type BuchDTO = Omit<Buch, 'aktualisiert' | 'erzeugt' | 'schlagwoerter'> & { schlagwoerter: string[] }" as BuchDTO
-  hide BuchDTO circle
+  class "type ComputerDTO = Omit<Computer, 'aktualisiert' | 'erzeugt'>" as ComputerDTO
+  hide ComputerDTO circle
 
-  class BuchMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
-    + @Mutation() @Roles() async create(@Args() buch: Buch): Promise<string>
-    + @Mutation() @Roles() async update(@Args() buch: BuchDTO): Promise<number>
+  class ComputerMutationResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
+    + @Mutation() @Roles() async create(@Args() computer: Computer): Promise<string>
+    + @Mutation() @Roles() async update(@Args() computer: ComputerDTO): Promise<number>
     + @Mutation() @Roles() async delete(@Args() id: string): Promise<boolean>
   }
 
-  BuchMutationResolver o-down-> "1" BuchWriteService : service
+  ComputerMutationResolver o-down-> "1" ComputerWriteService : service
 
-  BuchMutationResolver ..> Buch
-  BuchMutationResolver ..> BuchDTO
-  BuchDTO .up.> Buch
-  BuchMutationResolver ..> Promise
-  BuchMutationResolver ..> Resolver
+  ComputerMutationResolver ..> Computer
+  ComputerMutationResolver ..> ComputerDTO
+  ComputerDTO .up.> Computer
+  ComputerMutationResolver ..> Promise
+  ComputerMutationResolver ..> Resolver
 
-  BuchMutationResolver .up.> Roles
-  BuchMutationResolver .up.> Role
+  ComputerMutationResolver .up.> Roles
+  ComputerMutationResolver .up.> Role
 
-  BuchDTO .[hidden].> Promise
-  BuchDTO .[hidden].> Resolver
+  ComputerDTO .[hidden].> Promise
+  ComputerDTO .[hidden].> Resolver
 }
 
 hide empty members
 
-footer (c) Juergen Zimmermann
+footer (c) Gruppe 2
 
 @enduml
