@@ -1,0 +1,12 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-NODEFETCH-674311:
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > fbjs > isomorphic-fetch > node-fetch:
+        reason: None given
+        expires: '2020-12-01T08:44:22.739Z'
+    - graphql-tools > @graphql-tools/relay-operation-optimizer > relay-compiler > relay-runtime > fbjs > isomorphic-fetch > node-fetch:
+        reason: None given
+        expires: '2020-12-01T08:44:22.739Z'
+patch: {}
