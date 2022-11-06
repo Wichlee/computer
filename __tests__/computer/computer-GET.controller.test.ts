@@ -33,8 +33,8 @@ import { ComputerModell } from '../../src/computer/entity/computer.entity.js';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const modellVorhanden = ['k', 'g', 't'];
-const modellNichtVorhanden = ['xx', 'yy'];
+const herstellerVorhanden = ['k', 'g', 't'];
+const herstellerNichtVorhanden = ['xx', 'yy'];
 const farbeVorhanden = ['rot', 'schwarz'];
 const farbeNichtVorhanden = ['gelb', 'pink'];
 
@@ -86,11 +86,11 @@ describe('GET /', () => {
             });
     });
 
-    each(modellVorhanden).test(
-        'Computer mit Modellbezeichnung, die "%s" enthaelt',
-        async (teilModell: string) => {
+    each(herstellerVorhanden).test(
+        'Computer mit Herstellern, die "%s" enthaelt',
+        async (teilHersteller: string) => {
             // given
-            const params = { titel: teilModell };
+            const params = { hersteller: teilHersteller };
 
             // when
             const response: AxiosResponse<ComputerListModel> = await client.get(
@@ -109,10 +109,10 @@ describe('GET /', () => {
 
             // Jedes Buch hat einen Titel mit dem Teilstring 'a'
             computerList
-                .map((computer) => computer.modell)
-                .forEach((modell: ComputerModell) =>
-                    expect(modell.toLowerCase()).toEqual(
-                        expect.stringContaining(teilModell),
+                .map((computer) => computer.hersteller)
+                .forEach((hersteller: string) =>
+                    expect(hersteller.toLowerCase()).toEqual(
+                        expect.stringContaining(teilHersteller),
                     ),
                 );
         },
