@@ -40,14 +40,14 @@ const { httpsOptions, port } = nodeConfig;
 // "Arrow Function" ab ES 2015
 const setupSwagger = (app: INestApplication) => {
     const config = new DocumentBuilder()
-        .setTitle('Buch')
+        .setTitle('Computer')
         .setDescription('Beispiel für Software Engineering')
         .setVersion('1.0.0')
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config);
     const options: SwaggerCustomOptions = {
-        customSiteTitle: 'Software Engineering 2021/22',
+        customSiteTitle: 'Software Engineering 2022/23',
     };
     SwaggerModule.setup(paths.swagger, app, document, options);
 };
