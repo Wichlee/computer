@@ -47,7 +47,7 @@ const setupSwagger = (app: INestApplication) => {
         .build();
     const document = SwaggerModule.createDocument(app, config);
     const options: SwaggerCustomOptions = {
-        customSiteTitle: 'Software Engineering 2021/22',
+        customSiteTitle: 'Software Engineering 2022/23',
     };
     SwaggerModule.setup(paths.swagger, app, document, options);
 };
