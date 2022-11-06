@@ -35,8 +35,8 @@ import each from 'jest-each';
 // -----------------------------------------------------------------------------
 const herstellerVorhanden = ['k', 'g', 't'];
 const herstellerNichtVorhanden = ['xx', 'yy'];
-const farbeVorhanden = ['rot', 'schwarz'];
-const farbeNichtVorhanden = ['gelb', 'pink'];
+const modellVorhanden = ['rot', 'schwarz'];
+const modellNichtVorhanden = ['gelb', 'pink'];
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -137,60 +137,59 @@ describe('GET /', () => {
         },
     );
 
-    each(farbeVorhanden)
-        .test(
-            'Mind. 1 Buch mit dem Schlagwort "%s"',
-            async (schlagwort: string) => {
-                // given
-                const params = { [schlagwort]: 'true' };
+    each(modellVorhanden).test(
+        'Mind. 1 Computer des Modells mit "%s"',
+        async (modell: string) => {
+            // given
+            const params = { [modell]: 'true' };
 
-                // when
-                const response: AxiosResponse<ComputerListModel> =
-                    '/',
-                    { params },
+            // when
+            const response: AxiosResponse<ComputerListModel> = await client.get(
+                '/',
+                { params },
+            );
+
+            // then
+            const { status, headers, data } = response;
+
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu);
+            // JSON-Array mit mind. 1 JSON-Objekt
+            expect(data).toBeDefined();
+
+            const { computerList } = data._embedded;
+
+            // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
+            computerList
+                .map((computer) => computer.modell)
+                .forEach((modell) =>
+                    expect(modell).toEqual(
+                        expect.arrayContaining([modell.toUpperCase()]),
+                    ),
                 );
+        },
+    );
 
-                // then
-                const { status, headers, data } = response;
+    each(modellNichtVorhanden).test(
+        'Keine Buecher mit dem Schlagwort "%s"',
+        async (schlagwort: string) => {
+            // given
+            const params = { [schlagwort]: 'true' };
 
-                expect(status).toBe(HttpStatus.OK);
-                expect(headers['content-type']).toMatch(/json/iu);
-                // JSON-Array mit mind. 1 JSON-Objekt
-                expect(data).toBeDefined();
+            // when
+            const response: AxiosResponse<string> = await client.get('/', {
+                params,
+            });
 
-                const { computers } = data._embedded;
+            // then
+            const { status, data } = response;
 
-                // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
-                computers
-                    .map((computer) => computer.farbe)
-                    .forEach((farbe) =>
-                        expect(farbe).toEqual(
-                            expect.arrayContaining([farbe.toUpperCase()]),
-                        ),
-                    );
-            },
-            farbe,
-        )
-        .test(
-            'Keine computers mit dem Schlagwort "%s"',
-            async (schlagwort: string) => {
-                // given
-                const params = { [schlagwort]: 'true' };
+            expect(status).toBe(HttpStatus.NOT_FOUND);
+            expect(data).toMatch(/^not found$/iu);
+        },
+    );
 
-                // when
-                const response: AxiosResponse<string> = await client.get('/', {
-                    params,
-                });
-
-                // then
-                const { status, data } = response;
-
-                expect(status).toBe(HttpStatus.NOT_FOUND);
-                expect(data).toMatch(/^not found$/iu);
-            },
-        );
-
-    test('Keine computers zu einer nicht-vorhandenen Property', async () => {
+    test('Keine Buecher zu einer nicht-vorhandenen Property', async () => {
         // given
         const params = { foo: 'bar' };
 
