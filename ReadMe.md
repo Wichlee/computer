@@ -702,7 +702,7 @@ Die Dokumentation im Format HTML wird in einer Powershell folgendermaßen
 im Verzeichnis `extras\doc\html` erstellt:
 
 ```powershell
-    npm run asciidoc
+    npm run asciidoctor
 ```
 
 ## Continuous Integration mit Jenkins
