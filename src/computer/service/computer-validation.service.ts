@@ -30,12 +30,15 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import { type Computer } from '../entity/computer.entity.js';
 import { type FormatValidator } from 'ajv/dist/types/index.js';
 import { Injectable } from '@nestjs/common';
+import RE2 from 're2';
 import ajvErrors from 'ajv-errors';
 import formatsPlugin from 'ajv-formats';
 import { getLogger } from '../../logger/logger.js';
 import { jsonSchema } from './jsonSchema.js';
 
-export const REGEX = /[A-Z]{2}-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
+export const ID_PATTERN = new RE2(
+    '^[\\dA-Fa-f]{8}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{4}-[\\dA-Fa-f]{12}$',
+);
 
 @Injectable()
 export class ComputerValidationService {
@@ -57,13 +60,15 @@ export class ComputerValidationService {
     }
 
     validateId(id: string) {
-        return REGEX.test(id);
+        return ID_PATTERN.test(id);
     }
 
     // https://github.com/ajv-validator/ajv-formats/issues/14#issuecomment-826340298
     #validateSeriennummer: FormatValidator<string> = (subject: string) => {
+        const FORMAT_SERIENNUMMER = /[A-Z]{2}-\d{2}[A-Z]{2}\d[A-Z]/u;
+
         // Checks for serial number format
-        if (REGEX.test(subject)) {
+        if (FORMAT_SERIENNUMMER.test(subject)) {
             return true;
         }
 
