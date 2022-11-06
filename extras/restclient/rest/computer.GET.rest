@@ -21,7 +21,7 @@
 GET {{restUrl}}
 
 ### Suche mit vorhandener Computer-ID
-GET {{restUrl}}/00000000-0000-0000-0000-000000000001
+GET {{restUrl}}/00000000-0000-0000-0000-000000000050
 
 ### Suche mit vorhandener Computer-ID und Versionsnummer
 GET {{restUrl}}/00000000-0000-0000-0000-000000000001
@@ -38,13 +38,13 @@ GET {{restUrl}}/YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY
 GET {{restUrl}}/99999999-9999-9999-9999-999999999999
 
 ### Suche mit vorhandenem Hersteller
-GET {{restUrl}}?hersteller=a
+GET {{restUrl}}?hersteller=g
 
 ### Suche mit nicht-vorhandenem Hersteller
 GET {{restUrl}}?hersteller=xxx
 
 ### Suche mit vorhandener Seriennummer
-GET {{restUrl}}?seriennummer=PC-49XJ9F
+GET {{restUrl}}?seriennummer=PC-31LB3U
 
 ### Suche mit nicht-vorhandener Property
 GET {{restUrl}}?php=true
