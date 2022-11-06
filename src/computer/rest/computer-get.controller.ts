@@ -79,10 +79,10 @@ export type ComputerModel = Omit<
     _links: Links;
 };
 
-export interface ComputersModel {
+export interface ComputerListModel {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _embedded: {
-        computers: ComputerModel[];
+        computerList: ComputerModel[];
     };
 }
 
@@ -249,7 +249,7 @@ export class ComputerGetController {
         @Query() query: ComputerQuery,
         @Req() req: Request,
         @Res() res: Response,
-    ): Promise<Response<ComputersModel | undefined>> {
+    ): Promise<Response<ComputerListModel | undefined>> {
         this.#logger.debug('find: query=%o', query);
 
         if (req.accepts(['json', 'html']) === false) {
@@ -257,21 +257,21 @@ export class ComputerGetController {
             return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        const computers = await this.#service.find(query);
-        this.#logger.debug('find: %o', computers);
-        if (computers.length === 0) {
+        const computerList = await this.#service.find(query);
+        this.#logger.debug('find: %o', computerList);
+        if (computerList.length === 0) {
             this.#logger.debug('find: NOT_FOUND');
             return res.sendStatus(HttpStatus.NOT_FOUND);
         }
 
         // HATEOAS: Atom Links je Computer
-        const computersModel = computers.map((computer: Computer) =>
+        const computerListModel = computerList.map((computer: Computer) =>
             this.#toModel(computer, req, false),
         );
-        this.#logger.debug('find: computersModel=%o', computersModel);
+        this.#logger.debug('find: computerListModel=%o', computerListModel);
 
-        const result: ComputersModel = {
-            _embedded: { computers: computersModel },
+        const result: ComputerListModel = {
+            _embedded: { computerList: computerListModel },
         };
         return res.json(result).send();
     }
