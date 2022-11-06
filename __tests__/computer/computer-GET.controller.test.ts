@@ -28,7 +28,7 @@ import {
 import { type ComputerListModel } from '../../src/computer/rest/computer-get.controller.js';
 import { HttpStatus } from '@nestjs/common';
 import each from 'jest-each';
-import { ComputerModell } from '../../src/computer/entity/computer.entity.js';
+
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -118,11 +118,11 @@ describe('GET /', () => {
         },
     );
 
-    each(farbeNichtVorhanden).test(
+    each(herstellerNichtVorhanden).test(
         'Keine computers mit einem Titel, der "%s" enthaelt',
-        async (teilModell: string) => {
+        async (teilHersteller: string) => {
             // given
-            const params = { titel: teilModell };
+            const params = { hersteller: teilHersteller };
 
             // when
             const response: AxiosResponse<string> = await client.get('/', {
