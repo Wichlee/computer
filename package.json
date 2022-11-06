@@ -113,6 +113,7 @@
     "re2": "1.17.7",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.5.7",
+    "snyk": "1.1053.0",
     "sonic-boom": "3.2.0",
     "typeorm": "0.3.10",
     "uuid": "9.0.0",
