@@ -24,27 +24,24 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchDTO } from '../../src/buch/rest/buch-write.controller.js';
 import { HttpStatus } from '@nestjs/common';
-import { ID_PATTERN } from '../../src/buch/service/buch-validation.service.js';
+import { REGEX } from '../../src/computer/service/computer-validation.service.js';
 import { MAX_RATING } from '../../src/buch/service/jsonSchema.js';
 import { loginRest } from '../login.js';
+import { ComputerDTO } from '../../src/computer/graphql/computer-query.resolver.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const neuesBuch: BuchDTO = {
-    titel: 'Testrest',
-    rating: 1,
-    art: 'DRUCKAUSGABE',
-    verlag: 'FOO_VERLAG',
-    preis: 99.99,
-    rabatt: 0.099,
-    lieferbar: true,
-    datum: '2022-02-28',
-    isbn: '9780007006441',
-    homepage: 'https://test.de/',
-    schlagwoerter: ['JAVASCRIPT', 'TYPESCRIPT'],
+const neuerComputer: ComputerDTO = {
+    id: '00000000-0000-0000-0000-000000000200',
+    version: 0,
+    hersteller: 'Omega',
+    modell: 'NOTEBOOK',
+    herstelldatum: new Date('2022-02-01'),
+    preis: 100.11,
+    farbe: 'SCHWARZ',
+    seriennummer: 'NB-15AM6T',
 };
 const neuesBuchInvalid: Record<string, unknown> = {
     titel: '!?$',
@@ -100,7 +97,7 @@ describe('POST /', () => {
         await shutdownServer();
     });
 
-    test('Neues Buch', async () => {
+    test('Neuer Computer', async () => {
         // given
         const token = await loginRest(client);
         headers.Authorization = `Bearer ${token}`;
@@ -108,7 +105,7 @@ describe('POST /', () => {
         // when
         const response: AxiosResponse<string> = await client.post(
             '/',
-            neuesBuch,
+            neuerComputer,
             { headers },
         );
 
@@ -129,7 +126,7 @@ describe('POST /', () => {
         const idStr = location.slice(indexLastSlash + 1);
 
         expect(idStr).toBeDefined();
-        expect(ID_PATTERN.test(idStr)).toBe(true);
+        expect(REGEX.test(idStr)).toBe(true);
 
         expect(data).toBe('');
     });
