@@ -24,15 +24,14 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchUpdateDTO } from '../../src/buch/rest/buch-write.controller.js';
+import { type ComputerUpdateDTO } from '../../src/computer/rest/computer-write.controller.js';
 import { HttpStatus } from '@nestjs/common';
-import { MAX_RATING } from '../../src/buch/service/jsonSchema.js';
 import { loginRest } from '../login.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const geaendertesBuch: BuchUpdateDTO = {
+const geaendertesBuch: ComputerUpdateDTO = {
     // isbn wird nicht geaendet
     titel: 'Geaendert',
     rating: 1,
@@ -47,7 +46,7 @@ const geaendertesBuch: BuchUpdateDTO = {
 };
 const idVorhanden = '00000000-0000-0000-0000-000000000040';
 
-const geaendertesBuchIdNichtVorhanden: BuchUpdateDTO = {
+const geaendertesBuchIdNichtVorhanden: ComputerUpdateDTO = {
     titel: 'Nichtvorhanden',
     rating: 1,
     art: 'DRUCKAUSGABE',
@@ -74,7 +73,7 @@ const geaendertesBuchInvalid: Record<string, unknown> = {
 };
 
 // isbn wird nicht geaendet
-const veraltesBuch: BuchUpdateDTO = {
+const veraltesBuch: ComputerUpdateDTO = {
     titel: 'Veraltet',
     rating: 1,
     art: 'DRUCKAUSGABE',
