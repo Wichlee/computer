@@ -27,9 +27,9 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              app: buch
-              app.kubernetes.io/name: buch
-              app.kubernetes.io/instance: buch
+              app: computer
+              app.kubernetes.io/name: computer
+              app.kubernetes.io/instance: computer
       ports:
         - port: {{ .Chart.Name }}
           protocol: TCP
