@@ -25,9 +25,10 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type ComputerModel } from '../../src/computer/rest/computer-get.controller.js';
+import { type ComputerListModel } from '../../src/computer/rest/computer-get.controller.js';
 import { HttpStatus } from '@nestjs/common';
 import each from 'jest-each';
+import { ComputerModell } from '../../src/computer/entity/computer.entity.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -64,7 +65,9 @@ describe('GET /', () => {
         // given
 
         // when
-        const response: AxiosResponse<ComputerModel> = await client.get('/');
+        const response: AxiosResponse<ComputerListModel> = await client.get(
+            '/',
+        );
 
         // then
         const { status, headers, data } = response;
@@ -73,10 +76,10 @@ describe('GET /', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         expect(data).toBeDefined();
 
-        const { computers } = data._embedded;
+        const { computerList } = data._embedded;
 
-        computers
-            .map((buch) => buch._links.self.href)
+        computerList
+            .map((computer) => computer._links.self.href)
             .forEach((selfLink) => {
                 // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
                 expect(selfLink).toMatch(new RegExp(`^${baseURL}`, 'u'));
@@ -90,7 +93,7 @@ describe('GET /', () => {
             const params = { titel: teilModell };
 
             // when
-            const response: AxiosResponse<ComputerModel> = await client.get(
+            const response: AxiosResponse<ComputerListModel> = await client.get(
                 '/',
                 { params },
             );
@@ -102,12 +105,12 @@ describe('GET /', () => {
             expect(headers['content-type']).toMatch(/json/iu);
             expect(data).toBeDefined();
 
-            const { computers } = data._embedded;
+            const { computerList } = data._embedded;
 
             // Jedes Buch hat einen Titel mit dem Teilstring 'a'
-            computers
+            computerList
                 .map((computer) => computer.modell)
-                .forEach((modell: string) =>
+                .forEach((modell: ComputerModell) =>
                     expect(modell.toLowerCase()).toEqual(
                         expect.stringContaining(teilModell),
                     ),
@@ -142,7 +145,7 @@ describe('GET /', () => {
                 const params = { [schlagwort]: 'true' };
 
                 // when
-                const response: AxiosResponse<ComputerModel> = await client.get(
+                const response: AxiosResponse<ComputerListModel> =
                     '/',
                     { params },
                 );
