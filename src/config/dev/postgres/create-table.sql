@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS computer (
                   -- https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL
                   -- 10 Stellen, davon 2 Nachkommastellen
     preis         decimal(8,2) NOT NULL,
-    farbe         varchar(12) NOT NULL CHECK (art ~ 'rot|schwarz'),
+    farbe         varchar(12) NOT NULL CHECK (farbe ~ 'ROT|SCHWARZ'),
     seriennummer  varchar(9) NOT NULL UNIQUE USING INDEX TABLESPACE computerspace,
                   -- https://www.postgresql.org/docs/current/datatype-datetime.html
     erzeugt       timestamp NOT NULL DEFAULT NOW(),
