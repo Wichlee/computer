@@ -37,8 +37,8 @@ const {
     // - `test`
     NODE_ENV,
     PORT,
-    BUCH_SERVICE_HOST,
-    BUCH_SERVICE_PORT,
+    COMPUTER_SERVICE_HOST,
+    COMPUTER_SERVICE_PORT,
     K8S_TLS,
     DB_TYPE,
     DB_NAME,
@@ -68,8 +68,8 @@ interface NodeConfigEnv {
 const nodeConfigEnv: NodeConfigEnv = {
     nodeEnv: NODE_ENV,
     port: PORT,
-    serviceHost: BUCH_SERVICE_HOST,
-    servicePort: BUCH_SERVICE_PORT,
+    serviceHost: COMPUTER_SERVICE_HOST,
+    servicePort: COMPUTER_SERVICE_PORT,
 };
 
 interface ApolloConfigEnv {
