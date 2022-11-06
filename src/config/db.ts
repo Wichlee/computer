@@ -31,47 +31,25 @@ const { dbConfigEnv } = env;
 // nullish coalescing
 const database = dbConfigEnv.name ?? Computer.name.toLowerCase();
 const { detected } = k8sConfig;
-const dbType =
-    dbConfigEnv.type === undefined || dbConfigEnv.type === 'postgres'
-        ? 'postgres'
-        : 'mysql';
+const dbType = 'postgres';
 const host = detected ? dbType : dbConfigEnv.host ?? 'localhost';
 const username = dbConfigEnv.username ?? Computer.name.toLowerCase();
 const pass = dbConfigEnv.password ?? 'p';
 
-export const typeOrmModuleOptions: TypeOrmModuleOptions =
-    dbType === 'postgres'
-        ? {
-              type: 'postgres',
-              host,
-              port: 5432,
-              username,
-              password: pass,
-              database,
-              // siehe auch src\computer\computer.module.ts
-              entities: [Computer],
-              // logging durch console.log()
-              logging:
-                  nodeConfig.nodeEnv === 'development' ||
-                  nodeConfig.nodeEnv === 'test',
-              logger: 'advanced-console',
-          }
-        : {
-              type: 'mysql',
-              host,
-              port: 3306,
-              username,
-              password: pass,
-              database,
-              // siehe auch src\computer\computer.module.ts
-              entities: [Computer],
-              supportBigNumbers: true,
-              // logging durch console.log()
-              logging:
-                  nodeConfig.nodeEnv === 'development' ||
-                  nodeConfig.nodeEnv === 'test',
-              logger: 'advanced-console',
-          };
+export const typeOrmModuleOptions: TypeOrmModuleOptions = {
+    type: 'postgres',
+    host,
+    port: 5432,
+    username,
+    password: pass,
+    database,
+    // siehe auch src\computer\computer.module.ts
+    entities: [Computer],
+    // logging durch console.log()
+    logging:
+        nodeConfig.nodeEnv === 'development' || nodeConfig.nodeEnv === 'test',
+    logger: 'advanced-console',
+};
 
 const { password, ...typeOrmModuleOptionsLog } = typeOrmModuleOptions;
 console.info('typeOrmModuleOptions: %o', typeOrmModuleOptionsLog);
