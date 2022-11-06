@@ -24,11 +24,10 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { HttpStatus } from '@nestjs/common';
-import { REGEX } from '../../src/computer/service/computer-validation.service.js';
-import { MAX_RATING } from '../../src/buch/service/jsonSchema.js';
-import { loginRest } from '../login.js';
 import { ComputerDTO } from '../../src/computer/rest/computer-write.controller.js';
+import { HttpStatus } from '@nestjs/common';
+import { ID_PATTERN } from '../../src/computer/service/computer-validation.service.js';
+import { loginRest } from '../login.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -115,7 +114,7 @@ describe('POST /', () => {
         const idStr = location.slice(indexLastSlash + 1);
 
         expect(idStr).toBeDefined();
-        expect(REGEX.test(idStr)).toBe(true);
+        expect(ID_PATTERN.test(idStr)).toBe(true);
 
         expect(data).toBe('');
     });
@@ -138,13 +137,12 @@ describe('POST /', () => {
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
         expect(data).toEqual(
             expect.arrayContaining([
-                'Ein Buchtitel muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
-                `Eine Bewertung muss zwischen 0 und ${MAX_RATING} liegen.`,
+                'Ein Hersteller darf keine Sonderzeichen enthalten',
                 'Die Art eines Buches muss KINDLE oder DRUCKAUSGABE sein.',
                 'Der Verlag eines Buches muss FOO_VERLAG oder BAR_VERLAG sein.',
                 'Der Rabatt muss ein Wert zwischen 0 und 1 sein.',
                 'Das Datum muss im Format yyyy-MM-dd sein.',
-                'Die ISBN-Nummer ist nicht korrekt.',
+                'Die Seriennummer ist nicht korrekt.',
             ]),
         );
     });
