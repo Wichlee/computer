@@ -43,7 +43,7 @@ coverage
 /__tests__/computer/__snapshots__
 
 # Snyk
-.snyk
+#.snyk
 snyk_report.*
 snyk-*.json
 snyk-*.log
@@ -51,7 +51,7 @@ snyk-*.log
 # IDEs and editors
 /.idea
 *.iml
-.env
+#.env
 .project
 .classpath
 .c9/
