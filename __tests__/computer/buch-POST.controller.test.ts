@@ -49,18 +49,13 @@ const neuerComputerInvalid: Record<string, unknown> = {
     farbe: 'Lila Blassblau',
     seriennummer: 'keine Ahnung, 42',
 };
-const neuesBuchTitelExistiert: BuchDTO = {
-    titel: 'Alpha',
-    rating: 1,
-    art: 'DRUCKAUSGABE',
-    verlag: 'FOO_VERLAG',
-    preis: 99.99,
-    rabatt: 0.099,
-    lieferbar: true,
-    datum: '2022-02-28',
-    isbn: '9780007097326',
-    homepage: 'https://test.de/',
-    schlagwoerter: ['JAVASCRIPT', 'TYPESCRIPT'],
+const neuerComputerSeriennummerExistiert: ComputerDTO = {
+    hersteller: 'Alpha',
+    modell: 'DESKTOP_PC',
+    herstelldatum: new Date('2022-02-01'),
+    preis: 100.11,
+    farbe: 'SCHWARZ',
+    seriennummer: 'PC-49XJ9F',
 };
 
 // -----------------------------------------------------------------------------
@@ -154,7 +149,7 @@ describe('POST /', () => {
         );
     });
 
-    test('Neues Buch, aber der Titel existiert bereits', async () => {
+    test('Neuer Computer, aber die Seriennummer existiert bereits', async () => {
         // given
         const token = await loginRest(client);
         headers.Authorization = `Bearer ${token}`;
@@ -162,7 +157,7 @@ describe('POST /', () => {
         // when
         const response: AxiosResponse<string> = await client.post(
             '/',
-            neuesBuchTitelExistiert,
+            neuerComputerSeriennummerExistiert,
             { headers },
         );
 
@@ -170,14 +165,14 @@ describe('POST /', () => {
         const { status, data } = response;
 
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
-        expect(data).toEqual(expect.stringContaining('Titel'));
+        expect(data).toEqual(expect.stringContaining('Seriennummer'));
     });
 
-    test('Neues Buch, aber ohne Token', async () => {
+    test('Neuer Computer, aber ohne Token', async () => {
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
             '/',
-            neuesBuch,
+            neuerComputer,
         );
 
         // then
@@ -187,7 +182,7 @@ describe('POST /', () => {
         expect(data.statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
-    test('Neues Buch, aber mit falschem Token', async () => {
+    test('Neuer Computer, aber mit falschem Token', async () => {
         // given
         const token = 'FALSCH';
         headers.Authorization = `Bearer ${token}`;
@@ -195,7 +190,7 @@ describe('POST /', () => {
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
             '/',
-            neuesBuch,
+            neuerComputer,
             { headers },
         );
 
