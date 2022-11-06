@@ -28,14 +28,12 @@ import { HttpStatus } from '@nestjs/common';
 import { REGEX } from '../../src/computer/service/computer-validation.service.js';
 import { MAX_RATING } from '../../src/buch/service/jsonSchema.js';
 import { loginRest } from '../login.js';
-import { ComputerDTO } from '../../src/computer/graphql/computer-query.resolver.js';
+import { ComputerDTO } from '../../src/computer/rest/computer-write.controller.js';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 const neuerComputer: ComputerDTO = {
-    id: '00000000-0000-0000-0000-000000000200',
-    version: 0,
     hersteller: 'Omega',
     modell: 'NOTEBOOK',
     herstelldatum: new Date('2022-02-01'),
@@ -43,17 +41,13 @@ const neuerComputer: ComputerDTO = {
     farbe: 'SCHWARZ',
     seriennummer: 'NB-15AM6T',
 };
-const neuesBuchInvalid: Record<string, unknown> = {
-    titel: '!?$',
-    rating: -1,
-    art: 'UNSICHTBAR',
-    verlag: 'NO_VERLAG',
+const neuerComputerInvalid: Record<string, unknown> = {
+    hersteller: '§$%',
+    modell: 'NoTizBuCh',
+    herstelldatum: 'G1A8N7G',
     preis: 0,
-    rabatt: 2,
-    lieferbar: true,
-    datum: '12345123123',
-    isbn: 'falsche-ISBN',
-    schlagwoerter: [],
+    farbe: 'Lila Blassblau',
+    seriennummer: 'keine Ahnung, 42',
 };
 const neuesBuchTitelExistiert: BuchDTO = {
     titel: 'Alpha',
@@ -131,7 +125,7 @@ describe('POST /', () => {
         expect(data).toBe('');
     });
 
-    test('Neues Buch mit ungueltigen Daten', async () => {
+    test('Neuer Computer mit ungueltigen Daten', async () => {
         // given
         const token = await loginRest(client);
         headers.Authorization = `Bearer ${token}`;
@@ -139,7 +133,7 @@ describe('POST /', () => {
         // when
         const response: AxiosResponse<string> = await client.post(
             '/',
-            neuesBuchInvalid,
+            neuerComputerInvalid,
             { headers },
         );
 
