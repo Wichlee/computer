@@ -35,7 +35,7 @@ import formatsPlugin from 'ajv-formats';
 import { getLogger } from '../../logger/logger.js';
 import { jsonSchema } from './jsonSchema.js';
 
-export const REGEX = /PC-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
+export const REGEX = /[A-Z]{2}-\d{2}[A-Z]{2}\d[A-Z]/u; //NOSONAR
 
 @Injectable()
 export class ComputerValidationService {
