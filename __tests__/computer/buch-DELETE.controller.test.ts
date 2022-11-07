@@ -37,7 +37,7 @@ const id = '00000000-0000-0000-0000-000000000050';
 // -----------------------------------------------------------------------------
 // Test-Suite
 // eslint-disable-next-line max-lines-per-function
-describe('DELETE /buecher', () => {
+describe('DELETE /computerList', () => {
     let client: AxiosInstance;
 
     // Testserver starten und dabei mit der DB verbinden
@@ -55,7 +55,7 @@ describe('DELETE /buecher', () => {
         await shutdownServer();
     });
 
-    test('Vorhandenes Buch loeschen', async () => {
+    test('Vorhandenen Computer loeschen', async () => {
         // given
         const url = `/${id}`;
         const token = await loginRest(client);
@@ -73,7 +73,7 @@ describe('DELETE /buecher', () => {
         expect(data).toBeDefined();
     });
 
-    test('Buch loeschen, aber ohne Token', async () => {
+    test('Computer loeschen, aber ohne Token', async () => {
         // given
         const url = `/${id}`;
 
@@ -88,7 +88,7 @@ describe('DELETE /buecher', () => {
         expect(data.statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
-    test('Buch loeschen, aber mit falschem Token', async () => {
+    test('Computer loeschen, aber mit falschem Token', async () => {
         // given
         const url = `/${id}`;
         const token = 'FALSCH';
