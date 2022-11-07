@@ -62,7 +62,7 @@ const geaenderterComputerInvalid: Record<string, unknown> = {
 };
 
 // seriennummer wird nicht geaendet
-const veraltesBuch: ComputerUpdateDTO = {
+const veralteterComputer: ComputerUpdateDTO = {
     hersteller: 'Omega',
     modell: 'NOTEBOOK',
     herstelldatum: new Date('2022-02-01'),
@@ -173,7 +173,7 @@ describe('PUT /:id', () => {
         );
     });
 
-    test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
+    test('Vorhandenen Computer aendern, aber ohne Versionsnummer', async () => {
         // given
         const url = `/${idVorhanden}`;
         const token = await loginRest(client);
@@ -183,7 +183,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<string> = await client.put(
             url,
-            geaendertesBuch,
+            geaenderterComputer,
             { headers },
         );
 
@@ -194,7 +194,7 @@ describe('PUT /:id', () => {
         expect(data).toBe('Header "If-Match" fehlt');
     });
 
-    test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
+    test('Vorhandenen Computer aendern, aber mit alter Versionsnummer', async () => {
         // given
         const url = `/${idVorhanden}`;
         const token = await loginRest(client);
@@ -204,7 +204,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<string> = await client.put(
             url,
-            veraltesBuch,
+            veralteterComputer,
             { headers },
         );
 
@@ -215,7 +215,7 @@ describe('PUT /:id', () => {
         expect(data).toEqual(expect.stringContaining('Die Versionsnummer'));
     });
 
-    test('Vorhandenes Buch aendern, aber ohne Token', async () => {
+    test('Vorhandenen Computer aendern, aber ohne Token', async () => {
         // given
         const url = `/${idVorhanden}`;
         delete headers.Authorization;
@@ -224,7 +224,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<Record<string, any>> = await client.put(
             url,
-            geaendertesBuch,
+            geaenderterComputer,
             { headers },
         );
 
@@ -235,7 +235,7 @@ describe('PUT /:id', () => {
         expect(data.statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
-    test('Vorhandenes Buch aendern, aber mit falschem Token', async () => {
+    test('Vorhandenen Computer aendern, aber mit falschem Token', async () => {
         // given
         const url = `/${idVorhanden}`;
         const token = 'FALSCH';
@@ -244,7 +244,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<Record<string, any>> = await client.put(
             url,
-            geaendertesBuch,
+            geaenderterComputer,
             { headers },
         );
 
