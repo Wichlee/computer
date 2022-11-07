@@ -25,14 +25,12 @@ actor GraphQLClient
 node "Nest" {
   [RequestLoggerMiddleware]
 
-  [BuchController]
-  [BuchResolver]
+  [ComputerController]
+  [ComputerResolver]
 
-  [BuchService]
+  [ComputerService]
 
-  [Repository<Buch>]
-
-  [MailService]
+  [Repository<Computer>]
 }
 
 
@@ -40,37 +38,23 @@ cloud {
     [TypeORM]
 }
 
-cloud {
-    [nodemailer]
-}
-
-database "DB buch" {
-    [Tabelle buch]
-    [Tabelle schlagwort]
-}
-
-node {
-    [Mailserver]
+database "DB computer" {
+    [Tabelle computer]
 }
 
 RESTClient ~~> [RequestLoggerMiddleware]
 GraphQLClient ~~> [RequestLoggerMiddleware]
 
-[RequestLoggerMiddleware] ~~> [BuchController]
-[RequestLoggerMiddleware] ~~> [BuchResolver]
+[RequestLoggerMiddleware] ~~> [ComputerController]
+[RequestLoggerMiddleware] ~~> [ComputerResolver]
 
-[BuchController] ..> [BuchService]
-[BuchResolver] ..> [BuchService]
-[BuchService] ..> [Repository<Buch>]
+[ComputerController] ..> [ComputerService]
+[ComputerResolver] ..> [ComputerService]
+[ComputerService] ..> [Repository<Computer>]
 
-[Repository<Buch>] ~~> [TypeORM]
-[TypeORM] ~~> [Tabelle buch]
-[TypeORM] ~~> [Tabelle schlagwort]
+[Repository<Computer>] ~~> [TypeORM]
+[TypeORM] ~~> [Tabelle computer]
 
-[BuchService] ..> [MailService]
-[MailService] ~~> [nodemailer]
-[nodemailer] ~~> [Mailserver]
-
-footer (c) Jürgen Zimmermann
+footer (c) Gruppe 2
 
 @enduml
