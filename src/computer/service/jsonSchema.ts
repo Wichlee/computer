@@ -59,12 +59,11 @@ export const jsonSchema: GenericJsonSchema = {
     errorMessage: {
         properties: {
             version: 'Die Versionsnummer muss mindestens 0 sein.',
-            hersteller:
-                'Ein Hersteller muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
-            modell: 'Das Modell eines Computers muss DESKTOP_PC oder GAMING_PC sein.',
-            herstelldatum: 'Das Datum muss im Format yyyy-MM-dd sein.',
+            hersteller: 'Ein Hersteller darf keine Sonderzeichen enthalten.',
+            modell: 'Das Modell eines Computers muss DESKTOP_PC, GAMING_PC oder NOTEBOOK sein.',
+            herstelldatum: 'Das Herstelldatum muss im Format yyyy-MM-dd sein.',
             preis: 'Der Preis darf nicht negativ sein.',
-            farbe: 'Die Farbe eines Computers muss ROT oder SCHWARZ sein.',
+            farbe: 'Die Farbe eines Computers muss ROT SCHWARZ, SILBER oder WEISS sein.',
             seriennummer: 'Die Seriennummer ist nicht korrekt.',
         },
     },
