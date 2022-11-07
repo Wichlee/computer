@@ -138,10 +138,10 @@ describe('POST /', () => {
         expect(data).toEqual(
             expect.arrayContaining([
                 'Ein Hersteller darf keine Sonderzeichen enthalten.',
-                'Das Modell muss entweder DESKTOP_PC, GAMING_PC oder NOTEBOOK sein.',
+                'Das Modell eines Computers muss DESKTOP_PC, GAMING_PC oder NOTEBOOK sein.',
                 'Das Herstelldatum muss im Format yyyy-MM-dd sein.',
-                'Der Preis muss >= 0 sein.',
-                'Die Farbe muss teil der Farbpalette sein.',
+                'Der Preis darf nicht negativ sein.',
+                'Die Farbe eines Computers muss ROT SCHWARZ, SILBER oder WEISS sein.',
                 'Die Seriennummer ist nicht korrekt.',
             ]),
         );
