@@ -36,6 +36,7 @@ export const getBaseUri = (req: Request) => {
     const indexLastSlash = basePath.lastIndexOf('/');
     if (indexLastSlash > 0) {
         const idStr = basePath.slice(indexLastSlash + 1);
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (REGEX.test(idStr)) {
             basePath = basePath.slice(0, indexLastSlash);
         }
