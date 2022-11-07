@@ -163,13 +163,12 @@ describe('PUT /:id', () => {
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
         expect(data).toEqual(
             expect.arrayContaining([
-                'Ein Buchtitel muss mit einem Buchstaben, einer Ziffer oder _ beginnen.',
-                `Eine Bewertung muss zwischen 0 und ${MAX_RATING} liegen.`,
-                'Die Art eines Buches muss KINDLE oder DRUCKAUSGABE sein.',
-                'Der Verlag eines Buches muss FOO_VERLAG oder BAR_VERLAG sein.',
-                'Der Rabatt muss ein Wert zwischen 0 und 1 sein.',
-                'Das Datum muss im Format yyyy-MM-dd sein.',
-                'Die ISBN-Nummer ist nicht korrekt.',
+                'Ein Hersteller darf keine Sonderzeichen enthalten.',
+                'Das Modell muss entweder DESKTOP_PC, GAMING_PC oder NOTEBOOK sein.',
+                'Das Herstelldatum muss im Format yyyy-MM-dd sein.',
+                'Der Preis muss >= 0 sein.',
+                'Die Farbe muss teil der Farbpalette sein.',
+                'Die Seriennummer ist nicht korrekt.',
             ]),
         );
     });

@@ -140,7 +140,7 @@ describe('POST /', () => {
                 'Ein Hersteller darf keine Sonderzeichen enthalten.',
                 'Das Modell muss entweder DESKTOP_PC, GAMING_PC oder NOTEBOOK sein.',
                 'Das Herstelldatum muss im Format yyyy-MM-dd sein.',
-                'Der Preis muss > 0 sein.',
+                'Der Preis muss >= 0 sein.',
                 'Die Farbe muss teil der Farbpalette sein.',
                 'Die Seriennummer ist nicht korrekt.',
             ]),
