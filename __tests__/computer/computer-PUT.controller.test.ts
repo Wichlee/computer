@@ -56,7 +56,7 @@ const geaenderterComputerInvalid: Record<string, unknown> = {
     hersteller: '§$%',
     modell: 'NoTizBuCh',
     herstelldatum: 'G1A8N7G',
-    preis: 0,
+    preis: -89,
     farbe: 'Lila Blassblau',
     seriennummer: 'keine Ahnung, 42',
 };
@@ -139,7 +139,7 @@ describe('PUT /:id', () => {
 
         expect(status).toBe(HttpStatus.PRECONDITION_FAILED);
         expect(data).toBe(
-            `Es gibt kein Buch mit der ID "${idNichtVorhanden}".`,
+            `Es gibt keinen Computer mit der ID "${idNichtVorhanden}".`,
         );
     });
 
