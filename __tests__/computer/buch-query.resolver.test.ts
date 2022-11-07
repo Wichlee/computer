@@ -240,14 +240,14 @@ describe('GraphQL Queries', () => {
 
     each(teilHerstellerNichtVorhanden).test(
         'Computer zu nicht vorhandenem Hersteller %s',
-        async (teilTitel: string) => {
+        async (teilHersteller: string) => {
             // given
             const body: GraphQLRequest = {
                 query: `
                     {
-                        buecher(titel: "${teilTitel}") {
-                            titel
-                            art
+                        computerList(titel: "${teilHersteller}") {
+                            hersteller
+                            modell
                         }
                     }
                 `,
@@ -264,7 +264,7 @@ describe('GraphQL Queries', () => {
 
             expect(status).toBe(HttpStatus.OK);
             expect(headers['content-type']).toMatch(/json/iu);
-            expect(data.data!.buecher).toBeNull();
+            expect(data.data!.computerList).toBeNull();
 
             const { errors } = data;
 
@@ -273,9 +273,9 @@ describe('GraphQL Queries', () => {
             const [error] = errors!;
             const { message, path, extensions } = error!;
 
-            expect(message).toBe('Es wurden keine Buecher gefunden.');
+            expect(message).toBe('Es wurden keine Computer gefunden.');
             expect(path).toBeDefined();
-            expect(path!![0]).toBe('buecher');
+            expect(path!![0]).toBe('computerList');
             expect(extensions).toBeDefined();
             expect(extensions!.code).toBe('BAD_USER_INPUT');
         },
