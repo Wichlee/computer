@@ -20,7 +20,7 @@
  * @packageDocumentation
  */
 
-import { REGEX } from '../service/computer-validation.service.js';
+import { ID_PATTERN } from '../service/computer-validation.service.js';
 import { type Request } from 'express';
 import { cloud } from '../../config/cloud.js';
 import { nodeConfig } from '../../config/node.js';
@@ -36,8 +36,7 @@ export const getBaseUri = (req: Request) => {
     const indexLastSlash = basePath.lastIndexOf('/');
     if (indexLastSlash > 0) {
         const idStr = basePath.slice(indexLastSlash + 1);
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (REGEX.test(idStr)) {
+        if (ID_PATTERN.test(idStr)) {
             basePath = basePath.slice(0, indexLastSlash);
         }
     }
