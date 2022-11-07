@@ -28,7 +28,7 @@ import { getLogger } from '../../logger/logger.js';
 import { typeOrmModuleOptions } from '../../config/db.js';
 
 /**
- * Die Klasse `QueryBuilder` implementiert das Lesen für Bücher und greift
+ * Die Klasse `QueryBuilder` implementiert das Lesen für Computer und greift
  * mit _TypeORM_ auf eine relationale DB zu.
  */
 @Injectable()
