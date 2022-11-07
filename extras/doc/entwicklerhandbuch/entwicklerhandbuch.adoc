@@ -66,57 +66,57 @@ ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
 cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit
 amet ligula.
 
-."BuchGetController" für Lesezugriffe an der REST-Schnittstelle
-[plantuml,BuchGetController,svg]
+."ComputerGetController" für Lesezugriffe an der REST-Schnittstelle
+[plantuml,ComputerGetController,svg]
 ----
-include::BuchGetController.plantuml[]
+include::ComputerGetController.plantuml[]
 ----
 
 Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec
 sollicitudin molestie malesuada.
 
-."BuchWriteController" für Schreibzugriffe an der REST-Schnittstelle
-[plantuml,BuchGetController,svg]
+."ComputerWriteController" für Schreibzugriffe an der REST-Schnittstelle
+[plantuml,ComputerGetController,svg]
 ----
-include::BuchWriteController.plantuml[]
+include::ComputerWriteController.plantuml[]
 ----
 
 === Die GraphQL-Schnittstelle
 
 Donec sollicitudin molestie malesuada. Donec rutrum congue leo eget malesuada.
 
-.BuchQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
-[plantuml,BuchQueryResolver,svg]
+.ComputerQueryResolver für Lesezugriffe an der GraphQL-Schnittstelle
+[plantuml,ComputerQueryResolver,svg]
 ----
-include::BuchQueryResolver.plantuml[]
+include::ComputerQueryResolver.plantuml[]
 ----
 
 Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a
 pellentesque nec, egestas non nisi.
 
-.BuchMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
-[plantuml,BuchMutationResolver,svg]
+.ComputerMutationResolver für Schreibzugriffe an der GraphQL-Schnittstelle
+[plantuml,ComputerMutationResolver,svg]
 ----
-include::BuchMutationResolver.plantuml[]
+include::ComputerMutationResolver.plantuml[]
 ----
 
 === Der Anwendungskern
 
 Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada.
 
-."BuchReadService" im Anwendungskern
-[plantuml,BuchReadService,svg]
+."ComputerReadService" im Anwendungskern
+[plantuml,ComputerReadService,svg]
 ----
-include::BuchReadService.plantuml[]
+include::ComputerReadService.plantuml[]
 ----
 
 Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget
 malesuada.
 
-."BuchWriteService" im Anwendungskern
-[plantuml,BuchWriteService,svg]
+."ComputerWriteService" im Anwendungskern
+[plantuml,ComputerWriteService,svg]
 ----
-include::BuchWriteService.plantuml[]
+include::ComputerWriteService.plantuml[]
 ----
 
 === Klasse für Entities
@@ -125,9 +125,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur arcu erat,
 accumsan id imperdiet et, porttitor at sem.
 
 .Entity
-[plantuml,Buch,svg]
+[plantuml,Computer,svg]
 ----
-include::Buch.plantuml[]
+include::Computer.plantuml[]
 ----
 
 == Programmierrichtlinien für TypeScript und JavaScript
