@@ -544,7 +544,7 @@ z.B.:
 
 ```powershell
     npm exec jest --detectOpenHandles --errorOnDeprecated `
-      --forceExit --runTestsByPath '__tests__\computer\computer-get.controller.test.ts'
+      --forceExit --runTestsByPath '__tests__\computer\computer-GET.controller.test.ts'
 ```
 
 ---
