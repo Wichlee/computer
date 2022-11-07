@@ -1,0 +1,114 @@
+// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+//
+// N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
+//
+
+// siehe auch https://studio.apollographql.com/sandbox/explorer
+
+### Suche id, hersteller, modell und version von allen Computern
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+{
+  computerList {
+    id
+    hersteller
+    modell
+    version
+  }
+}
+
+### Suche hersteller, modell, seriennummer und version von einem Computer mit vorhandener Computer-ID
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID! = "00000000-0000-0000-0000-000000000001") {
+  computer(id: $id) {
+    hersteller
+    modell
+    seriennummer
+    version
+  }
+}
+
+{
+  "id": "00000000-0000-0000-0000-000000000001"
+}
+
+### Suche hersteller von einem Computer mit nicht-vorhandener Computer-ID
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID! = "99999999-9999-9999-9999-999999999999") {
+  computer(id: $id) {
+    hersteller
+  }
+}
+
+{
+  "id": "99999999-9999-9999-9999-999999999999"
+}
+
+### Suche modell von Computern mit vorhandenem Hersteller
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($hersteller: String = "Alpha") {
+  computerList(hersteller: $hersteller) {
+    modell
+  }
+}
+
+{
+  "hersteller": "Alpha"
+}
+
+### Suche hersteller, modell und farbe von Computern mit vorhandenem Hersteller
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($hersteller: String = "a") {
+  computerList(hersteller: $hersteller) {
+    hersteller
+    modell
+    farbe
+  }
+}
+
+{
+  "hersteller": "a"
+}
+
+### Suche modell von Computern mit NICHT-vorhandenem Hersteller
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($hersteller: String = "Nichtvorhanden") {
+  computerList(hersteller: $hersteller) {
+    modell
+  }
+}
+
+{
+  "hersteller": "Nichtvorhanden"
+}
