@@ -31,59 +31,44 @@ import { loginRest } from '../login.js';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const geaendertesBuch: ComputerUpdateDTO = {
-    // isbn wird nicht geaendet
-    titel: 'Geaendert',
-    rating: 1,
-    art: 'DRUCKAUSGABE',
-    verlag: 'BAR_VERLAG',
-    preis: 44.4,
-    rabatt: 0.044,
-    lieferbar: true,
-    datum: '2022-02-03',
-    isbn: '0007097328',
-    homepage: 'https://test.te',
+const geaenderterComputer: ComputerUpdateDTO = {
+    // seriennummer wird nicht geaendet
+    hersteller: 'Alpha',
+    modell: 'DESKTOP_PC',
+    herstelldatum: new Date('2022-02-01'),
+    preis: 100.11,
+    farbe: 'SCHWARZ',
+    seriennummer: 'PC-49XJ9F',
 };
-const idVorhanden = '00000000-0000-0000-0000-000000000040';
+const idVorhanden = '00000000-0000-0000-0000-000000000001';
 
-const geaendertesBuchIdNichtVorhanden: ComputerUpdateDTO = {
-    titel: 'Nichtvorhanden',
-    rating: 1,
-    art: 'DRUCKAUSGABE',
-    verlag: 'BAR_VERLAG',
-    preis: 44.4,
-    rabatt: 0.044,
-    lieferbar: true,
-    datum: '2022-02-04',
-    isbn: '0007097328',
-    homepage: 'https://test.te',
+const geaenderterComputerIdNichtVorhanden: ComputerUpdateDTO = {
+    hersteller: 'NichtVorhanden',
+    modell: 'DESKTOP_PC',
+    herstelldatum: new Date('2022-02-01'),
+    preis: 100.11,
+    farbe: 'SCHWARZ',
+    seriennummer: 'PC-49XJ9F',
 };
 const idNichtVorhanden = '99999999-9999-9999-9999-999999999999';
 
-const geaendertesBuchInvalid: Record<string, unknown> = {
-    titel: '?!$',
-    rating: -1,
-    art: 'UNSICHTBAR',
-    verlag: 'NO_VERLAG',
-    preis: 0.01,
-    rabatt: 2,
-    lieferbar: true,
-    datum: '12345-123-123',
-    isbn: 'falsche-ISBN',
+const geaenderterComputerInvalid: Record<string, unknown> = {
+    hersteller: '§$%',
+    modell: 'NoTizBuCh',
+    herstelldatum: 'G1A8N7G',
+    preis: 0,
+    farbe: 'Lila Blassblau',
+    seriennummer: 'keine Ahnung, 42',
 };
 
-// isbn wird nicht geaendet
+// seriennummer wird nicht geaendet
 const veraltesBuch: ComputerUpdateDTO = {
-    titel: 'Veraltet',
-    rating: 1,
-    art: 'DRUCKAUSGABE',
-    verlag: 'BAR_VERLAG',
-    preis: 44.4,
-    rabatt: 0.044,
-    lieferbar: true,
-    datum: '2022-02-03',
-    isbn: '0007097328',
-    homepage: 'https://test.te',
+    hersteller: 'Omega',
+    modell: 'NOTEBOOK',
+    herstelldatum: new Date('2022-02-01'),
+    preis: 100.11,
+    farbe: 'SCHWARZ',
+    seriennummer: 'NB-15AM6T',
 };
 
 // -----------------------------------------------------------------------------
@@ -114,7 +99,7 @@ describe('PUT /:id', () => {
         await shutdownServer();
     });
 
-    test('Vorhandenes Buch aendern', async () => {
+    test('Vorhandenen Computer aendern', async () => {
         // given
         const url = `/${idVorhanden}`;
         const token = await loginRest(client);
@@ -124,7 +109,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<string> = await client.put(
             url,
-            geaendertesBuch,
+            geaenderterComputer,
             { headers },
         );
 
@@ -135,7 +120,7 @@ describe('PUT /:id', () => {
         expect(data).toBe('');
     });
 
-    test('Nicht-vorhandenes Buch aendern', async () => {
+    test('Nicht-vorhandenen Computer aendern', async () => {
         // given
         const url = `/${idNichtVorhanden}`;
         const token = await loginRest(client);
@@ -145,7 +130,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<string> = await client.put(
             url,
-            geaendertesBuchIdNichtVorhanden,
+            geaenderterComputerIdNichtVorhanden,
             { headers },
         );
 
@@ -158,7 +143,7 @@ describe('PUT /:id', () => {
         );
     });
 
-    test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
+    test('Vorhandenen Computer aendern, aber mit ungueltigen Daten', async () => {
         // given
         const url = `/${idVorhanden}`;
         const token = await loginRest(client);
@@ -168,7 +153,7 @@ describe('PUT /:id', () => {
         // when
         const response: AxiosResponse<string> = await client.put(
             url,
-            geaendertesBuchInvalid,
+            geaenderterComputerInvalid,
             { headers },
         );
 
