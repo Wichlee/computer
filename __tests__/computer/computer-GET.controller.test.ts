@@ -104,7 +104,6 @@ describe('GET /', () => {
 
             const { computerList } = data._embedded;
 
-            // Jedes Buch hat einen Titel mit dem Teilstring 'a'
             computerList
                 .map((computer) => computer.hersteller)
                 .forEach((hersteller: string) =>
