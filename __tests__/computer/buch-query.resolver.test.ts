@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion */
 /*
- * Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+ * Copyright (C) 2022 - present Ioannis Theodosiadis, Hochschule Karlsruhe
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { type BuchDTO } from '../../src/buch/graphql/buch-query.resolver.js';
+import { type ComputerDTO } from '../../src/computer/graphql/computer-query.resolver.js';
 import { HttpStatus } from '@nestjs/common';
 import each from 'jest-each';
 
@@ -39,11 +39,11 @@ const idVorhanden = [
     '00000000-0000-0000-0000-000000000003',
 ];
 
-const titelVorhanden = ['Alpha', 'Beta', 'Gamma'];
+const herstellerVorhanden = ['Alpha', 'Beta', 'Gamma'];
 
-const teilTitelVorhanden = ['a', 't', 'g'];
+const teilHerstellerVorhanden = ['a', 't', 'g'];
 
-const teilTitelNichtVorhanden = ['Xyz', 'abc'];
+const teilHerstellerNichtVorhanden = ['Xyz', 'abc'];
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -68,51 +68,54 @@ describe('GraphQL Queries', () => {
         await shutdownServer();
     });
 
-    each(idVorhanden).test('Buch zu vorhandener ID %s', async (id: string) => {
-        // given
-        const body: GraphQLRequest = {
-            query: `
-                {
-                    buch(id: "${id}") {
-                        titel
-                        art
-                        isbn
-                        version
+    each(idVorhanden).test(
+        'Computer zu vorhandener ID %s',
+        async (id: string) => {
+            // given
+            const body: GraphQLRequest = {
+                query: `
+                    {
+                        computer(id: "${id}") {
+                            hersteller
+                            modell
+                            seriennummer
+                            farbe
+                        }
                     }
-                }
-            `,
-        };
+                `,
+            };
 
-        // when
-        const response: AxiosResponse<GraphQLResponse> = await client.post(
-            graphqlPath,
-            body,
-        );
+            // when
+            const response: AxiosResponse<GraphQLResponse> = await client.post(
+                graphqlPath,
+                body,
+            );
 
-        // then
-        const { status, headers, data } = response;
+            // then
+            const { status, headers, data } = response;
 
-        expect(status).toBe(HttpStatus.OK);
-        expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.errors).toBeUndefined();
-        expect(data.data).toBeDefined();
+            expect(status).toBe(HttpStatus.OK);
+            expect(headers['content-type']).toMatch(/json/iu);
+            expect(data.errors).toBeUndefined();
+            expect(data.data).toBeDefined();
 
-        const { buch } = data.data!;
-        const result: BuchDTO = buch;
+            const { computer } = data.data!;
+            const result: ComputerDTO = computer;
 
-        expect(result.titel).toMatch(/^\w/u);
-        expect(result.version).toBeGreaterThan(-1);
-        expect(result.id).toBeUndefined();
-    });
+            expect(result.hersteller).toMatch(/^\w/u);
+            expect(result.version).toBeGreaterThan(-1);
+            expect(result.id).toBeUndefined();
+        },
+    );
 
-    test('Buch zu nicht-vorhandener ID', async () => {
+    test('Computer zu nicht-vorhandener ID', async () => {
         // given
         const id = '999999999999999999999999';
         const body: GraphQLRequest = {
             query: `
                 {
-                    buch(id: "${id}") {
-                        titel
+                    computer(id: "${id}") {
+                        hersteller
                     }
                 }
             `,
@@ -129,7 +132,7 @@ describe('GraphQL Queries', () => {
 
         expect(status).toBe(HttpStatus.OK);
         expect(headers['content-type']).toMatch(/json/iu);
-        expect(data.data!.buch).toBeNull();
+        expect(data.data!.computer).toBeNull();
 
         const { errors } = data;
 
@@ -138,23 +141,25 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error!;
 
-        expect(message).toBe(`Es wurde kein Buch mit der ID ${id} gefunden.`);
+        expect(message).toBe(
+            `Es wurde kein Computer mit der ID ${id} gefunden.`,
+        );
         expect(path).toBeDefined();
-        expect(path!![0]).toBe('buch');
+        expect(path!![0]).toBe('computer');
         expect(extensions).toBeDefined();
         expect(extensions!.code).toBe('BAD_USER_INPUT');
     });
 
-    each(titelVorhanden).test(
-        'Buch zu vorhandenem Titel %s',
-        async (titel: string) => {
+    each(herstellerVorhanden).test(
+        'Computer zu vorhandenem Hersteller %s',
+        async (hersteller: string) => {
             // given
             const body: GraphQLRequest = {
                 query: `
                     {
-                        buecher(titel: "${titel}") {
-                            titel
-                            art
+                        computerList(hersteller: "${hersteller}") {
+                            hersteller
+                            modell
                         }
                     }
                 `,
@@ -175,30 +180,30 @@ describe('GraphQL Queries', () => {
 
             expect(data.data).toBeDefined();
 
-            const { buecher } = data.data!;
+            const { computerList } = data.data!;
 
-            expect(buecher).not.toHaveLength(0);
+            expect(computerList).not.toHaveLength(0);
 
-            const buecherArray: BuchDTO[] = buecher;
+            const computerArray: ComputerDTO[] = computerList;
 
-            expect(buecherArray).toHaveLength(1);
+            expect(computerArray).toHaveLength(1);
 
-            const [buch] = buecherArray;
+            const [computer] = computerArray;
 
-            expect(buch!.titel).toBe(titel);
+            expect(computer!.hersteller).toBe(hersteller);
         },
     );
 
-    each(teilTitelVorhanden).test(
-        'Buch zu vorhandenem Teil-Titel %s',
-        async (teilTitel: string) => {
+    each(teilHerstellerVorhanden).test(
+        'Computer zu vorhandenem Teil-Hersteller %s',
+        async (teilHersteller: string) => {
             // given
             const body: GraphQLRequest = {
                 query: `
                     {
-                        buecher(titel: "${teilTitel}") {
-                            titel
-                            art
+                        computerList(hersteller: "${teilHersteller}") {
+                            hersteller
+                            modell
                         }
                     }
                 `,
@@ -218,23 +223,23 @@ describe('GraphQL Queries', () => {
             expect(data.errors).toBeUndefined();
             expect(data.data).toBeDefined();
 
-            const { buecher } = data.data!;
+            const { computerList } = data.data!;
 
-            expect(buecher).not.toHaveLength(0);
+            expect(computerList).not.toHaveLength(0);
 
-            const buecherArray: BuchDTO[] = buecher;
-            buecherArray
-                .map((buch) => buch.titel)
-                .forEach((titel: string) =>
-                    expect(titel.toLowerCase()).toEqual(
-                        expect.stringContaining(teilTitel),
+            const computerArray: ComputerDTO[] = computerList;
+            computerArray
+                .map((computer) => computer.hersteller)
+                .forEach((hersteller: string) =>
+                    expect(hersteller.toLowerCase()).toEqual(
+                        expect.stringContaining(teilHersteller),
                     ),
                 );
         },
     );
 
-    each(teilTitelNichtVorhanden).test(
-        'Buch zu nicht vorhandenem Titel %s',
+    each(teilHerstellerNichtVorhanden).test(
+        'Computer zu nicht vorhandenem Hersteller %s',
         async (teilTitel: string) => {
             // given
             const body: GraphQLRequest = {
