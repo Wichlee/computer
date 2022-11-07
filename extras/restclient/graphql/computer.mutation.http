@@ -1,0 +1,169 @@
+// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+//
+// N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
+//
+
+### Einloggen in der Rolle "admin", "mitarbeiter" und "kunde"
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "admin", password: "p") { token expiresIn roles }
+}
+
+### Einloggen in der Rolle "mitarbeiter" und "kunde"
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "alfred.alpha", password: "p") { token expiresIn roles }
+}
+
+### Einloggen in der Rolle "kunde"
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "dirk.delta", password: "p") { token expiresIn roles }
+}
+
+### Einloggen mit falschem Passwort
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "admin", password: "FALSCH") { token expiresIn roles }
+}
+
+### Neuen Computer anlegen
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  create(
+    input: {
+      hersteller: "Testgraphql",
+      modell: GAMING_PC,
+      herstelldatum: "2022-01-31",
+      preis: 999.9,
+      farbe: ROT,
+      seriennummer: "JK-56LM7N"
+    }
+  )
+}
+
+### Neuen Computer mit ungueltigen Daten anlegen
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  create(
+    input: {
+      hersteller: "?!$",
+      modell: GAMING_PC,
+      herstelldatum: "123",
+      preis: -999,
+      farbe: WEISS,
+      seriennummer: "123"
+    }
+  )
+}
+
+### Vorhandenen Computer aktualisieren
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  update(
+    input: {
+      id: "00000000-0000-0000-0000-000000000003",
+      version: 0,
+      hersteller: "Geaendertgraphql",
+      modell: GAMING_PC,
+      herstelldatum: "2022-02-03",
+      preis: 300.33,
+      farbe: SCHWARZ,
+      seriennummer: "GM-74ED7T"
+    }
+  )
+}
+
+### Vorhandenen Computer mit ungueltigen Werten aktualisieren
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  update(
+    input: {
+      id: "00000000-0000-0000-0000-000000000003",
+      version: 0,
+      hersteller: "?!$",
+      modell: GAMING_PC,
+      herstelldatum: "123",
+      preis: -999,
+      farbe: SCHWARZ,
+      seriennummer: "123"
+    }
+  )
+}
+
+### Nicht-Vorhandenen Computer aktualisieren
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  update(
+    input: {
+      id: "99999999-9999-9999-9999-999999999999",
+      version: 0,
+      hersteller: "Nichtvorhanden",
+      modell: GAMING_PC,
+      herstelldatum: "2022-02-03",
+      preis: 99.99,
+      farbe: SCHWARZ,
+      seriennummer: "GM-74ED7T"
+    }
+  )
+}
+
+### Vorhandenen Computer loeschen
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  delete(id: "00000000-0000-0000-0000-000000000060")
+}
