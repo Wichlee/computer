@@ -35,7 +35,7 @@ const geaenderterComputer: ComputerUpdateDTO = {
     // seriennummer wird nicht geaendet
     hersteller: 'Alpha',
     modell: 'DESKTOP_PC',
-    herstelldatum: new Date('2022-02-01'),
+    herstelldatum: '2022-02-01',
     preis: 100.11,
     farbe: 'SCHWARZ',
     seriennummer: 'PC-49XJ9F',
@@ -45,7 +45,7 @@ const idVorhanden = '00000000-0000-0000-0000-000000000001';
 const geaenderterComputerIdNichtVorhanden: ComputerUpdateDTO = {
     hersteller: 'NichtVorhanden',
     modell: 'DESKTOP_PC',
-    herstelldatum: new Date('2022-02-01'),
+    herstelldatum: '2022-02-01',
     preis: 100.11,
     farbe: 'SCHWARZ',
     seriennummer: 'PC-49XJ9F',

@@ -35,23 +35,23 @@ import { loginRest } from '../login.js';
 const neuerComputer: ComputerDTO = {
     hersteller: 'Omega',
     modell: 'NOTEBOOK',
-    herstelldatum: new Date('2022-02-01'),
+    herstelldatum: '2022-08-11',
     preis: 100.11,
     farbe: 'SCHWARZ',
-    seriennummer: 'NB-15AM6T',
+    seriennummer: 'NB-15AD6T',
 };
 const neuerComputerInvalid: Record<string, unknown> = {
     hersteller: '§$%',
     modell: 'NoTizBuCh',
     herstelldatum: 'G1A8N7G',
-    preis: 0,
+    preis: -999,
     farbe: 'Lila Blassblau',
     seriennummer: 'keine Ahnung, 42',
 };
 const neuerComputerSeriennummerExistiert: ComputerDTO = {
     hersteller: 'Alpha',
     modell: 'DESKTOP_PC',
-    herstelldatum: new Date('2022-02-01'),
+    herstelldatum: '2022-02-01',
     preis: 100.11,
     farbe: 'SCHWARZ',
     seriennummer: 'PC-49XJ9F',

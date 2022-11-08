@@ -63,7 +63,7 @@ export const jsonSchema: GenericJsonSchema = {
             modell: 'Das Modell eines Computers muss DESKTOP_PC, GAMING_PC oder NOTEBOOK sein.',
             herstelldatum: 'Das Herstelldatum muss im Format yyyy-MM-dd sein.',
             preis: 'Der Preis darf nicht negativ sein.',
-            farbe: 'Die Farbe eines Computers muss ROT SCHWARZ, SILBER oder WEISS sein.',
+            farbe: 'Die Farbe eines Computers muss ROT, SCHWARZ, SILBER oder WEISS sein.',
             seriennummer: 'Die Seriennummer ist nicht korrekt.',
         },
     },

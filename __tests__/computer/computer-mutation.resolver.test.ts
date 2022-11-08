@@ -74,7 +74,7 @@ describe('GraphQL Mutations', () => {
                             herstelldatum: new Date('2022-06-08'),
                             preis: 145.15,
                             farbe: SCHWARZ,
-                            seriennummer: "PC-78KE2U"
+                            seriennummer: "PC-78KE2U",
                         }
                     )
                 }
