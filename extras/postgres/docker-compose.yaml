@@ -61,7 +61,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2.0"
+          cpus: "1.5"
           memory: 2048M
     healthcheck:
       test: ["CMD", "pg_isready", "--dbname", "postgres", "--username", "postgres"]
