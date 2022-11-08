@@ -32,16 +32,16 @@ resourcesRequests:
 
 resourcesLimits:
   cpu: 2000m
-  memory: 768Mi
-  #memory: 1536Mi
+  #memory: 768Mi
+  memory: 1536Mi
 
 livenessProbe:
-  initialDelay: 45
+  initialDelay: 100
   timeout: 30
   period: 120
   failureThreshold: 1
 readinessProbe:
-  initialDelay: 45
+  initialDelay: 100
   timeout: 30
   period: 120
   failureThreshold: 1
