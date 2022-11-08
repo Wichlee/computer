@@ -39,7 +39,7 @@ export const jsonSchema: GenericJsonSchema = {
         },
         modell: {
             type: 'string',
-            enum: ['DESKTOP_PC', 'GAMING_PC', ''],
+            enum: ['DESKTOP_PC', 'GAMING_PC', 'NOTEBOOK'],
         },
         herstelldatum: { type: 'string', format: 'date' },
         preis: {
@@ -48,7 +48,7 @@ export const jsonSchema: GenericJsonSchema = {
         },
         farbe: {
             type: 'string',
-            enum: ['ROT', 'SCHWARZ', ''],
+            enum: ['ROT', 'SCHWARZ', 'SILBER', 'WEISS'],
         },
         seriennummer: { type: 'string', format: 'Seriennummer' },
         erzeugt: { type: ['string', 'null'] },
