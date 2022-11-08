@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /*
  * Copyright (C) 2021 - present Juergen Zimmermann, Florian Goebel, Hochschule Karlsruhe
  *
@@ -36,14 +37,14 @@ import process from 'node:process';
 @Injectable()
 export class InfoService implements OnApplicationBootstrap {
     readonly #banner = `
-        .      _____                                ___  
-        .     / ____|                              |__ | 
-        .    | |  __ _ __ _   _ _ __  _ __   ___     ) |
-        .    | | |_ | '__| | | | '_ || '_ | / _ |   / / 
-        .    | |__| | |  | |_| | |_) | |_) |  __/  / /_ 
-        .     |_____|_|   |__,_| .__/| .__/  ___| |____|
-        .                      | |   | |                
-        .                      |_|   |_|                     
+    .       _____                               ___              _____                            _            
+    .      / ____|                             |__ \\            / ____|                          | |           
+    .     | |  __ _ __ _   _ _ __  _ __   ___     ) |  ______  | |     ___  _ __ ___  _ __  _   _| |_ ___ _ __ 
+    .     | | |_ | '__| | | | '_ \\| '_ \\ / _ \\   / /  |______| | |    / _ \\| '_ ' _ \\| '_ \\| | | | __/ _ \\ '__|
+    .     | |__| | |  | |_| | |_) | |_) |  __/  / /_           | |___| (_) | | | | | | |_) | |_| | ||  __/ |   
+    .     \\_ ____|_|   \\__,_| .__/| .__/ \\___| |____|           \\_____\\___/|_| |_| |_| .__/ \\__,_|\\__\\___|_|   
+    .                      | |   | |                                                | |                       
+    .                      |_|   |_|                                                |_|                       
     `;
 
     readonly #logger = getLogger(InfoService.name);
