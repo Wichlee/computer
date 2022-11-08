@@ -25,12 +25,12 @@ resourcesLimits:
 
 liveness:
   initialDelay: 10
-  timeout: 5
+  timeout: 10
   period: 20
   failureThreshold: 2
 readiness:
   initialDelay: 10
-  timeout: 5
+  timeout: 10
   period: 20
   failureThreshold: 2
 

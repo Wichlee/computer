@@ -26,23 +26,23 @@ userPasswordEncoded: "$argon2i$v=19$m=4096,t=3,p=1$aaxA2v/9rRSPGkwYN+NQog$27Huii
 replicaCount: 1
 
 resourcesRequests:
-  #cpu: 1000m
+  cpu: 1000m
   memory: 768Mi
   #memory: 1536Mi
 
 resourcesLimits:
-  #cpu: 2000m
+  cpu: 2000m
   memory: 768Mi
   #memory: 1536Mi
 
 livenessProbe:
   initialDelay: 45
-  timeout: 15
+  timeout: 30
   period: 120
   failureThreshold: 1
 readinessProbe:
   initialDelay: 45
-  timeout: 15
+  timeout: 30
   period: 120
   failureThreshold: 1
 
