@@ -25,7 +25,7 @@ import { dbPopulate, typeOrmModuleOptions } from '../db.js';
 import { Computer } from '../../computer/entity/computer.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { computerList } from './testdaten.js';
+import { computers } from './testdaten.js';
 import { configDir } from '../node.js';
 import { getLogger } from '../../logger/logger.js';
 import { readFileSync } from 'node:fs';
@@ -41,7 +41,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
 
     readonly #logger = getLogger(DbPopulateService.name);
 
-    readonly #computerList = computerList;
+    readonly #computers = computers;
 
     /**
      * Initialisierung durch DI mit `Repository<Computer>` gemäß _TypeORM_.
@@ -83,7 +83,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
         const sql = readFileSync(createScript, 'utf8');
         await this.#repo.query(sql);
 
-        const saved = await this.#repo.save(this.#computerList);
+        const saved = await this.#repo.save(this.#computers);
         this.#logger.warn(
             '#populatePostgres: %d Datensaetze eingefuegt',
             saved.length,
