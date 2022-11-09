@@ -18,7 +18,7 @@ import { type Computer } from '../../computer/entity/computer.entity.js';
 
 // TypeORM kann keine SQL-Skripte ausfuehren
 
-export const computerList: Computer[] = [
+export const computers: Computer[] = [
     // -------------------------------------------------------------------------
     // L e s e n
     // -------------------------------------------------------------------------
