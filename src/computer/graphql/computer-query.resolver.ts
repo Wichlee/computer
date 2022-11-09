@@ -59,23 +59,23 @@ export class ComputerQueryResolver {
         return computerDTO;
     }
 
-    @Query('computers')
+    @Query('computerList')
     async find(@Args() hersteller: { hersteller: string } | undefined) {
         const herstellerStr = hersteller?.hersteller;
         this.#logger.debug('find: hersteller=%s', herstellerStr);
         const suchkriterium =
             herstellerStr === undefined ? {} : { hersteller: herstellerStr };
-        const computers = await this.#service.find(suchkriterium);
-        if (computers.length === 0) {
+        const computerList = await this.#service.find(suchkriterium);
+        if (computerList.length === 0) {
             // UserInputError liefert Statuscode 200
             throw new UserInputError('Es wurden keine Computer gefunden.');
         }
 
-        const computersDTO = computers.map((computer) =>
+        const computerListDTO = computerList.map((computer) =>
             this.#toComputerDTO(computer),
         );
-        this.#logger.debug('find: comutersDTO=%o', computersDTO);
-        return computersDTO;
+        this.#logger.debug('find: comuterListDTO=%o', computerListDTO);
+        return computerListDTO;
     }
 
     #toComputerDTO(computer: Computer) {

@@ -22,7 +22,7 @@ schema {
 
 "Funktionen, um Computerdaten zu lesen"
 type Query {
-  computers(seriennummer: String): [Computer!]
+  computerList(seriennummer: String): [Computer!]
 
   computer(id: ID!): Computer
 }
