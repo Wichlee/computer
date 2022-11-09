@@ -80,7 +80,6 @@ describe('GraphQL Queries', () => {
                             modell
                             seriennummer
                             farbe
-                            version
                         }
                     }
                 `,
