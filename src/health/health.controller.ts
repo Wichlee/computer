@@ -23,64 +23,66 @@
 import { Controller, Get } from '@nestjs/common';
 import {
     HealthCheck,
-    HealthCheckService,
-    HttpHealthIndicator,
-    TypeOrmHealthIndicator,
+    // HealthCheckService,
+    // HttpHealthIndicator,
+    // TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { Agent } from 'node:https';
+// import { Agent } from 'node:https';
 import { ApiTags } from '@nestjs/swagger';
-import { k8sConfig } from '../config/kubernetes.js';
-import { nodeConfig } from '../config/node.js';
+// import { k8sConfig } from '../config/kubernetes.js';
+// import { nodeConfig } from '../config/node.js';
 
 /**
  * Die Controller-Klasse für Health-Checks.
  */
-@Controller('health')
+@Controller('/health')
 @ApiTags('Health')
 export class HealthController {
-    readonly #health: HealthCheckService;
+    // readonly #health: HealthCheckService;
 
-    readonly #http: HttpHealthIndicator;
+    // readonly #http: HttpHealthIndicator;
 
-    readonly #typeorm: TypeOrmHealthIndicator;
+    // readonly #typeorm: TypeOrmHealthIndicator;
 
-    readonly #schema = k8sConfig.detected && !k8sConfig.tls ? 'http' : 'https';
+    // readonly #schema = k8sConfig.detected && !k8sConfig.tls ? 'http' : 'https';
 
-    readonly #httpsAgent = new Agent({
-        requestCert: true,
-        rejectUnauthorized: false,
-        // cert aus interface HttpsOptions (von Nest) ist undefined
-        ca: nodeConfig.httpsOptions?.cert as Buffer, // type-coverage:ignore-line
-    });
+    // readonly #httpsAgent = new Agent({
+    //     requestCert: true,
+    //     rejectUnauthorized: false,
+    //     // cert aus interface HttpsOptions (von Nest) ist undefined
+    //     ca: nodeConfig.httpsOptions?.cert as Buffer, // type-coverage:ignore-line
+    // });
 
-    constructor(
-        health: HealthCheckService,
-        http: HttpHealthIndicator,
-        typeorm: TypeOrmHealthIndicator,
-    ) {
-        this.#health = health;
-        this.#http = http;
-        this.#typeorm = typeorm;
-    }
+    // constructor(
+    //     health: HealthCheckService,
+    //     http: HttpHealthIndicator,
+    //     typeorm: TypeOrmHealthIndicator,
+    // ) {
+    //     this.#health = health;
+    //     this.#http = http;
+    //     this.#typeorm = typeorm;
+    // }
 
-    @Get('live')
+    @Get('/live')
     @HealthCheck()
     live() {
-        return this.#health.check([
-            () =>
-                this.#http.pingCheck(
-                    'computer REST-API',
-                    `${this.#schema}://${nodeConfig.host}:${
-                        nodeConfig.port
-                    }/api/00000000-0000-0000-0000-000000000001`,
-                    { httpsAgent: this.#httpsAgent },
-                ),
-        ]);
+        return { status: 'up' };
+        // return this.#health.check([
+        //     () =>
+        //         this.#http.pingCheck(
+        //             'computer REST-API',
+        //             `${this.#schema}://${nodeConfig.host}:${
+        //                 nodeConfig.port
+        //             }/api/00000000-0000-0000-0000-000000000001`,
+        //             { httpsAgent: this.#httpsAgent },
+        //         ),
+        // ]);
     }
 
-    @Get('ready')
+    @Get('/ready')
     @HealthCheck()
     ready() {
-        return this.#health.check([() => this.#typeorm.pingCheck('DB')]);
+        return { status: 'up' };
+        // return this.#health.check([() => this.#typeorm.pingCheck('DB')]);
     }
 }

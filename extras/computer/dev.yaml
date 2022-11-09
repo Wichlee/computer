@@ -36,15 +36,15 @@ resourcesLimits:
   memory: 1536Mi
 
 livenessProbe:
-  initialDelay: 100
-  timeout: 30
+  initialDelay: 120
+  timeout: 60
   period: 120
-  failureThreshold: 1
+  failureThreshold: 2
 readinessProbe:
-  initialDelay: 100
-  timeout: 30
+  initialDelay: 120
+  timeout: 60
   period: 120
-  failureThreshold: 1
+  failureThreshold: 2
 
 autoscaling:
   enabled: false
