@@ -54,7 +54,7 @@ const neuerComputerSeriennummerExistiert: ComputerDTO = {
     herstelldatum: '2022-02-01',
     preis: 100.11,
     farbe: 'SCHWARZ',
-    seriennummer: 'PC-49XJ9F',
+    seriennummer: 'NB-15AD6T',
 };
 
 // -----------------------------------------------------------------------------

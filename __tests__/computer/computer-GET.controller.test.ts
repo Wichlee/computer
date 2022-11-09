@@ -32,7 +32,7 @@ import each from 'jest-each';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const herstellerVorhanden = ['k', 'g', 't'];
+const herstellerVorhanden = ['a', 'g', 't'];
 const herstellerNichtVorhanden = ['xx', 'yy'];
 
 // -----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ describe('GET /', () => {
         await shutdownServer();
     });
 
-    test('Alle computers', async () => {
+    test('Alle Computer', async () => {
         // given
 
         // when
@@ -78,8 +78,10 @@ describe('GET /', () => {
         computerList
             .map((computer) => computer._links.self.href)
             .forEach((selfLink) => {
-                // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
-                expect(selfLink).toMatch(new RegExp(`^${baseURL}`, 'u'));
+                expect(selfLink).toMatch(
+                    // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
+                    new RegExp(`${baseURL.toLowerCase()}`, 'u'),
+                );
             });
     });
 
