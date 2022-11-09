@@ -44,10 +44,10 @@ logPretty: "false"
 logHealthyPretty: "false"
 
 # -- Benutzername für die DB
-dbUser: postgres
+dbUser: computer
 
 # -- Passwort für die DB
-dbPassword: "p"
+dbPassword: "Change Me!!!"
 
 # -- Neuladen der DB beim Start des Appservers
 dbPopulate: "false"
