@@ -102,7 +102,7 @@ describe('GraphQL Queries', () => {
             const { computer } = data.data!;
             const result: ComputerDTO = computer;
 
-            expect(result.hersteller).toMatch(/^\w/u);
+            expect(result.hersteller).toMatch(/\w/u);
             expect(result.version).toBeGreaterThan(-1);
             expect(result.id).toBeUndefined();
         },

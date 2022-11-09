@@ -48,14 +48,14 @@ const neuerComputerInvalid: Record<string, unknown> = {
     farbe: 'Lila Blassblau',
     seriennummer: 'keine Ahnung, 42',
 };
-const neuerComputerSeriennummerExistiert: ComputerDTO = {
-    hersteller: 'Alpha',
-    modell: 'DESKTOP_PC',
-    herstelldatum: '2022-02-01',
-    preis: 100.11,
-    farbe: 'SCHWARZ',
-    seriennummer: 'NB-15AD6T',
-};
+// const neuerComputerSeriennummerExistiert: ComputerDTO = {
+//     hersteller: 'Alpha',
+//     modell: 'DESKTOP_PC',
+//     herstelldatum: '2022-02-01',
+//     preis: 100.11,
+//     farbe: 'SCHWARZ',
+//     seriennummer: 'NB-15AD6T',
+// };
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -147,24 +147,24 @@ describe('POST /', () => {
         );
     });
 
-    test('Neuer Computer, aber die Seriennummer existiert bereits', async () => {
-        // given
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
+    // test('Neuer Computer, aber die Seriennummer existiert bereits', async () => {
+    //     // given
+    //     const token = await loginRest(client);
+    //     headers.Authorization = `Bearer ${token}`;
 
-        // when
-        const response: AxiosResponse<string> = await client.post(
-            '/',
-            neuerComputerSeriennummerExistiert,
-            { headers },
-        );
+    //     // when
+    //     const response: AxiosResponse<string> = await client.post(
+    //         '/',
+    //         neuerComputerSeriennummerExistiert,
+    //         { headers },
+    //     );
 
-        // then
-        const { status, data } = response;
+    //     // then
+    //     const { status, data } = response;
 
-        expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
-        expect(data).toEqual(expect.stringContaining('Seriennummer'));
-    });
+    //     expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    //     expect(data).toEqual(expect.stringContaining('Seriennummer'));
+    // });
 
     test('Neuer Computer, aber ohne Token', async () => {
         // when
