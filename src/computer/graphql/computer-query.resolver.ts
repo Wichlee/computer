@@ -74,7 +74,7 @@ export class ComputerQueryResolver {
         const computersDTO = computers.map((computer) =>
             this.#toComputerDTO(computer),
         );
-        this.#logger.debug('find: comutersDTO=%o', computersDTO);
+        this.#logger.debug('find: computersDTO=%o', computersDTO);
         return computersDTO;
     }
 
