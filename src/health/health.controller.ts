@@ -20,6 +20,8 @@
  * @packageDocumentation
  */
 
+import { ApiTags } from '@nestjs/swagger';
+// eslint-disable-next-line sort-imports
 import { Controller, Get } from '@nestjs/common';
 import {
     HealthCheck,
@@ -28,7 +30,6 @@ import {
     // TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 // import { Agent } from 'node:https';
-import { ApiTags } from '@nestjs/swagger';
 // import { k8sConfig } from '../config/kubernetes.js';
 // import { nodeConfig } from '../config/node.js';
 
