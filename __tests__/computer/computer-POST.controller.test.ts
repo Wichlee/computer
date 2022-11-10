@@ -147,25 +147,6 @@ describe('POST /', () => {
         );
     });
 
-    // test('Neuer Computer, aber die Seriennummer existiert bereits', async () => {
-    //     // given
-    //     const token = await loginRest(client);
-    //     headers.Authorization = `Bearer ${token}`;
-
-    //     // when
-    //     const response: AxiosResponse<string> = await client.post(
-    //         '/',
-    //         neuerComputerSeriennummerExistiert,
-    //         { headers },
-    //     );
-
-    //     // then
-    //     const { status, data } = response;
-
-    //     expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
-    //     expect(data).toEqual(expect.stringContaining('Seriennummer'));
-    // });
-
     test('Neuer Computer, aber ohne Token', async () => {
         // when
         const response: AxiosResponse<Record<string, any>> = await client.post(
