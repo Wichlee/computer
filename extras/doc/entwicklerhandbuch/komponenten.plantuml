@@ -42,8 +42,8 @@ database "DB computer" {
     [Tabelle computer]
 }
 
-RESTClient ~~> [RequestLoggerMiddleware]
-GraphQLClient ~~> [RequestLoggerMiddleware]
+RESTClient ~up~> [RequestLoggerMiddleware]
+GraphQLClient ~up~> [RequestLoggerMiddleware]
 
 [RequestLoggerMiddleware] ~~> [ComputerController]
 [RequestLoggerMiddleware] ~~> [ComputerResolver]
