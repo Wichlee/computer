@@ -29,9 +29,6 @@ import {
     // HttpHealthIndicator,
     // TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-// import { Agent } from 'node:https';
-// import { k8sConfig } from '../config/kubernetes.js';
-// import { nodeConfig } from '../config/node.js';
 
 /**
  * Die Controller-Klasse für Health-Checks.
