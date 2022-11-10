@@ -40,6 +40,7 @@ package computer {
 
   package service #DDDDDD {
     class ComputerInvalid
+    class SeriennummerExists
     class VersionInvalid
     class VersionOutdated
 
