@@ -269,11 +269,9 @@ export class ComputerWriteController {
             case 'ConstraintViolations': {
                 return this.#handleValidationError(err.messages, res);
             }
-
             case 'SeriennummerExists': {
                 return this.#handleSeriennummerExists(err.seriennummer, res);
             }
-
             default: {
                 return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -331,6 +329,10 @@ export class ComputerWriteController {
                     .status(HttpStatus.PRECONDITION_FAILED)
                     .set('Content-Type', 'text/plain')
                     .send(msg);
+            }
+
+            case 'SeriennummerExists': {
+                return this.#handleSeriennummerExists(err.seriennummer, res);
             }
 
             case 'VersionInvalid': {
