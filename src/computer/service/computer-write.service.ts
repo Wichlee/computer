@@ -149,6 +149,11 @@ export class ComputerWriteService {
         }
 
         let deleteResult: DeleteResult | undefined;
+        await this.#repo.manager.transaction(async (transactionalMgr) => {
+            // Den Computer zur gegebenen ID asynchron loeschen
+            deleteResult = await transactionalMgr.delete(Computer, id);
+            this.#logger.debug('delete: deleteResult=%o', deleteResult);
+        });
         return (
             deleteResult?.affected !== undefined &&
             deleteResult.affected !== null &&
