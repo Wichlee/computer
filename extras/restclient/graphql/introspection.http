@@ -32,13 +32,13 @@ X-REQUEST-TYPE: GraphQL
   }
 }
 
-### Details zum Typ "Buch": Felder und deren Typen
+### Details zum Typ "computer": Felder und deren Typen
 POST {{graphQlUrl}}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
 {
-  __type(name: "Buch") {
+  __type(name: "Computer") {
     name
     kind
     description
