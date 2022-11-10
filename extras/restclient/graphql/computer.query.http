@@ -25,7 +25,7 @@ Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
 {
-  computerList {
+  computers {
     id
     hersteller
     modell
@@ -72,7 +72,7 @@ Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
 query ($hersteller: String = "Alpha") {
-  computerList(hersteller: $hersteller) {
+  computers(hersteller: $hersteller) {
     modell
   }
 }

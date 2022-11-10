@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 /*
  * Copyright (C) 2021 - present Juergen Zimmermann, Florian Goebel, Hochschule Karlsruhe
  *

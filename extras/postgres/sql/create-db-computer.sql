@@ -17,7 +17,7 @@
 --     d.h. auskommentieren in docker-compose.yaml
 -- (2) docker compose exec postgres sh
 -- (3) chown postgres:postgres /var/lib/postgresql/tablespace
--- (4) chown postgres:postgres /var/lib/postgresql/tablespace/kunde
+-- (4) chown postgres:postgres /var/lib/postgresql/tablespace/computer
 -- (5) docker compose down
 -- (6) in docker-compose.yaml den User "postgres" wieder aktivieren
 -- (7) docker compose up
