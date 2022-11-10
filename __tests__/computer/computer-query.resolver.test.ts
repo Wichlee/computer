@@ -77,6 +77,7 @@ describe('GraphQL Queries', () => {
                     {
                         computer(id: "${id}") {
                             hersteller
+                            version
                             modell
                             seriennummer
                             farbe
@@ -157,7 +158,7 @@ describe('GraphQL Queries', () => {
             const body: GraphQLRequest = {
                 query: `
                     {
-                        computerList(hersteller: "${hersteller}") {
+                        computers(hersteller: "${hersteller}") {
                             hersteller
                             modell
                         }
@@ -201,7 +202,7 @@ describe('GraphQL Queries', () => {
             const body: GraphQLRequest = {
                 query: `
                     {
-                        computerList(hersteller: "${teilHersteller}") {
+                        computers(hersteller: "${teilHersteller}") {
                             hersteller
                             modell
                         }
@@ -245,7 +246,7 @@ describe('GraphQL Queries', () => {
             const body: GraphQLRequest = {
                 query: `
                     {
-                        computerList(titel: "${teilHersteller}") {
+                        computers(titel: "${teilHersteller}") {
                             hersteller
                             modell
                         }
