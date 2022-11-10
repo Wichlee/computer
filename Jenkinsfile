@@ -24,7 +24,7 @@ pipeline {
     agent {
         docker {
             // https://www.debian.org/releases: Bullseye = Debian 11
-            image 'node:19.0.0-bullseye'
+            image 'node:19.0.1-bullseye'
             // https://stackoverflow.com/questions/62330354/jenkins-pipeline-alpine-agent-apk-update-error-unable-to-lock-database-permis
             // https://stackoverflow.com/questions/42630894/jenkins-docker-how-to-control-docker-user-when-using-image-inside-command/51986870#51986870
             // https://stackoverflow.com/questions/42743201/npm-install-fails-in-jenkins-pipeline-in-docker
