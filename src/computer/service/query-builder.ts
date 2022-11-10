@@ -107,20 +107,13 @@ export class QueryBuilder {
 
         // type-coverage:ignore-next-line
         if (seriennummer !== undefined && typeof seriennummer === 'string') {
-            // "-" aus Seriennummer entfernen, da diese nicht abgespeichert sind
-            const seriennummerOhne = seriennummer.replaceAll('-', '');
-            const param = {
-                seriennummer: seriennummerOhne,
-            };
-            queryBuilder = useWhere
-                ? queryBuilder.where(
-                      `${this.#computerAlias}.seriennummer = :seriennummer`,
-                      param,
-                  )
-                : queryBuilder.andWhere(
-                      `${this.#computerAlias}.seriennummer = :seriennummer`,
-                      param,
-                  );
+            const ilike =
+                typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
+            queryBuilder = queryBuilder.where(
+                `${this.#computerAlias}.seriennummer ${ilike} :seriennummer`,
+                { seriennummer: `%${seriennummer}%` },
+            );
+            useWhere = false;
         }
 
         // Restliche Properties als Key-Value-Paare: Vergleiche auf Gleichheit
