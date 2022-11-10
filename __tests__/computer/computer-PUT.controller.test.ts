@@ -42,16 +42,6 @@ const geaenderterComputer: ComputerUpdateDTO = {
 };
 const idVorhanden = '00000000-0000-0000-0000-000000000001';
 
-const geaenderterComputerIdNichtVorhanden: ComputerUpdateDTO = {
-    hersteller: 'NichtVorhanden',
-    modell: 'DESKTOP_PC',
-    herstelldatum: '2022-02-01',
-    preis: 100.11,
-    farbe: 'SCHWARZ',
-    seriennummer: 'PC-49XJ9F',
-};
-const idNichtVorhanden = '99999999-9999-9999-9999-999999999999';
-
 const geaenderterComputerInvalid: Record<string, unknown> = {
     hersteller: '§$%',
     modell: 'NoTizBuCh',
@@ -118,29 +108,6 @@ describe('PUT /:id', () => {
 
         expect(status).toBe(HttpStatus.NO_CONTENT);
         expect(data).toBe('');
-    });
-
-    test('Nicht-vorhandenen Computer aendern', async () => {
-        // given
-        const url = `/${idNichtVorhanden}`;
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
-
-        // when
-        const response: AxiosResponse<string> = await client.put(
-            url,
-            geaenderterComputerIdNichtVorhanden,
-            { headers },
-        );
-
-        // then
-        const { status, data } = response;
-
-        expect(status).toBe(HttpStatus.PRECONDITION_FAILED);
-        expect(data).toBe(
-            `Es gibt keinen Computer mit der ID "${idNichtVorhanden}".`,
-        );
     });
 
     test('Vorhandenen Computer aendern, aber mit ungueltigen Daten', async () => {
