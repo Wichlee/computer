@@ -71,7 +71,7 @@ describe('GraphQL Mutations', () => {
                         input: {
                             hersteller: "Omikron",
                             modell: DESKTOP_PC,
-                            herstelldatum: new Date('2022-06-08'),
+                            herstelldatum: "2022-06-08",
                             preis: 145.15,
                             farbe: SCHWARZ,
                             seriennummer: "PC-78KE2U",
@@ -114,7 +114,7 @@ describe('GraphQL Mutations', () => {
                         input: {
                             hersteller: "Omikron",
                             modell: DESKTOP_PC,
-                            herstelldatum: new Date('2022-06-08'),
+                            herstelldatum: "2022-06-08",
                             preis: 145.15,
                             farbe: SCHWARZ,
                             seriennummer: "PC-78KE2U"
@@ -160,12 +160,13 @@ describe('GraphQL Mutations', () => {
                     update(
                         input: {
                             id: "00000000-0000-0000-0000-000000000002",
-                            hersteller: "Beta",
-                            modell: DESKTOP,
-                            herstelldatum: new Date('2022-03-12'),
-                            preis: 250.00,
+                            version: 0,
+                            hersteller: "Geandert",
+                            modell: NOTEBOOK,
+                            herstelldatum: "2022-12-03",
+                            preis: 250.50,
                             farbe: SCHWARZ,
-                            seriennummer: "PC-60HG2O"
+                            seriennummer: "NB-60HG2O",
                         }
                     )
                 }
@@ -209,7 +210,7 @@ describe('GraphQL Mutations', () => {
                             modell: NoTizBuCh,
                             herstelldatum: "G1A8N7G",
                             preis: -89,
-                            farbe: Lila Blassblau,
+                            farbe: LilaBlassblau,
                             seriennummer: "keine Ahnung, 42",
                         }
                     )
