@@ -75,12 +75,14 @@ export interface ComputerNotExists {
  * Union-Type für Fehler beim Ändern eines Computers:
  * - {@linkcode ComputerNotExists}
  * - {@linkcode ConstraintViolations}
+ * - {@linkcode SeriennummerExists}
  * - {@linkcode VersionInvalid}
  * - {@linkcode VersionOutdated}
  */
 export type UpdateError =
     | ComputerNotExists
     | ConstraintViolations
+    | SeriennummerExists
     | VersionInvalid
     | VersionOutdated;
 
