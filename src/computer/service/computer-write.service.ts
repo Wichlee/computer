@@ -26,6 +26,7 @@ import { Computer } from '../entity/computer.entity.js';
 import {
     type ComputerNotExists,
     type CreateError,
+    type SeriennummerExists,
     type UpdateError,
     type VersionInvalid,
     type VersionOutdated,
@@ -208,6 +209,13 @@ export class ComputerWriteService {
             return { type: 'ConstraintViolations', messages };
         }
 
+        const resultSeriennummer = await this.#checkSeriennummerExists(
+            computer,
+        );
+        if (resultSeriennummer !== undefined && resultSeriennummer.id !== id) {
+            return resultSeriennummer;
+        }
+
         const resultFindById = await this.#findByIdAndCheckVersion(id, version);
         this.#logger.debug('#validateUpdate: %o', resultFindById);
         return resultFindById;
@@ -224,6 +232,25 @@ export class ComputerWriteService {
         }
 
         return Number.parseInt(version.slice(1, -1), 10);
+    }
+
+    async #checkSeriennummerExists(
+        computer: Computer,
+    ): Promise<SeriennummerExists | undefined> {
+        const { seriennummer } = computer;
+
+        const computerList = await this.#readService.find({
+            seriennummer: seriennummer, // eslint-disable-line object-shorthand
+        });
+        if (computerList.length > 0) {
+            const [gefundenerComputer] = computerList;
+            const { id } = gefundenerComputer!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            this.#logger.debug('#checkSeriennummerExists: id=%s', id);
+            return { type: 'SeriennummerExists', seriennummer, id: id! }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        }
+
+        this.#logger.debug('#checkSeriennummerExists: ok');
+        return undefined;
     }
 
     async #findByIdAndCheckVersion(
