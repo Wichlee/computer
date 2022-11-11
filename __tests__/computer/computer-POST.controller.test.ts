@@ -48,14 +48,6 @@ const neuerComputerInvalid: Record<string, unknown> = {
     farbe: 'Lila Blassblau',
     seriennummer: 'keine Ahnung, 42',
 };
-// const neuerComputerSeriennummerExistiert: ComputerDTO = {
-//     hersteller: 'Alpha',
-//     modell: 'DESKTOP_PC',
-//     herstelldatum: '2022-02-01',
-//     preis: 100.11,
-//     farbe: 'SCHWARZ',
-//     seriennummer: 'NB-15AD6T',
-// };
 
 // -----------------------------------------------------------------------------
 // T e s t s

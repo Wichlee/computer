@@ -1,4 +1,4 @@
-' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+' Copyright (C) 2022 - present Gruppe 2, Hochschule Karlsruhe
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ package typeorm {
 }
 
 package computer.entity {
-  class "type ComputerFarbe = 'ROT' | 'SCHWARZ'" as ComputerFarbe
+  class "type ComputerFarbe = 'ROT' | 'SCHWARZ' | 'SILBER' | 'WEISS'" as ComputerFarbe
   hide ComputerFarbe circle
 
-  class "type ComputerModell = 'DESKTOP_PC' | 'GAMING_PC'" as ComputerModell
+  class "type ComputerModell = 'DESKTOP_PC' | 'GAMING_PC' | 'NOTEBOOK'" as ComputerModell
   hide ComputerModell circle
 
   class Computer <<entity>> <<@Entity>> {
