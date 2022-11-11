@@ -33,10 +33,10 @@ package typeorm {
 }
 
 package computer.entity {
-  class "type ComputerFarbe = 'ROT' | 'SCHWARZ'" as ComputerFarbe
+  class "type ComputerFarbe = 'ROT' | 'SCHWARZ' | 'SILBER' | 'WEISS'" as ComputerFarbe
   hide ComputerFarbe circle
 
-  class "type ComputerModell = 'DESKTOP_PC' | 'GAMING_PC'" as ComputerModell
+  class "type ComputerModell = 'DESKTOP_PC' | 'GAMING_PC' | 'NOTEBOOK'" as ComputerModell
   hide ComputerModell circle
 
   class Computer <<entity>> <<@Entity>> {
